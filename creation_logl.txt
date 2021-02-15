@@ -113,6 +113,38 @@ sudo ln -s /home/cborka/homework /var/www/html
 
 ---------------------------
 
+Создал структуру каталогов,
+composer.json
+пока такой
+{
+  "config": {
+    "sort-packages": true
+  },
+  "require": {
+    "php": ">=7.3.0",
+    "roave/security-advisories": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Controllers\\": "src/Controllers/",
+      "Models\\": "src/Models/",
+      "System\\": "src/System/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
+  "authors": [
+    {
+      "name": "Boris Ts.",
+      "email": "cborka@mail.ru",
+      "homepage": "https://github.com/cborka",
+      "role": "Developer"
+    }
+  ]
+}
+
+сделал роутер System/App.php, взял его из примера, который делал пару дней назад, потом ещё доработаю если будет надо.
 
 
 

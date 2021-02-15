@@ -1,0 +1,103 @@
+/*
+Author: cborka
+Author URI: https://github.com/cborka
+*/
+
+/*
+**      РАЗМЕТКА СТРАНИЦЫ большой экран
+*/
+.grid-container {
+    display: grid;
+    max-width: 1366px;
+    min-height: 90vh;
+    margin: auto;
+
+    grid-template-areas:
+            "h h h"
+            "s c r"
+            "f f f";
+    grid-template-columns: minmax(150px, min-content) 1fr minmax(150px, min-content);
+    grid-template-rows: minmax(15px, min-content) 1fr minmax(15px, min-content);
+
+    grid-gap: 1px;
+    background-color: lightgray;
+}
+
+/*
+**      РАЗМЕТКА СТРАНИЦЫ смартфон
+*/
+@media screen and (min-width: 100px) and (max-width: 800px)
+{
+    .grid-container {
+        grid-template-areas:
+                "h"
+                "s"
+                "c"
+                "r"
+                "f";
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(15px, min-content )minmax(15px, min-content) 1fr minmax(15px, min-content) minmax(15px, min-content);
+
+        background-color: lightpink;
+    }
+}
+
+/*
+**      ШАПКА
+*/
+header {
+    grid-area: h;
+    background-color: white;
+//    color: darkviolet;
+    padding: 5px;
+}
+
+/*
+**      ЛЕВАЯ КОЛОНКА
+*/
+aside.left {
+    grid-area: s;
+    background-color: whitesmoke;
+    padding: 5px;
+}
+
+/* ЛЕВАЯ КОЛОНКА СМАРТФОН */
+@media screen and (min-width: 100px) and (max-width: 800px) {
+    aside.left {
+    //        height: 0px;
+    }
+}
+
+/*
+**      ПРАВАЯ КОЛОНКА
+*/
+aside.right {
+    grid-area: r;
+    background-color: mistyrose ;
+    padding: 5px;
+}
+
+/*
+**      КОНТЕНТ (СОДЕРЖИМОЕ)
+*/
+main {
+    grid-area: c;
+    background-color: white;
+    padding: 5px;
+//    margin: 5%;
+}
+
+/*
+**      ФУТЕР (ПОДВАЛ)
+*/
+footer {
+    grid-area: f;
+    background-color: dimgray;
+    color: ghostwhite;
+    padding: 5px;
+}
+
+body{
+
+
+}
