@@ -1,6 +1,6 @@
 15.02.2021
 
-Хост 93.189.42.2
+Удаленный хост 93.189.42.2
 
 login as bor
 
@@ -61,7 +61,55 @@ git flow init
 git remote add origin https://github.com/cborka/homework.git
 git push -u origin --all
 
+
+vmWare-Ubuntu хост
+
+login as bor
+
+# настройка nginx
+cd /etc/nginx/sites-available
+nano homework
+---------------------------
+server {
+        listen 80;
+#       listen [::]:80;
+
+        root /var/www/html/homework;
+
+        index index.php index.html index.htm index.nginx-debian.html;
+
+        server_name homework.xvmware.ru hwvm.ru;
+
+        charset utf-8;
+
+        location / {
+                try_files /public/$uri /public/$uri/ /index.php;
+        }
+
+        location = /index.php {
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        }
+}
+---------------------------
+sudo ln -s /etc/nginx/sites-available/homework /etc/nginx/sites-enable
+sudo ln -s /home/cborka/homework /var/www/html
+---------------------------
+
 Зашел в PhpStorm, создал проект на основе существующих файлов, исходники лежат на удаленной машине, доступ через фтп.
+
+---------------------------
+
+Добавил в файл hosts строки
+зачем мне по два имени сайта? да я и сам не знаю )
+
+# удаленный сервер
+93.189.42.2 homework.xntvps.ru
+93.189.42.2 hwnt.ru
+
+# сервер под vmWare
+192.168.72.128 homework.xvmware.ru
+192.168.72.128 hwvm.ru
 
 ---------------------------
 
