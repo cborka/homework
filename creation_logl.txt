@@ -1,0 +1,72 @@
+15.02.2021
+
+Хост 93.189.42.2
+
+login as bor
+
+# настройка nginx
+cd /etc/nginx/sites-available
+nano homework
+---------------------------
+server {
+        listen 80;
+#       listen [::]:80;
+
+        root /var/www/html/homework;
+
+        index index.php index.html index.htm index.nginx-debian.html;
+
+        server_name homework.xntvps.ru hwnt.ru;
+
+        charset utf-8;
+
+        location / {
+                try_files /public/$uri /public/$uri/ /index.php;
+        }
+
+        location = /index.php {
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        }
+}
+---------------------------
+sudo ln -s /etc/nginx/sites-available/homework /etc/nginx/sites-enable
+
+# создание каталога для сайта
+# создал там файл public/index.html потому что PhpStorm не находил путь для сайта при создании проекта
+cd /var/www/html
+sudo mkdir homework
+sudo chmod a+rwx ho*
+mkdir public
+cat >public/index.html
+sudo chown ftpuser public
+sudo chgrp ftpuser public
+cd public
+sudo chgrp ftpuser *
+sudo chown ftpuser *
+---------------------------
+
+В браузере зашел на https://github.com/cborka
+создал репозиторий homework
+---------------------------
+
+Хост Windows-10 (Каталог c:\cborka смонтирован на vmWare-Ubuntu /home/cborka)
+
+создал каталог c:\cborka\homework
+
+зашел через gitbash терминал
+
+cd /c/cborka/homework
+git flow init
+git remote add origin https://github.com/cborka/homework.git
+git push -u origin --all
+
+Зашел в PhpStorm, создал проект на основе существующих файлов, исходники лежат на удаленной машине, доступ через фтп.
+
+---------------------------
+
+
+
+
+
+
