@@ -13,13 +13,14 @@
 <h2>Забавы с jQuery</h2>
 
 <button onclick="hide_ps()"> Скрыть абзацы </button>
+<button onclick="axios_get()"> Запрос axios </button>
 <button onclick="hide_me()" id="hideme"> Спрячь меня </button>
 
 <p>
  Это абзацццц
 </p>
 ---
-<p>
+<p id="abzac">
     И это абзацццц
 </p>
 
@@ -27,6 +28,17 @@
 
 
 <script>
+
+function axios_get() {
+
+    axios.get('http://hwvm.ru/index.html').then(res => {
+        $("#abzac").html(res.data); // Результат ответа от сервера
+//      alert(JSON.stringify(res.data)); // Результат ответа от сервера
+    });
+}
+$(document).ready(function(){
+    $("#abzac").text("Hello world!");
+});
 
 // Скрыть абзацы
 function hide_ps()
