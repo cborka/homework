@@ -9,6 +9,9 @@ use System\Render;
 // Подключаем файл реализующий автозагрузку
 require 'vendor/autoload.php';
 
+//echo 'root_dir = ' . __DIR__;
+//echo '<pre>'; print_r($_SERVER); echo '</pre>';
+
 // Запускаем приложение
 try {
     App::run();

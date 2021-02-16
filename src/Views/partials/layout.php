@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <link rel="stylesheet" href="/css/style.css" />
+    <script type="text/javascript" src="/js/jquery-3.5.1.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
 
 </head>
 <body>
@@ -18,7 +20,20 @@
 
     <?php include 'header.php'; ?>
 
-    <?= $content; ?>
+    <aside class="left">
+        левая колонка
+    </aside>
+
+    <main>
+    <div>
+        <?= $content; ?>
+    </div>
+    </main>
+
+    <aside class="right">
+        правая колонка
+    </aside>
+
 
     <?php include 'footer.php'; ?>
 

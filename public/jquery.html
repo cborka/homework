@@ -1,0 +1,49 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery</title>
+</head>
+<body>
+<h2>Забавы с jQuery</h2>
+
+</body>
+</html>-->
+
+<h2>Забавы с jQuery</h2>
+
+<button onclick="hide_ps()"> Скрыть абзацы </button>
+<button onclick="hide_me()" id="hideme"> Спрячь меня </button>
+
+<p>
+ Это абзацццц
+</p>
+---
+<p>
+    И это абзацццц
+</p>
+
+
+
+
+<script>
+
+// Скрыть абзацы
+function hide_ps()
+{
+    $(document).ready(function(){
+        $("p").hide();
+    });
+}
+
+// Скрыть элемент с ид=hideme
+function hide_me()
+{
+    $(document).ready(function(){
+        $("#hideme").hide();
+    });
+}
+
+
+
+</script>

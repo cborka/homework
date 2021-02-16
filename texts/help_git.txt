@@ -1,0 +1,149 @@
+git init
+git add learngit.txt
+
+#Создание репозитория на github
+git remote add origin https://github.com/cborka/learngit.git
+git branch -M main
+git push -u origin main
+
+# Клонирование существующего репозитория в папку с другим именем
+git clone https://github.com/libgit2/libgit2 mylibgit
+
+# Посмотреть состояние файлов
+git status
+# кратко
+git status -s
+git status --short
+
+# Посмотреть изменения в файлах
+# то, что изменено, но не подготовлено к коммиту
+git diff
+# изменения подготовленные к коммиту
+git diff --staged
+# или тоже самое
+git diff --cached
+
+# Коммит подготовленных (git add <files>) изменений
+git commit -m 'Commit notes'
+# или так, открывает редактор для описания коммита
+git commit
+# пропускает этап подготовки файлов и коммитит сразу все изменения
+git commit -a
+
+# Удалить файл, в том числе совсем из каталога
+git rm <file>
+# Удалить подготовленный к коммиту файл
+git rm -f <file>
+# Перестать отслеживать файл, но оставить в каталоге
+git rm --cached <file>
+
+# Перемещение (переименование) файлов
+git mv file_from file_to
+
+Посмотреть историю коммитов
+git log
+Подробно
+git log -p
+Только 2 записи
+git log -2
+Кратная статистика
+git log --stat
+Каждый коммит в одну строку
+git log --pretty=oneline
+Форматирование - вывод нужной информации
+git log --pretty=format:"%h - %an, %ar : %s"
+История слияний
+git log --pretty=format:"%h %s" --graph
+Коммиты за последние 2 недели
+git log --since=2.weeks
+Коммиты где удалена или вставлена <строка>
+git log -S <строка>
+и много других опций
+
+Заменить последний коммит новым,
+применяется в случае если сделали незначительные правки после последнего коммита
+и хотите чтобы они вошли в последний коммит
+git commit --amend
+
+Отмена индексации файла <file>
+git reset HEAD <file> ????????? я не понял
+подсказывает то вот так
+git restore --staged <file>.
+
+отменить изменения в файле до состояния последнего коммита
+git restore <file>
+
+Посмотреть список удаленных (находящихся далеко, а не стертых) репозитариев
+git remote -v
+добавить удаленный репозитарий
+git remote add pb https://github.com/paulboone/ticgit
+Получение изменений из удаленного репозитария не сливая
+git fetch [remote-name]
+получить изменения из удалённой ветки и слить их со своей текущей
+git pull origin master
+отправка изменений в удаленный репозитарий
+git push <remote-name> <branch-name>
+git push origin master
+Просмотр удаленного репозитория
+git remote show origin
+Изменить (переименовать) удаленный репозитарий
+git remote rename pb paul
+Удалить (перестать отлеживать/пользоваться) удаленный репозиталий paul
+git remote rm paul
+
+Просмотр меток
+git tag
+Просмотр веток по шаблону
+git tag -l 'v1.8.5*'
+создание аннотированной ветки
+git tag -a v1.4 -m 'my version 1.4'
+создание легковесной метки
+git tag v1.4-lw
+создане тега для прошлого коммита, 9fceb02 - начало контрольной суммы (хеша) коммита
+git tag -a v1.2 9fceb02
+отправка метки на удаленный сервер
+git push origin v1.5
+отправка всех меток сразу на удаленный сервер
+git push origin --tags
+удаление легковесной метки из текущего репозитория
+git tag -d v1.4-lw
+удалить метку из удаленного репозитория
+git push origin --delete <tagname>
+переход на метку (лучше этого не делать)
+git checkout v2.0.0
+создать ветку (с этим тоже не всё ясно)
+git checkout -b version2 v2.0.0
+
+создание псеводонимов для команд гит
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.last 'log -1 HEAD'
+создание псевдонимов для внешних команд (добавить в начало восклицательный знак)
+git config --global alias.visual "!gitk"
+
+ВЕТКИ
+
+создание новой ветки
+git branch testing
+переключение на ветку testing
+git checkout testing
+создать ветку и сразу переключиться на нее
+git checkout -b iss53
+слияние текущей ветки с веткой hotfix
+git merge hotfix
+удаление ветки
+git branch -d hotfix
+
+показать имеющиеся ветки
+git branch
+показать имеющиеся ветки вместе с последними коммитами
+git branch -v
+показать ветки, которые уже слиты с текущей (влиты в текущую),
+их можно удалять, так как их наработки (изменения) уже присутствуют в текущей ветке
+git branch --merged
+показать ветки, которые не слиты с текущей
+git branch --no-merged
+показать ветки слежения за ветками на удаленных серверах
+git branch -vv
+удаление ветки serverfix на удаленном сервере
+git push origin --delete serverfix
