@@ -10,12 +10,12 @@ class App
 
     public static function run()
     {
-        $path = $_SERVER['REQUEST_URI'];
-        $pathParts = explode('/', $path);
-        $controller = $pathParts[1];
-        $action = $pathParts[2];
-        $controller = 'Controllers\\' . $controller . 'Controller';
-        $action = 'action' . ucfirst($action);
+//        $path = $_SERVER['REQUEST_URI'];
+        $pathParts = explode('/', $_SERVER['REQUEST_URI']);
+//        $controller = $pathParts[1];
+//        $action = $pathParts[2];
+        $controller = 'Controllers\\' . $pathParts[1] . 'Controller';
+        $action = 'action' . ucfirst($pathParts[2]);
 
         echo $pathParts[1] . '->' . $pathParts[2] . '<br>';
 //        echo $controller . '->' . $action . '<br>';

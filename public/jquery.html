@@ -10,7 +10,7 @@
 </body>
 </html>-->
 
-<h2>Забавы с jQuery</h2>
+<h2>Забавы с jQuery и Axios</h2>
 
 <button onclick="hide_ps()"> Скрыть абзацы </button>
 <button onclick="axios_get()"> Запрос axios </button>
@@ -20,22 +20,25 @@
  Это абзацццц
 </p>
 ---
+<pre>
 <p id="abzac">
     И это абзацццц
 </p>
-
+</pre>
 
 
 
 <script>
 
-function axios_get() {
-
-    axios.get('http://hwvm.ru/index.html').then(res => {
-        $("#abzac").html(res.data); // Результат ответа от сервера
-//      alert(JSON.stringify(res.data)); // Результат ответа от сервера
+function axios_get()
+{
+    axios.get('http://hwvm.ru/test.php').then(res => {
+//        $("#abzac").html(res.data).show(); // Результат ответа от сервера
+//        $("#abzac").html('<pre>' + JSON.stringify(res, null, 4)+'</pre>').show(); // Результат ответа от сервера
+        $("#abzac").text(JSON.stringify(res, null, 4)).show(); // Результат ответа от сервера
     });
 }
+
 $(document).ready(function(){
     $("#abzac").text("Hello world!");
 });
