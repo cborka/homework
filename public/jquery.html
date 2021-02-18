@@ -16,31 +16,44 @@
 <button onclick="axios_get()"> Запрос axios </button>
 <button onclick="hide_me()" id="hideme"> Спрячь меня </button>
 
-<p>
+<p id="ab1">
  Это абзацццц
 </p>
 ---
-<pre>
-<p id="abzac">
+<p id="abzac2">
     И это абзацццц
 </p>
+
+<pre  id="abzac">
 </pre>
-
-
 
 <script>
 
+
+// Запрос axios
 function axios_get()
 {
-    axios.get('http://hwvm.ru/test.php').then(res => {
+    axios.headers = {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+    };
+
+    let dt = new Date();
+    let t = dt.toISOString();
+
+    $("#ab1").text(t);
+
+    axios.get('http://hwvm.ru/index.html?t='+t).then(res => {
 //        $("#abzac").html(res.data).show(); // Результат ответа от сервера
 //        $("#abzac").html('<pre>' + JSON.stringify(res, null, 4)+'</pre>').show(); // Результат ответа от сервера
         $("#abzac").text(JSON.stringify(res, null, 4)).show(); // Результат ответа от сервера
     });
 }
 
+
 $(document).ready(function(){
-    $("#abzac").text("Hello world!");
+    $("#abzac2").text("Hello world! ");
 });
 
 // Скрыть абзацы
