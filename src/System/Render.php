@@ -12,7 +12,7 @@ class Render
         if (!file_exists($layout_file)) {
             echo self::class .'::render(): не найден файл .../' . basename($layout_file);
         }
-
+// $left_col = 'LLLLLL';
         include $layout_file;
     }
 

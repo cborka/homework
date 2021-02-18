@@ -25,6 +25,7 @@
 
     <aside class="left">
         левая колонка
+        <?= $left_col; ?>
     </aside>
 
     <main>
@@ -35,6 +36,7 @@
 
     <aside class="right">
         правая колонка
+        <?= $right_col; ?>
     </aside>
 
 

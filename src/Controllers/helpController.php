@@ -4,6 +4,10 @@ namespace Controllers;
 
 use System\Render;
 
+
+/*
+ * Показывает мои шпаргалки и вообще тексты по темам
+ */
 class helpController
 {
     private $logger;
@@ -18,7 +22,7 @@ class helpController
 
     public function actionGitHelp()
     {
-        $this->logger->setCurrentLevel(33);
+//        $this->logger->setCurrentLevel(33);
 
         $this->logger->emergency('actionGitHelp()');
         $this->logger->alert('actionGitHelp()');

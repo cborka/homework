@@ -4,7 +4,8 @@
     <a href="/help/jqueryHelp">jQuery Help | </a>
     <a href="/help/http">Http | </a>
     <a href="/help/CreationLog">CreationLog | </a>
-    <a href="/help/jqueryLearn">jQuery Learn| </a>
+    <a href="/help/jqueryLearn">jQuery Learn ||| </a>
+    <a href="/mdn/view">Дневник | </a>
     <br>
 
 </header>
