@@ -2,7 +2,9 @@
 
 namespace System;
 
-
+/*
+ * Надо переделать, чтобы было попроще
+ */
 class Render
 {
     public static function render(string $content, $filename = null, $params = [])
@@ -40,6 +42,9 @@ class Render
 //            $content = escapeshellcmd($content);
             $content = strip_tags($content);
             $content = '<pre>' . $content . '</pre>';
+
+            $fullname = null;
+            $params = [];
         }
 
         self::render($content, $fullname, $params);

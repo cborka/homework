@@ -44,7 +44,7 @@ function axios_get()
 
     $("#ab1").text(t);
 
-    axios.get('http://hwvm.ru/index.html?t='+t).then(res => {
+    axios.get('/index.html?t='+t).then(res => {
 //        $("#abzac").html(res.data).show(); // Результат ответа от сервера
 //        $("#abzac").html('<pre>' + JSON.stringify(res, null, 4)+'</pre>').show(); // Результат ответа от сервера
         $("#abzac").text(JSON.stringify(res, null, 4)).show(); // Результат ответа от сервера

@@ -5,22 +5,22 @@
 
 namespace Models\MyDailyNews;
 
-use System\MyPdo;
+// use System\MyPdo;
 
 /*
  *  Работа с таблицей БД my_daily_news
  */
 class MdnDb
 {
-    private $logger;
-
-    public function __construct()
-    {
-        global $logger;
-        $this->logger = $logger;
-
-        $this->logger->debug('__construct MdnDb пока не нужен.');
-    }
+//   private $logger;
+//
+//    public function __construct()
+//    {
+//        global $logger;
+//        $this->logger = $logger;
+//
+//        $this->logger->debug('__construct MdnDb пока не нужен.');
+//    }
 
     //
     // Возвращает последние 10 записей
@@ -38,7 +38,7 @@ class MdnDb
             $where = ' WHERE content LIKE \'%' . $_POST['search'] . '%\'';
         }
 
-        $sql = 'SELECT * FROM my_daily_news ' . $where . ' ORDER BY dt DESC LIMIT 3';
+        $sql = 'SELECT * FROM my_daily_news ' . $where . ' ORDER BY dt DESC LIMIT 10';
 
 //        $logger->debug('getRecords sql = ' . $sql);
 

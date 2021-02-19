@@ -30,9 +30,13 @@
 
     <main>
     <div>
-        <?= $content; ?>
-        <?php  //echo '<br>$params<pre>'; var_dump($params); echo '</pre>'; ?>
-        <?php  if ($filename) include $filename; ?>
+        <?php
+            if ($filename) {
+                include $filename;
+            } else {
+                echo $content;
+            }
+        ?>
     </div>
     </main>
 
