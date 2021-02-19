@@ -5,14 +5,14 @@ namespace System;
 
 class Render
 {
-    public static function render(string $content, $params = [])
+    public static function render(string $content, $filename = null, $params = [])
     {
         $layout_file = __DIR__ . '/../Views/partials/layout.php';
 
         if (!file_exists($layout_file)) {
-            echo self::class .'::render(): не найден файл .../' . basename($layout_file);
+            echo self::class .'::render(): не найден файл .../' . basename($layout_file) . '<br>';
         }
-// $left_col = 'LLLLLL';
+
         include $layout_file;
     }
 
@@ -23,7 +23,7 @@ class Render
         $fullname = $filename;
 
         if (!file_exists($fullname)) {
-            echo self::class .'::render_file(): не найден файл ' . ($filename);
+            echo self::class .'::render_file(): не найден файл ' . ($filename) . '<br>';
         }
 
         // Читаем содержимое файла в строку
@@ -33,7 +33,7 @@ class Render
             self::render($e->getMessage());
         }
 
-        // Если текст, то выводим как есть
+        // Если текст, то заключаем в тег <pre>
         $extension = pathinfo($fullname, PATHINFO_EXTENSION);
         echo 'Ext = ' . $extension;
         if ($extension == 'txt') {
@@ -42,7 +42,7 @@ class Render
             $content = '<pre>' . $content . '</pre>';
         }
 
-        self::render($content);
+        self::render($content, $fullname, $params);
     }
 
 }

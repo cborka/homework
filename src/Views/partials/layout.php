@@ -31,6 +31,8 @@
     <main>
     <div>
         <?= $content; ?>
+        <?php  //echo '<br>$params<pre>'; var_dump($params); echo '</pre>'; ?>
+        <?php  if ($filename) include $filename; ?>
     </div>
     </main>
 

@@ -9,6 +9,7 @@ use System\Logger;
 use System\MyPdo;
 
 global $logger;
+global $pdo;
 
 // Подключаем файл реализующий автозагрузку
 require 'vendor/autoload.php';
