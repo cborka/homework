@@ -71,7 +71,7 @@ class Logger extends AbstractLogger
             return;
         }
 
-        echo $this->levels[$level] . '(' . $level . '): ' . $message . '<br>';
+        echo date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . '<br>';
         //Render::render($level . $message . '<br>');
     }
 

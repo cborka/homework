@@ -18,7 +18,8 @@ Author URI: https://github.com/cborka
             "f f f";
     /*grid-template-columns: 1fr 1fr 1fr;*/
     grid-template-columns: min-content 1fr min-content;
-    grid-template-rows: minmax(15px, min-content) 1fr minmax(15px, min-content);
+    /*grid-template-columns: 25% 50% 25%;*/
+    grid-template-rows: minmax(min-content, 35px) 1fr minmax(15px, min-content);
 
     grid-gap: 1px;
     background-color: lightgray;

@@ -10,14 +10,15 @@ class App
 
     public static function run()
     {
-//        $path = $_SERVER['REQUEST_URI'];
+        global $logger;
+
         $pathParts = explode('/', $_SERVER['REQUEST_URI']);
-//        $controller = $pathParts[1];
-//        $action = $pathParts[2];
         $controller = 'Controllers\\' . $pathParts[1] . 'Controller';
         $action = 'action' . ucfirst($pathParts[2]);
 
-        echo $pathParts[1] . '->' . $pathParts[2] . '<br>';
+        $logger->debug(self::class . '::run: ' . $pathParts[1] . '->' . $pathParts[2]);
+
+//        echo $pathParts[1] . '->' . $pathParts[2] . '<br>';
 //        echo $controller . '->' . $action . '<br>';
 
         if (!class_exists($controller)) {

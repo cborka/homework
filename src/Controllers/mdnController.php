@@ -24,7 +24,7 @@ class mdnController
     // Показать записи на экране
     public function actionView()
     {
-        $this->logger->debug('mdn-view');
+        $this->logger->debug(self::class . '->actionView()');
 
         $records = MdnDb::getRecords();
         Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/mdn/mdnList.php', $records );
@@ -33,7 +33,7 @@ class mdnController
     // Редактировать запись в форме
     public function actionForm()
     {
-        $this->logger->debug('mdn-form');
+        $this->logger->debug(self::class . '->actionForm()');
 
         Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/mdn/mdnForm.php');
     }
@@ -41,7 +41,7 @@ class mdnController
     // Сохранить запись из формы в БД
     public function actionSave()
     {
-        $this->logger->debug('mdn-save');
+        $this->logger->debug(self::class . '->actionSave()');
 
         if ($_POST['password'] == 21) {
             $result = MdnDb::saveRecord($_POST['id'], $_POST['dt'], $_POST['header'], $_POST['content']);

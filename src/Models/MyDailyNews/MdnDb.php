@@ -30,7 +30,7 @@ class MdnDb
         global $pdo;
         global $logger;
 
-        $logger->debug('MdnDb::getRecords()');
+        $logger->debug(self::class . '::getRecords()');
 
         if (!$_POST['search'] || $_POST['search'] == '') {
             $where = '';
@@ -61,7 +61,7 @@ class MdnDb
         global $pdo;
         global $logger;
 
-        $logger->debug('MdnDb::saveRecords()');
+        $logger->debug(self::class . '::saveRecords()');
 
         if ($id == 0) {
             $sql = 'INSERT INTO my_daily_news(dt, header, content) VALUES (:dt, :header, :content)';
