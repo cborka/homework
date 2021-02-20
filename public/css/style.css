@@ -16,7 +16,8 @@ Author URI: https://github.com/cborka
             "h h h"
             "s c r"
             "f f f";
-    grid-template-columns: minmax(150px, min-content) 1fr minmax(150px, min-content);
+    /*grid-template-columns: 1fr 1fr 1fr;*/
+    grid-template-columns: min-content 1fr min-content;
     grid-template-rows: minmax(15px, min-content) 1fr minmax(15px, min-content);
 
     grid-gap: 1px;
@@ -101,6 +102,11 @@ footer {
 }
 
 body{
+    word-wrap: break-word;
 
+}
+
+div{
+    word-wrap: break-word;
 
 }

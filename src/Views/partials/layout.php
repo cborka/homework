@@ -15,6 +15,10 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!--    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
 
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />-->
+
+
+
 </head>
 <body>
 
@@ -23,10 +27,7 @@
 
     <?php include 'header.php'; ?>
 
-    <aside class="left">
-        левая колонка
-        <?= $left_col; ?>
-    </aside>
+    <?php if ($params['left_col']) include 'left_col.php'; ?>
 
     <main>
     <div>
@@ -40,11 +41,7 @@
     </div>
     </main>
 
-    <aside class="right">
-        правая колонка
-        <?= $right_col; ?>
-    </aside>
-
+    <?php if ($params['right_col']) include 'right_col.php'; ?>
 
     <?php include 'footer.php'; ?>
 
