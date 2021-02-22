@@ -4,6 +4,22 @@
 А то было несколько сайтов, теперь будет всего один.
 Если захочу что-нибудь потестить, то сделаю для этого отдельный контроллер.
 
+Чтобы сайт окрывался на удаленном сервере по IP добавил IP в список серверов в файле
+cd /etc/nginx/sites-available
+
+server_name homework.xntvps.ru hwnt.ru 93.189.42.2;
+
+Почему называется ntvps?
+Потому что у меня сервер арендован на nt-vps.ru
+
+#Мои алиасы из файла .bashrc
+alias cdwww='cd /var/www/html'
+alias cdhw='cd /var/www/html/homework'
+alias cdng='cd /etc/nginx/sites-available'
+alias mo1="sudo mount /home/cborka"
+alias mo2="sudo mount /home/cborka2" # это мягкая ссылка на /home/cborka
+
+
 18.02.2021
 
 Сделал уникальной строку запроса axios, добавил время,

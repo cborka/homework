@@ -3,6 +3,9 @@
 // Включаем режим строгой типизации
 declare(strict_types=1);
 
+// Подключаем файл реализующий автозагрузку
+require 'vendor/autoload.php';
+
 use System\App;
 use System\Render;
 use System\Logger;
@@ -11,8 +14,6 @@ use System\MyPdo;
 global $logger;
 global $pdo;
 
-// Подключаем файл реализующий автозагрузку
-require 'vendor/autoload.php';
 
 // Создаю глобальный логгер
 try {

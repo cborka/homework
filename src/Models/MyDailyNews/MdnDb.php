@@ -1,8 +1,5 @@
 <?php
 
-//require_once 'dbconnect.php';
-
-
 namespace Models\MyDailyNews;
 
 // use System\MyPdo;
