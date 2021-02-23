@@ -3,6 +3,7 @@
 namespace Models\Users;
 
 use System\Lib;
+use System\Mailer;
 
 class RegUser
 {
@@ -14,25 +15,40 @@ class RegUser
 
         $logger->debug(self::class . '::regUser()');
 
-        Lib::var_dump($_POST);
+//        Lib::var_dump($_POST);
+//        array(6) {
+//        ["login"]=>
+//  string(9) "cborka777"
+//        ["password"]=>
+//  string(0) ""
+//        ["password2"]=>
+//  string(0) ""
+//        ["test"]=>
+//  string(3) "144"
+//        ["fullname"]=>
+//  string(12) "Михаил"
+//        ["button_submit"]=>
+//  string(0) ""
+//}
+        $email = $_POST['email'];
+        $login = $_POST['login'];
+        $name = $_POST['name'];
+        $subject = 'Подтверждение почты. Email confirmation.';
+        $message = <<<"EOF"
+        
+        Здравствуйте, $name
 
-        try {
-            if (mail('cborka@mail.ru', 'Hi Subject', 'Hello, Mir!')) {
-                $logger->debug(self::class . '::regUser() Почта отправлена!');
-            }
-            else {
-                $logger->debug(self::class . '::regUser() Почта НЕ отправлена!');
-            }
-        } catch (\ERROR $e) {
-            $logger->debug(self::class . '::regUser(): ' . $e->getMessage());
-        }
-//        mail (
-//            string $to ,
-//            string $subject ,
-//            string $message ,
-//            array|string $additional_headers = [] ,
-//            string $additional_params = ""
-//        ) : bool
+EOF;
+
+        echo $message;
+//        $email = $_POST['email'];
+
+//        try {
+//            Mailer::send('cborka@mail.ru', 'Hi Subject', 'Hello, Mir!');
+//        } catch (\ERROR $e) {
+//            $logger->debug(self::class . '::regUser(): ' . $e->getMessage());
+//        }
+
         }
 
 

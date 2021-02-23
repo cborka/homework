@@ -30,6 +30,7 @@ class usersController
     }
 
     // Зарегистрировать пользователя
+    // сюда попадаем из формы регистрации, когда все поля заполнены и лежат в $_POST
     public function actionReg()
     {
         $this->logger->debug(self::class . '->actionReg()');
@@ -43,9 +44,24 @@ class usersController
     {
         $this->logger->debug(self::class . '->sendMail()');
 
-        Mailer::sendMail();
+        Lib::var_dump($_POST);
+
+        Mailer::send('cborka@mail.ru',
+            'Tema',
+            'Привет от старых штиблет. Hi from old shoose.',
+            'Old fart');
     }
 
+    // Показать форму регистрации
+    public function actionCheck_login()
+    {
+        $this->logger->debug(self::class . '->actionCheck_login()');
+
+        //Lib::var_dump($_POST);
+        echo "login OK";
+
+//        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/reg.php');
+    }
 
 
 }

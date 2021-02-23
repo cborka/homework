@@ -37,11 +37,11 @@ class Logger extends AbstractLogger
         LogLevel::DEBUG     => 80
     ];
 
-    private $currentLevel = 100;
+    private $currentLevel = 0;
 
     public function __construct()
     {
-        echo 'I am Logger<br>';
+//        echo 'I am Logger<br>';
     }
 
     public function getCurrentLevel()

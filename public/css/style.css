@@ -111,3 +111,7 @@ div{
     word-wrap: break-word;
 
 }
+
+input:invalid {
+    border: 2px dashed red;
+}
