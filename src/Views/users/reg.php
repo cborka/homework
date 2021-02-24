@@ -5,13 +5,13 @@
     <table class="form">
         <tr>
             <td><label>Логин (имя для входа):</label></td>
-            <td><input id="login" type="text" name="login" placeholder="Такое как alex или vlad" value="" onchange="check_login_query()">
-                <span id="isloginfree"></span></td>
+            <td><input id="login" type="text" name="login" placeholder="Такое как alex или vlad" value="" onchange="check_data()">
+                <span class="red" id="isloginfree"></span></td>
         </tr>
         <tr>
-            <td><label>Почта:</label></td>
-            <td><input id="email" type="email" name="email" placeholder="my@email" value="" onchange="check_email_query()">
-                <span id="isemailfree"></span></td>
+            <td><label>Почта (email):</label></td>
+            <td><input id="email" type="email" name="email" placeholder="my@email" value="" onchange="check_data()">
+                <span class="red" id="isemailfree"></span></td>
         </tr>
         <tr>
             <td><label>Пароль:</label></td>
@@ -22,7 +22,7 @@
             <td><input id="password2" type="password" name="password2" placeholder="***" value="" onchange="check_data()" ></td>
         </tr>
         <tr>
-            <td><label>А ты не робот? Проверка:</label></td>
+            <td><label>А вы не робот? Проверка:</label></td>
             <td><input id="test" type="text" name="test" placeholder="12 х 12 =" value="" onchange="check_data()" ></td>
         </tr>
         <tr>
@@ -38,7 +38,7 @@
         <tr>
             <td></td>
             <td>
-                <div id="hint" ></div>
+                <div class="red" id="hint" ></div>
                 <div id="erro"></div>
 
             </td>
@@ -47,32 +47,36 @@
 </form>
 
 <script>
+
+    //
+    //  Проверка правильности занесения данных
+    //
     function check_data()
     {
         userreg.button_submit.disabled = true;
-        if (userreg.login.value === "")
-        {
-            info("Поле 'Login' не заполнено");
+        if (userreg.login.value.length < 3) {
+            info("Поле 'Login' слишком короткое, меньше трёх символов");
+        }
+        if (!check_login_free()) {
             return false;
         }
-        if (userreg.email.value === "")
-        {
-            info("Email не заполнен");
+        if (!validate_email(userreg.email.value)) {
+            info("Формат email неверный");
             return false;
         }
-        if (userreg.password.value === "")
-        {
+        if (!check_email_free()) {
+            return false;
+        }
+        if (userreg.password.value === "") {
             info("Пароль не заполнен");
             return false;
         }
-        if (userreg.password.value !== userreg.password2.value)
-        {
+        if (userreg.password.value !== userreg.password2.value) {
             info("Пароли не совпадают");
             return false;
         }
-        if (userreg.test.value !== "144")
-        {
-            info("А не робот ли ты?");
+        if (userreg.test.value !== "144") {
+            info("А вы не робот случайно?");
             return false;
         }
         info("OK");
@@ -80,51 +84,65 @@
         return true;
     }
 
-    function info(str)
-    {
-        document.getElementById("hint").innerHTML=str;
-    }
-
-    function check_login_query()
+    //
+    //  Не занят ли логин?
+    //
+    function check_login_free()
     {
         let login = userreg.login.value;
 
-        if (userreg.login.value === "") {
-            info("Поле 'Login' не заполнено");
-            return false;
-        }
-
         // Запрос серверу на проверку не занят ли этот логин
-        response = sql_one('SELECT count(*) FROM users WHERE login = \'' + login + '\'');
+//        response = sql_one('SELECT count(*) FROM users WHERE login = \'' + login + '\'');
+        response = sql_one('SELECT count(*) FROM users WHERE login = :par1', [login, 'qwerty']);
+
+alert('resp='+response);
+        return false;
+
 
         if (response !== '0') {
-            info( "Логин '"+login+"' уже занят.")
-            $("#isloginfree").text("Логин занят")
-        } else {
-            check_data();
+            info("Логин '"+login+"' уже занят.");
+            $("#isloginfree").text("Логин занят");
+            return false;
         }
 
-//        alert('resp = '+response);
-
-//        doQuery ("/users/isLoginFree", check_login, "&login=" + encodeURIComponent(userreg.login.value));
+        return true;
     }
 
-    function check_emailn_query()
+    //
+    //  Есть ли такая почта в БД?
+    //
+    function check_email_free()
     {
-        if (!check_data()) {
+        let email = userreg.email.value;
+
+        // Запрос серверу на проверку не занят ли этот email
+        response = sql_one('SELECT count(*) FROM users WHERE email = \'' + email + '\'');
+
+        if (response !== '0') {
+            info("Уже есть пользователь с почтой '"+email);
+            $("#isemailfree").text("Уже есть такая почта");
             return false;
         }
-        userreg.button_submit.disabled = true;
-        if (userreg.login.value === "") {
-            info("Поле 'Login' не заполнено");
-            return false;
-        }
-        // Запрос серверу на проверку не занят ли этот логин
-//        doQuery ("/users/isLoginFree", check_login, "&login=" + encodeURIComponent(userreg.login.value));
+
+        return true;
     }
 
-    function show_msg(str) {
-        info();
+    //
+    //  Правильный ли формат email
+    //
+    function validate_email(email) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
     }
+
+    //
+    //  Просто выводит сообщение
+    //
+    function info(str)
+    {
+        $("#hint").text(str);
+//        document.getElementById("hint").innerHTML=str;
+    }
+
 
 </script>

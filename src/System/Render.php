@@ -56,7 +56,15 @@ class Render
             $fullname = null;
             $params = [];
         }
+        if ($extension == 'md') {
+            $Parsedown = new \Parsedown();
+//            $content = escapeshellcmd($content);
+            $content = $Parsedown->text($content);
+            $fullname = null;
+            $params = [];
+        }
 
+        $Parsedown->text('Hello _Parsedown_!');
         self::render($content, $fullname, $params);
     }
 }

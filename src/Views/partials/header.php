@@ -6,6 +6,7 @@
     <a href="/help/http">Http | </a>
     <a href="/help/CreationLog">CreationLog | </a>
     <a href="/help/jqueryLearn">jQuery Learn ||| </a>
+    <a href="/help/docs">Описание ||| </a>
     <a href="/mdn/view">Дневник ||| </a>
     <a href="/users/showRegForm">Регистрация | </a>
     <br>

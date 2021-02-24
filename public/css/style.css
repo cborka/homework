@@ -115,3 +115,5 @@ div{
 input:invalid {
     border: 2px dashed red;
 }
+
+.red { color: red;}

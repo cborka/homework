@@ -73,4 +73,18 @@ class helpController
         Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/public/jquery.html');
     }
 
+    public function actionMarkdown()
+    {
+        $this->logger->debug(self::class . '->actionMarkdown()');
+
+        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/texts/markdown.md');
+    }
+
+    public function actionDocs()
+    {
+        $this->logger->debug(self::class . '->actionMarkdown()');
+
+        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/texts/docs.md');
+    }
+
 }

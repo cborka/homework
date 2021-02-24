@@ -11,30 +11,32 @@ declare(strict_types=1);
 // Подключаем файл реализующий автозагрузку
 require 'vendor/autoload.php';
 
-use System\App;
-use System\Render;
 use System\Logger;
 use System\MyPdo;
+use System\App;
+use System\Render;
 
 global $logger;
-global $pdo;
+global $mypdo;
+global $dbh;
 
 
 // Создаю глобальный логгер
 try {
     $logger = new Logger();
 } catch (\Error $e) {
-    echo $e->getMessage() . '<br>';
+    echo "Logger: Ошибка: {$e->getMessage()} ";
     exit;
 }
 
-// Подключаюсь к БД
+// Подключаюсь к БД, глобальная ссылка на подключение
 try {
-    $mypdo = new MyPdo('mysql:host=93.189.42.2;dbname=homeworks', 'boris', '14321');
-    $pdo = $mypdo->getDbh();
+    $mypdo = new MyPdo('mysql:host=93.189.42.2;dbname=homework', 'bor', '432');
+    $dbh = $mypdo->getDbh();
     $logger->info("Подключена БД");
 } catch (PDOException $e) {
-    $logger->error( "Ошибка: " . $e->getMessage() . "<br/>");
+    $logger->error( "MyPdo: Ошибка: {$e->getMessage()} ");
+    echo "MyPdo: Ошибка: {$e->getMessage()} ";
     die();
 }
 
@@ -42,6 +44,6 @@ try {
 try {
     App::run();
 } catch (\ErrorException $e) {
-    $logger->error( "Ошибка: " . $e->getMessage());
-//    Render::render($e->getMessage() . '<br>');
+    $logger->warning( "App::run: " . $e->getMessage());
+    Render::render( "App::run: " . $e->getMessage());
 }

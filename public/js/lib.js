@@ -2,13 +2,14 @@ function libjs() {
    return 'libjs';
 }
 
-function sql_one(sql) {
+function sql_one(sql, params) {
 
     $.ajaxSetup({async:false});
     response = '';
     $.post("/pdo/sql_one",
 //    $.post("http://hwvm.ru/users/check_login",
         {
+            params: params,
             sql: sql
         },
         function (data, status) {

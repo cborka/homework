@@ -10,10 +10,11 @@ My daily news (mdn)<br>
         <button>Применить</button>
     </form>
 <hr>
+<!-- Пустые поля для добавления новой записи-->
     <form action="/mdn/form" method="post">
-        <input type="number" name="id" value="0" readonly hidden>
-        <input type="datetime-local" name="dt" value="" hidden>
-        <input type="text" name="header" value="" hidden>
+        <input type="number"         name="id"     value="0" readonly hidden>
+        <input type="datetime-local" name="dt"     value="" hidden>
+        <input type="text"           name="header" value="" hidden>
         <textarea name="content" rows="10" cols="60" hidden></textarea>
         <button >Добавить запись</button>
         <br>

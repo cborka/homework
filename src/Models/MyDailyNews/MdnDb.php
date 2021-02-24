@@ -24,7 +24,7 @@ class MdnDb
     //
     public static function getRecords ($where_clause = '')
     {
-        global $pdo;
+        global $dbh;
         global $logger;
 
         $logger->debug(self::class . '::getRecords()');
@@ -40,7 +40,7 @@ class MdnDb
 //        $logger->debug('getRecords sql = ' . $sql);
 
         try {
-            $statement = $pdo->prepare($sql);
+            $statement = $dbh->prepare($sql);
             $statement->execute();
             $records = $statement->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
@@ -55,7 +55,7 @@ class MdnDb
      */
     public static function saveRecord($id, $dt, $header, $content)
     {
-        global $pdo;
+        global $dbh;
         global $logger;
 
         $logger->debug(self::class . '::saveRecords()');
@@ -75,7 +75,7 @@ EOS;
         }
 
         try {
-            $statement = $pdo->prepare($sql);
+            $statement = $dbh->prepare($sql);
             if ($id != 0) {
                 $statement->bindParam(':id', $id);
             }
@@ -93,8 +93,6 @@ EOS;
         } catch (\PDOException $e) {
             $logger->error($e->getMessage() );
             echo $e->getMessage();
-
-          die();
         }
     }
 }
