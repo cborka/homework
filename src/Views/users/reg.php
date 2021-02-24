@@ -46,6 +46,9 @@
     </table>
 </form>
 
+<button onclick="atest()">atest</button>
+
+
 <script>
 
     //
@@ -93,9 +96,10 @@
 
         // Запрос серверу на проверку не занят ли этот логин
 //        response = sql_one('SELECT count(*) FROM users WHERE login = \'' + login + '\'');
-        response = sql_one('SELECT count(*) FROM users WHERE login = :par1', [login, 'qwerty']);
+        response = sql_one('SELECT count(*) FROM users WHERE login = ? AND id = ? ', [String(login), Number(111)]);
 
-alert('resp='+response);
+        $("#isloginfree").text(response);
+        //alert('resp='+response);
         return false;
 
 
@@ -142,6 +146,25 @@ alert('resp='+response);
     {
         $("#hint").text(str);
 //        document.getElementById("hint").innerHTML=str;
+    }
+
+
+    function atest() {
+//        alert('atest');
+        $.ajax({
+            type: "POST",
+            url: "/pdo/sql_one",
+            data: 'select count(*) from test',
+//            dataType: "json",
+            success: function(data) {
+                alert('success');
+            },
+            error: function(data) {
+                alert('error');
+            }
+        });
+
+
     }
 
 

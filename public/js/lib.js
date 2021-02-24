@@ -2,8 +2,8 @@ function libjs() {
    return 'libjs';
 }
 
-function sql_one(sql, params) {
-
+function sql_one(sql, params)
+{
     $.ajaxSetup({async:false});
     response = '';
     $.post("/pdo/sql_one",
@@ -14,9 +14,14 @@ function sql_one(sql, params) {
         },
         function (data, status) {
             response = data;
-        });
+        }
+    );
 
-    if (response.substr(0, 12) === 'PDOException') {
+
+
+
+    // Если ошибка PDO
+    if (response.substr(0, 14) === 'MyPdo->sql_one') {
         alert(response);
         return '';
     }

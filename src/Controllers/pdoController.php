@@ -18,7 +18,8 @@ class pdoController
         $logger->debug(self::class . '::sql_one()');
 
         $sql = $_POST['sql'];
+        $params = $_POST['params'];
 
-        echo $mypdo->sql_one($sql);
+        echo $mypdo->sql_one($sql, $params);
     }
 }

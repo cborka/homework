@@ -27,17 +27,23 @@ class MyPdo
     /*
      *  Выполняет запрос возвращающий ОДНО значение
      */
-    public function sql_one($sql, $params)
+    public function sql_one($sql, $params='')
     {
         global $logger;
         $logger->debug(self::class . '::sql_one()');
 
+        $post = var_export($_POST, true);
+        $logger->notice('post = ' . $post);
 
-        return $params;
-        die();
 
-        try {
+        $logger->notice('sql = ' . $sql);
+        $logger->notice('params = ' . var_export($params, true));
+
+         try {
             $statement = $this->dbh->prepare($sql);
+            for ($i = 0; $i < count($params); $i++) {
+                $statement->bindValue($i+1, $params[$i]); //, \PDO::PARAM_STR);
+            }
             $statement->execute();
             $records = $statement->fetchAll();
         } catch (\PDOException $e) {

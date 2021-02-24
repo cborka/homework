@@ -37,7 +37,7 @@ class Logger extends AbstractLogger
         LogLevel::DEBUG     => 80
     ];
 
-    private $currentLevel = 0;
+    private $currentLevel = 61;
 
     public function __construct()
     {
@@ -71,8 +71,26 @@ class Logger extends AbstractLogger
             return;
         }
 
-        echo date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . '<br>';
+   //     echo date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . '<br>';
+        $this->addMessageToFile(date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . "\n");
         //Render::render($level . $message . '<br>');
+    }
+
+    private function addMessageToFile($message)
+    {
+        $filename =$_SERVER['DOCUMENT_ROOT'] . '/logs/log1.txt';
+   //     echo $filename . '<br>';
+        if (!$fp = fopen($filename, "a")) {
+            echo "Не могу открыть файл";
+            exit;
+        }
+        if (fwrite($fp, $message) === FALSE) {
+            echo "Не могу произвести запись в файл";
+            exit;
+        }
+
+        fclose($fp);
+
     }
 
 
