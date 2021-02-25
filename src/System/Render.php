@@ -60,6 +60,7 @@ class Render
             $Parsedown = new \Parsedown();
 //            $content = escapeshellcmd($content);
             $content = $Parsedown->text($content);
+
             $fullname = null;
             $params = [];
         }
