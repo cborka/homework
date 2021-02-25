@@ -5,12 +5,12 @@
     <table class="form">
         <tr>
             <td><label>Логин (имя для входа):</label></td>
-            <td><input id="login" type="text" name="login" placeholder="Такое как alex или vlad" value="" onchange="check_data()">
+            <td><input id="login" type="text" name="login" placeholder="Такое как alex или vlad" value="" maxlength="31" onchange="check_login_free()">
                 <span class="red" id="isloginfree"></span></td>
         </tr>
         <tr>
             <td><label>Почта (email):</label></td>
-            <td><input id="email" type="email" name="email" placeholder="my@email" value="" onchange="check_data()">
+            <td><input id="email" type="email" name="email" placeholder="my@email" value="" maxlength="63" onchange="check_email_free()">
                 <span class="red" id="isemailfree"></span></td>
         </tr>
         <tr>
@@ -40,13 +40,12 @@
             <td>
                 <div class="red" id="hint" ></div>
                 <div id="erro"></div>
-
             </td>
         </tr>
     </table>
 </form>
 
-<button onclick="atest()">atest</button>
+<!--<button onclick="atest()">atest</button>-->
 
 
 <script>
@@ -57,17 +56,12 @@
     function check_data()
     {
         userreg.button_submit.disabled = true;
+
         if (userreg.login.value.length < 3) {
             info("Поле 'Login' слишком короткое, меньше трёх символов");
         }
-        if (!check_login_free()) {
-            return false;
-        }
         if (!validate_email(userreg.email.value)) {
             info("Формат email неверный");
-            return false;
-        }
-        if (!check_email_free()) {
             return false;
         }
         if (userreg.password.value === "") {
@@ -92,24 +86,22 @@
     //
     function check_login_free()
     {
+        userreg.login.value = userreg.login.value.trim();
         let login = userreg.login.value;
 
         // Запрос серверу на проверку не занят ли этот логин
 //        response = sql_one('SELECT count(*) FROM users WHERE login = \'' + login + '\'');
-        response = sql_one('SELECT count(*) FROM users WHERE login = ? AND id = ? ', [String(login), Number(111)]);
+//        response = sql_one('SELECT count(*) FROM users WHERE login = ? AND id = ? ', [String(login), Number(111)]);
 
-        $("#isloginfree").text(response);
-        //alert('resp='+response);
-        return false;
-
-
-        if (response !== '0') {
+        response = sql_one('SELECT count(*) FROM users WHERE login = ? ', [String(login)]);
+//        alert('resp='+response);
+        if (response > 0) {
             info("Логин '"+login+"' уже занят.");
             $("#isloginfree").text("Логин занят");
             return false;
         }
 
-        return true;
+        return check_data();
     }
 
     //
@@ -117,18 +109,19 @@
     //
     function check_email_free()
     {
+        userreg.email.value = userreg.email.value.trim();
         let email = userreg.email.value;
 
         // Запрос серверу на проверку не занят ли этот email
-        response = sql_one('SELECT count(*) FROM users WHERE email = \'' + email + '\'');
+        response = sql_one('SELECT count(*) FROM users WHERE email = ? ', [String(email)]);
 
-        if (response !== '0') {
+        if (response === '1') {
             info("Уже есть пользователь с почтой '"+email);
             $("#isemailfree").text("Уже есть такая почта");
             return false;
         }
 
-        return true;
+        return check_data();
     }
 
     //
@@ -149,23 +142,21 @@
     }
 
 
-    function atest() {
-//        alert('atest');
-        $.ajax({
-            type: "POST",
-            url: "/pdo/sql_one",
-            data: 'select count(*) from test',
-//            dataType: "json",
-            success: function(data) {
-                alert('success');
-            },
-            error: function(data) {
-                alert('error');
-            }
-        });
-
-
-    }
+//     function atest() {
+// //        alert('atest');
+//         $.ajax({
+//             type: "POST",
+//             url: "/pdo/sql_one",
+//             data: 'select count(*) from test',
+// //            dataType: "json",
+//             success: function(data) {
+//                 alert('success');
+//             },
+//             error: function(data) {
+//                 alert('error');
+//             }
+//         });
+//     }
 
 
 </script>

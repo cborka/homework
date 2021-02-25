@@ -2,6 +2,7 @@
 
 namespace System;
 
+use mysql_xdevapi\Exception;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
@@ -37,7 +38,7 @@ class Logger extends AbstractLogger
         LogLevel::DEBUG     => 80
     ];
 
-    private $currentLevel = 61;
+    private $currentLevel = 81;
 
     public function __construct()
     {
@@ -78,19 +79,18 @@ class Logger extends AbstractLogger
 
     private function addMessageToFile($message)
     {
-        $filename =$_SERVER['DOCUMENT_ROOT'] . '/logs/log1.txt';
-   //     echo $filename . '<br>';
+        $filename =$_SERVER['DOCUMENT_ROOT'] . '/logs/log2.txt';
+
         if (!$fp = fopen($filename, "a")) {
-            echo "Не могу открыть файл";
+            echo "Не могу открыть логфайл";
             exit;
         }
         if (fwrite($fp, $message) === FALSE) {
-            echo "Не могу произвести запись в файл";
+            echo "Не могу произвести запись в логфайл";
             exit;
         }
 
         fclose($fp);
-
     }
 
 

@@ -63,7 +63,6 @@ class helpController
         $this->logger->debug(self::class . '->actionCreationLog()');
 
         Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/creation_log.txt');
-//        readfile($_SERVER['DOCUMENT_ROOT'] . '/creation_log.txt');
     }
 
     public function actionJqueryLearn()
@@ -85,6 +84,18 @@ class helpController
         $this->logger->debug(self::class . '->actionMarkdown()');
 
         Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/texts/docs.md');
+    }
+
+    public function actionTest()
+    {
+        $this->logger->debug(self::class . '->actionTest()');
+
+        Render::render(highlight_string('<?php
+    // подсветка синтаксиса, функция ighlight_string()
+    phpinfo(); 
+    $this->logger->debug(self::class . \'->actionTest()\'); 
+?>', true));
+
     }
 
 }

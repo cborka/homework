@@ -2,29 +2,23 @@ function libjs() {
    return 'libjs';
 }
 
+//
+// POST запрос на выполенние SQL возвращающего одно значение
+//
 function sql_one(sql, params)
 {
     $.ajaxSetup({async:false});
-    response = '';
+
     $.post("/pdo/sql_one",
 //    $.post("http://hwvm.ru/users/check_login",
         {
-            params: params,
-            sql: sql
+            sql: sql,
+            params: params
         },
         function (data, status) {
-            response = data;
+            return data;
         }
     );
 
-
-
-
-    // Если ошибка PDO
-    if (response.substr(0, 14) === 'MyPdo->sql_one') {
-        alert(response);
-        return '';
-    }
-
-    return response;
+    return '';
 }

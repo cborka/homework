@@ -1,6 +1,7 @@
 <header>
     <span id="show_error"></span>
     <br>header<br>
+    <a href="/help/test">Тесты ||| </a>
     <a href="/help/gitHelp">Git Help | </a>
     <a href="/help/jqueryHelp">jQuery Help | </a>
     <a href="/help/http">Http | </a>

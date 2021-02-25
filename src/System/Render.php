@@ -64,7 +64,6 @@ class Render
             $params = [];
         }
 
-        $Parsedown->text('Hello _Parsedown_!');
         self::render($content, $fullname, $params);
     }
 }

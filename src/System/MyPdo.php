@@ -2,10 +2,15 @@
 
 namespace System;
 
+use System\Lib;
+
 class MyPdo
 {
     private $dbh;
 
+    /*
+     * Подключение к БД
+     */
     public function __construct($dsn, $user, $password)
     {
         try {
@@ -24,6 +29,47 @@ class MyPdo
         return $this->dbh;
     }
 
+
+    /*
+     *  Выполняет запрос НЕ возвращающий значений
+     */
+    public function sql_update($sql, $params='')
+    {
+        global $logger;
+        $logger->debug(self::class . '::sql_update()');
+
+        $logger->notice('sql = ' . $sql);
+        $logger->notice('params = ' . Lib::var_dump1($params));
+
+        try {
+            $statement = $this->dbh->prepare($sql);
+//            for ($i = 0; $i < count($params); $i++) {
+//                $statement->bindValue($i+1, $params[$i]); //, \PDO::PARAM_STR);
+//            }
+            $statement->execute($params);
+        } catch (\PDOException $e) {
+            $logger->error("MyPdo->sql_update: ($sql): \n {$e->getMessage()}");
+            Render::render("облом ($sql): <br> {$e->getMessage()}");
+            die();
+//            return false;
+        }
+
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*
      *  Выполняет запрос возвращающий ОДНО значение
      */
@@ -32,9 +78,8 @@ class MyPdo
         global $logger;
         $logger->debug(self::class . '::sql_one()');
 
-        $post = var_export($_POST, true);
-        $logger->notice('post = ' . $post);
-
+//        $post = var_export($_POST, true);
+//        $logger->notice('post = ' . $post);
 
         $logger->notice('sql = ' . $sql);
         $logger->notice('params = ' . var_export($params, true));
@@ -48,6 +93,7 @@ class MyPdo
             $records = $statement->fetchAll();
         } catch (\PDOException $e) {
             $logger->error("MyPdo->sql_one: ($sql): {$e->getMessage()}");
+            return '';
         }
 
         // Если запрос ничего не вернул

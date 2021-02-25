@@ -22,6 +22,12 @@ class Lib
         print_r($variable);
         echo "</pre>";
     }
+    // Возвращает var_dump() в одну строку
+    public static function var_dump1($variable)
+    {
+        return str_replace("  ", " ", str_replace("\n", "", var_export($variable, true)));
+    }
+
 
 
 }
