@@ -3,6 +3,7 @@
 namespace System;
 
 use System\Lib;
+use System\Render;
 
 class MyPdo
 {
@@ -38,37 +39,24 @@ class MyPdo
         global $logger;
         $logger->debug(self::class . '::sql_update()');
 
-        $logger->notice('sql = ' . $sql);
-        $logger->notice('params = ' . Lib::var_dump1($params));
+        $logger->debug('sql = ' . $sql);
+        $logger->debug('params = ' . Lib::var_dump1($params));
 
         try {
             $statement = $this->dbh->prepare($sql);
-//            for ($i = 0; $i < count($params); $i++) {
-//                $statement->bindValue($i+1, $params[$i]); //, \PDO::PARAM_STR);
-//            }
             $statement->execute($params);
         } catch (\PDOException $e) {
             $logger->error("MyPdo->sql_update: ($sql): \n {$e->getMessage()}");
-            Render::render("облом ($sql): <br> {$e->getMessage()}");
-            die();
-//            return false;
+            return 'PDOError';
         }
 
-        return true;
+        // Количество строк затронутых оператором SQL
+        // хотел проветять на успешность выполнения, но это оказалось лишним
+        // потому что если что, например, нарушение целостности, вызывается исключение
+        // Но пусть будет, пригодится для других целей
+
+        return $statement->rowCount();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /*
      *  Выполняет запрос возвращающий ОДНО значение
@@ -82,24 +70,28 @@ class MyPdo
 //        $logger->notice('post = ' . $post);
 
         $logger->notice('sql = ' . $sql);
-        $logger->notice('params = ' . var_export($params, true));
+        $logger->notice('params = ' . Lib::var_dump1($params));
 
          try {
             $statement = $this->dbh->prepare($sql);
-            for ($i = 0; $i < count($params); $i++) {
-                $statement->bindValue($i+1, $params[$i]); //, \PDO::PARAM_STR);
-            }
-            $statement->execute();
+//  Этот код может пригодиться, пусть побудет пока, оказалось, что можно передавать массив прямо в execute
+//            for ($i = 0; $i < count($params); $i++) {
+//                $statement->bindValue($i+1, $params[$i]); //, \PDO::PARAM_STR);
+//            }
+            $statement->execute($params);
             $records = $statement->fetchAll();
         } catch (\PDOException $e) {
-            $logger->error("MyPdo->sql_one: ($sql): {$e->getMessage()}");
-            return '';
+            $logger->error("MyPdo->sql_one: ($sql): \n {$e->getMessage()}");
+            return 'PDOError';
         }
 
         // Если запрос ничего не вернул
         if( count($records) == 0 || count($records[0]) == 0) {
+            $logger->notice('return = ;');
             return '';
         }
+
+        $logger->notice('return = ' . $records[0][0]);
         return $records[0][0];
     }
 

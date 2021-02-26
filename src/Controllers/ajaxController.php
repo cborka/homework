@@ -8,7 +8,7 @@ use System\MyPdo;
 /*
  * Выполняет SQL-запросы и возвращает результат
  */
-class pdoController
+class ajaxController
 {
     public static function actionSql_one()
     {

@@ -9,16 +9,26 @@ function sql_one(sql, params)
 {
     $.ajaxSetup({async:false});
 
-    $.post("/pdo/sql_one",
-//    $.post("http://hwvm.ru/users/check_login",
+    sql_one_result = '';
+    $.post("/ajax/sql_one",
         {
             sql: sql,
             params: params
         },
         function (data, status) {
-            return data;
+            sql_one_result = data;
         }
     );
 
-    return '';
+    checkPDOError(sql_one_result);
+    return sql_one_result;
+}
+
+/*
+ * Проверка результатов выполнения запроса к БД
+ */
+function checkPDOError(str) {
+    if (str === "PDOError") {
+        alert("Ошибка выполнения запроса к базе данных. <br>Подробности смотрите в логах.");
+    }
 }

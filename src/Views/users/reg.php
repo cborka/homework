@@ -23,7 +23,7 @@
         </tr>
         <tr>
             <td><label>А вы не робот? Проверка:</label></td>
-            <td><input id="test" type="text" name="test" placeholder="12 х 12 =" value="" onchange="check_data()" ></td>
+            <td><input id="test" type="text" name="test" placeholder="12 х 12 =" value="" maxlength="63" onchange="check_data()" ></td>
         </tr>
         <tr>
             <td><label>Ваше имя</label></td>
@@ -46,7 +46,6 @@
 </form>
 
 <!--<button onclick="atest()">atest</button>-->
-
 
 <script>
 
@@ -76,6 +75,13 @@
             info("А вы не робот случайно?");
             return false;
         }
+        if ($("#isloginfree").text() !== '') {
+            return false;
+        }
+        if ($("#isemailfree").text() !== '') {
+            return false;
+        }
+
         info("OK");
         userreg.button_submit.disabled = false;
         return true;
@@ -86,19 +92,17 @@
     //
     function check_login_free()
     {
-        userreg.login.value = userreg.login.value.trim();
-        let login = userreg.login.value;
+        userreg.button_submit.disabled = true;
+
+        let login = userreg.login.value.trim();
 
         // Запрос серверу на проверку не занят ли этот логин
-//        response = sql_one('SELECT count(*) FROM users WHERE login = \'' + login + '\'');
-//        response = sql_one('SELECT count(*) FROM users WHERE login = ? AND id = ? ', [String(login), Number(111)]);
-
         response = sql_one('SELECT count(*) FROM users WHERE login = ? ', [String(login)]);
-//        alert('resp='+response);
-        if (response > 0) {
-            info("Логин '"+login+"' уже занят.");
+
+        if (response !== '0') {
             $("#isloginfree").text("Логин занят");
-            return false;
+        } else {
+            $("#isloginfree").text('');
         }
 
         return check_data();
@@ -109,16 +113,17 @@
     //
     function check_email_free()
     {
-        userreg.email.value = userreg.email.value.trim();
-        let email = userreg.email.value;
+        userreg.button_submit.disabled = true;
+
+        let email = userreg.email.value.trim();
 
         // Запрос серверу на проверку не занят ли этот email
         response = sql_one('SELECT count(*) FROM users WHERE email = ? ', [String(email)]);
 
-        if (response === '1') {
-            info("Уже есть пользователь с почтой '"+email);
+        if (response !== '0') {
             $("#isemailfree").text("Уже есть такая почта");
-            return false;
+        } else {
+            $("#isemailfree").text('');
         }
 
         return check_data();

@@ -2,6 +2,8 @@
 
 namespace System;
 
+use System\Logger;
+
 class App
 {
     function __construct()
@@ -12,7 +14,9 @@ class App
     {
         global $logger;
 
-        $pathParts = explode('/', $_SERVER['REQUEST_URI']);
+        $pathPath = explode('?', $_SERVER['REQUEST_URI']); // Отделяю GET-параметры
+        $pathParts = explode('/', $pathPath[0]);
+//        $pathParts = explode('/', $_SERVER['REQUEST_URI']);
         $controller = 'Controllers\\' . $pathParts[1] . 'Controller';
         $action = 'action' . ucfirst($pathParts[2]);
 
@@ -32,5 +36,8 @@ class App
         }
 
         $objController->$action();
+
+
+
     }
 }

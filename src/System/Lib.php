@@ -2,6 +2,7 @@
 
 namespace System;
 
+use System\Render;
 
 /*
  * Библиотека общих функций
@@ -9,7 +10,9 @@ namespace System;
 class Lib
 {
 
-    // Форматированный вывод переменной на экран
+    /*
+     * Форматированный вывод переменной на экран
+     */
     public static function var_dump($variable)
     {
         echo "<pre>";
@@ -28,6 +31,15 @@ class Lib
         return str_replace("  ", " ", str_replace("\n", "", var_export($variable, true)));
     }
 
+    /*
+     * Проверка результатов выполнения запросов к БД
+     */
+    public static function checkPDOError($str) {
+        if ($str === "PDOError") {
+            Render::render("Ошибка выполнения запроса к базе данных. <br>Подробности смотрите в логах.");
+            die();
+        }
+    }
 
 
 }

@@ -39,6 +39,15 @@ class usersController
         RegUser::regUser();
     }
 
+    // Подтверждение почты пользователя
+    public function actionEmailConfirmation()
+    {
+        $this->logger->debug(self::class . '->actionConfirmation()');
+
+        // Models\Users\
+        RegUser::emailConfirmation($_GET['token']);
+    }
+
 
 
 

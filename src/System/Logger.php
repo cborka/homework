@@ -38,11 +38,23 @@ class Logger extends AbstractLogger
         LogLevel::DEBUG     => 80
     ];
 
+    private $fp;
+    private $logname;
+
     private $currentLevel = 81;
 
     public function __construct()
     {
-//        echo 'I am Logger<br>';
+        $this->logname = 'log2.txt';
+        $filename = "{$_SERVER['DOCUMENT_ROOT']}/logs/$this->logname";
+
+        if (!$this->fp = fopen($filename, "a")) {
+            throw new \Error("Logger: Не могу открыть файл $this->logname");
+        }
+    }
+    function __destruct()
+    {
+        fclose($this->fp);
     }
 
     public function getCurrentLevel()
@@ -79,18 +91,18 @@ class Logger extends AbstractLogger
 
     private function addMessageToFile($message)
     {
-        $filename =$_SERVER['DOCUMENT_ROOT'] . '/logs/log2.txt';
-
-        if (!$fp = fopen($filename, "a")) {
-            echo "Не могу открыть логфайл";
+//        $filename =$_SERVER['DOCUMENT_ROOT'] . '/logs/log2.txt';
+//
+//        if (!$fp = fopen($filename, "a")) {
+//            echo "Не могу открыть логфайл";
+//            exit;
+//        }
+        if (fwrite($this->fp, $message) === FALSE) {
+            echo "Logger: Не могу произвести запись в файл $this->logname";
             exit;
         }
-        if (fwrite($fp, $message) === FALSE) {
-            echo "Не могу произвести запись в логфайл";
-            exit;
-        }
 
-        fclose($fp);
+//        fclose($fp);
     }
 
 

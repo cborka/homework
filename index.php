@@ -3,6 +3,9 @@
 // Включаем режим строгой типизации
 declare(strict_types=1);
 
+//echo $_SERVER['REQUEST_URI'] . '<br>';
+//var_dump(parse_url($_SERVER['REQUEST_URI']));
+//var_dump($_GET);
 
 //echo bin2hex(random_bytes(32));
 //phpinfo();
@@ -25,7 +28,7 @@ global $dbh;
 try {
     $logger = new Logger();
 } catch (\Error $e) {
-    echo "Logger: Ошибка: {$e->getMessage()} ";
+    echo "Ошибка: {$e->getMessage()}";
     exit;
 }
 
@@ -50,3 +53,5 @@ try {
     $logger->warning( "App::run: " . $e->getMessage());
     Render::render( "App::run: " . $e->getMessage());
 }
+
+$logger->error( "The END!");
