@@ -22,4 +22,5 @@ class ajaxController
 
         echo $mypdo->sql_one($sql, $params);
     }
+
 }

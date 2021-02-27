@@ -10,6 +10,7 @@
     <a href="/help/docs">Описание ||| </a>
     <a href="/mdn/view">Дневник ||| </a>
     <a href="/users/showRegForm">Регистрация | </a>
+    <a href="/users/showLoginForm">Вход | </a>
     <br>
 
 </header>

@@ -12,12 +12,23 @@ class MyPdo
     /*
      * Подключение к БД
      */
-    public function __construct($dsn, $user, $password)
+    public function __construct()
     {
+        global $logger;
+
         try {
-            $this->dbh = new \PDO($dsn, $user, $password,  [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+            $params = explode(',', file_get_contents ($_SERVER['DOCUMENT_ROOT'] . '/db_connection.txt'));
+        } catch (\Error $e) {
+            $logger->error($e->getMessage());
+            echo $e->getMessage();
+            die();
+        }
+
+        try {
+            $this->dbh = new \PDO($params[0], $params[1], $params[2],  [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
         } catch (\PDOException $e) {
-            echo "MyPdo: Ошибка: " . $e->getMessage() . "<br/>";
+            $logger->error(self::class . " Ошибка: " . $e->getMessage());
+            echo self::class . " Ошибка: " . $e->getMessage() . "<br/>";
             die();
         }
     }

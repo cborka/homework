@@ -20,7 +20,6 @@ use System\App;
 use System\Render;
 
 global $logger;
-global $mypdo;
 global $dbh;
 
 
@@ -32,19 +31,13 @@ try {
     exit;
 }
 
-$logger->info("---------------------------------------------------------------");
+$logger->info("------------------------ BEGIN ----------------------");
 
 
 // Подключаюсь к БД, глобальная ссылка на подключение
-try {
-    $mypdo = new MyPdo('mysql:host=93.189.42.2;dbname=homework', 'bor', '432');
-    $dbh = $mypdo->getDbh();
-    $logger->info("Подключена БД");
-} catch (PDOException $e) {
-    $logger->error( "MyPdo: Ошибка: {$e->getMessage()} ");
-    echo "MyPdo: Ошибка: {$e->getMessage()} ";
-    die();
-}
+$mypdo = new MyPdo();
+$dbh = $mypdo->getDbh();
+$logger->info("Подключена БД ");
 
 // Запускаем приложение
 try {
@@ -54,4 +47,4 @@ try {
     Render::render( "App::run: " . $e->getMessage());
 }
 
-$logger->error( "The END!");
+$logger->error( "END!");
