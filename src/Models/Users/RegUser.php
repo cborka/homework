@@ -130,12 +130,12 @@ class RegUser
 
         $logger->notice('post = ' . Lib::var_dump1($_POST) );
 
-        $login = $_SESSION['login'];
-        $email = $_POST['email'];
-        $name = $_POST['name'];
+        $login =    $_SESSION['login'];
+        $email =    $_POST['email'];
+        $name =     $_POST['name'];
         $birthday = $_POST['birthday'];
-        $phone = $_POST['phone'];
-        $notes = $_POST['notes'];
+        $phone =    $_POST['phone'];
+        $notes =    $_POST['notes'];
 
         $sql = <<< EOS
             UPDATE users SET  
@@ -149,6 +149,13 @@ EOS;
         // Записываем данные в таблицу БД
         $result = $mypdo->sql_update($sql, [$email, $name, $birthday, $phone, $notes, $login]);
         Lib::checkPDOError($result);
+
+        // Обновляем переменные $_SESSION
+        $_SESSION['email'] =    $_POST['email'];
+        $_SESSION['name'] =     $_POST['name'];
+        $_SESSION['birthday'] = $_POST['birthday'];
+        $_SESSION['phone'] =    $_POST['phone'];
+        $_SESSION['notes'] =    $_POST['notes'];
 
         Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
     }
@@ -190,7 +197,7 @@ EOS;
 
         $_SESSION['login'] = $_POST['login'];
 
-        $data = $mypdo->sql_one_record('SELECT name, email, phone, birthday, flags, created_at FROM users WHERE login = ? ', [$_SESSION['login']]);
+        $data = $mypdo->sql_one_record('SELECT name, email, phone, birthday, flags, created_at, notes FROM users WHERE login = ? ', [$_SESSION['login']]);
         Lib::checkPDOError($_SESSION['$data']);
 
         foreach ($data as $key => $value) {
