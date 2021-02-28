@@ -56,7 +56,7 @@ class usersController
     /*
      * Показать форму входа
      */
-    public function actionShowLoginForm()
+    public function actionLogin()
     {
         $this->logger->debug(self::class . '->actionShowLoginForm()');
 
@@ -67,13 +67,80 @@ class usersController
      * Войти на сайт
      * сюда попадаем из формы входа, когда все поля заполнены и лежат в $_POST
      */
-    public function actionLogin()
+    public function actionUserLogin()
     {
         $this->logger->debug(self::class . '->actionLogin()');
 
         // Models\Users\RegUser
-        RegUser::loginUser();
+        RegUser::userLogin();
     }
+
+    /*
+     * Выход
+     */
+    public function actionLogout()
+    {
+        $this->logger->debug(self::class . '->actionLogout()');
+
+        $_SESSION = [];
+        header('location: /users/login');
+    }
+
+    /*
+     * Домашняя страница
+     */
+    public function actionHome()
+    {
+        $this->logger->debug(self::class . '->actionHome()');
+
+        if(isset($_SESSION['login'])) {
+            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
+        } else {
+            $_SESSION = [];
+            Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
+        }
+    }
+
+    /*
+     * Личный кабинет
+     */
+    public function actionAccount()
+    {
+        $this->logger->debug(self::class . '->actionAccount()');
+
+        if(isset($_SESSION['login'])) {
+            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/account.php');
+        } else {
+            $_SESSION = [];
+            Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
+        }
+    }
+
+    /*
+     * Сохранить данные акканунта пользователя
+     * сюда попадаем из формы личного кабинета, когда все поля заполнены и лежат в $_POST
+     */
+    public function actionSaveAccount()
+    {
+        $this->logger->debug(self::class . '->actionSaveAccount()');
+
+        // Models\Users\RegUser
+        RegUser::saveAccount();
+    }
+    /*
+     * Сохранить данные акканунта пользователя
+     * сюда попадаем из формы личного кабинета, когда все поля заполнены и лежат в $_POST
+     */
+    public function actionChangePassword()
+    {
+        $this->logger->debug(self::class . '->actionChangePassword()');
+
+        // Models\Users\RegUser
+        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $_SESSION['login']]);
+    }
+
+
+
 
     /*
      * Восстановлении пароля, шаг 0

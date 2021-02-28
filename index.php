@@ -2,6 +2,7 @@
 
 // Включаем режим строгой типизации
 declare(strict_types=1);
+session_start();
 
 //echo $_SERVER['REQUEST_URI'] . '<br>';
 //var_dump(parse_url($_SERVER['REQUEST_URI']));
@@ -21,7 +22,6 @@ use System\Render;
 
 global $logger;
 global $dbh;
-
 
 // Создаю глобальный логгер
 try {

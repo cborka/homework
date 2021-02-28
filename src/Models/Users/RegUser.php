@@ -85,35 +85,78 @@ class RegUser
     /*
      * Login
      */
-    public static function loginUser()
+    public static function userLogin()
     {
         global $logger;
-        global $mypdo;
 
         $logger->debug(self::class . '::loginUser()');
 
         $flag = self::checkLogPass();
 
-
-        if ($flag === '1') {
+        if ($flag === '1' || $flag === '0') {
             // начать сессию
-            Render::render("Добро пожаловать!");
+
+            self::sessionInit();
+
+            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
 
             return;
-        } else if ($flag === '0') {
-            // почта не подтверждена
-
-            Render::render('Ваша почта не подтверждена, можете пока зайти как гость 
-            или сначала подтвердить почту перейдя по ссылке в письме, которое было отправлено по вашему адресу
-            или в личном кабинете поменять почту если она была указана неверно.');
-
-            return;
+//        } else if ($flag === '0') {
+//            // почта не подтверждена
+//
+//            Render::render("Ваша почта не подтверждена, регистрация не закончена. <br>
+//            Подтвердите почту перейдя по ссылке в письме, которое было отправлено по вашему адресу. <br>
+//            Если почта указана неверно, то можете поменять её в личном кабинете.");
+//
+//            return;
         }
 
-        // Польователь не найден
+        // Пользователь не найден
+        $_SESSION = [];
          Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/notfound.php');
     }
 
+
+    /*
+     * Сохранить данные акканунта пользователя
+     * сюда попадаем из формы личного кабинета, когда все поля заполнены и лежат в $_POST
+     */
+    public static function saveAccount()
+    {
+        global $logger;
+        global $mypdo;
+
+        $logger->debug(self::class . '::saveAccount()');
+
+        $logger->notice('post = ' . Lib::var_dump1($_POST) );
+
+        $login = $_SESSION['login'];
+        $email = $_POST['email'];
+        $name = $_POST['name'];
+        $birthday = $_POST['birthday'];
+        $phone = $_POST['phone'];
+        $notes = $_POST['notes'];
+
+        $sql = <<< EOS
+            UPDATE users SET  
+                email = ?, 
+                name = ?, 
+                birthday = ?, 
+                phone = ?, 
+                notes = ? 
+            WHERE login = ?
+EOS;
+        // Записываем данные в таблицу БД
+        $result = $mypdo->sql_update($sql, [$email, $name, $birthday, $phone, $notes, $login]);
+        Lib::checkPDOError($result);
+
+        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
+    }
+
+
+    /*
+     * Проверить логин и пароль
+     */
     public static function checkLogPass()
     {
         global $logger;
@@ -125,13 +168,38 @@ class RegUser
         $login = $_POST['login'];
         $password = md5($_POST['password']);
 
-        $sql = 'SELECT flags | 1 FROM users WHERE login = ? AND password = ?';
+        $sql = 'SELECT flags & 1 FROM users WHERE login = ? AND password = ?';
 
         $flags = $mypdo->sql_one($sql, [$login, $password]);
         Lib::checkPDOError($flags);
 
         return $flags;
     }
+
+    /*
+     * Инициализация сессии (заполенние переменных $_SESSION данными пользователя
+     */
+    private static function sessionInit()
+    {
+        global $logger;
+        global $mypdo;
+
+        $logger->debug(self::class . '::sessionInit()');
+
+        $_SESSION = [];
+
+        $_SESSION['login'] = $_POST['login'];
+
+        $data = $mypdo->sql_one_record('SELECT name, email, phone, birthday, flags, created_at FROM users WHERE login = ? ', [$_SESSION['login']]);
+        Lib::checkPDOError($_SESSION['$data']);
+
+        foreach ($data as $key => $value) {
+            $_SESSION[$key] = $value;
+        }
+
+        $logger->debug('$_SESSION = ' . Lib::var_dump1($_SESSION) );
+    }
+
 
     /*
      * Восстановлении пароля, шаг 1

@@ -2,4 +2,4 @@
 
 
 <br>
-<a href="/users/showLoginForm">Войти</a><br>
+<a href="/users/home">Войти</a><br>

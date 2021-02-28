@@ -16,6 +16,7 @@ class MyPdo
     {
         global $logger;
 
+        // Получаю параметры подключения из файла
         try {
             $params = explode(',', file_get_contents ($_SERVER['DOCUMENT_ROOT'] . '/db_connection.txt'));
         } catch (\Error $e) {
@@ -80,8 +81,8 @@ class MyPdo
 //        $post = var_export($_POST, true);
 //        $logger->notice('post = ' . $post);
 
-        $logger->notice('sql = ' . $sql);
-        $logger->notice('params = ' . Lib::var_dump1($params));
+        $logger->debug('sql = ' . $sql);
+        $logger->debug('params = ' . Lib::var_dump1($params));
 
          try {
             $statement = $this->dbh->prepare($sql);
@@ -98,15 +99,50 @@ class MyPdo
 
         // Если запрос ничего не вернул
         if( count($records) == 0 || count($records[0]) == 0) {
-            $logger->notice('return = ;');
+            $logger->debug('return = ;');
             return '';
         }
 
-        $logger->notice('return = ' . $records[0][0]);
+        $logger->debug('return = ' . $records[0][0]);
         return $records[0][0];
     }
 
+
+
+    /*
+     *  Выполняет запрос возвращающий ОДНУ строку (запись)
+     * первую, если вдруг запрос возвратил несколько строк
+     */
+    public function sql_one_record($sql, $params='')
+    {
+        global $logger;
+        $logger->debug(self::class . '::sql_one_record()');
+
+        $logger->debug('sql = ' . $sql);
+        $logger->debug('params = ' . Lib::var_dump1($params));
+
+        try {
+            $statement = $this->dbh->prepare($sql);
+            $statement->execute($params);
+            $records = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            $logger->error("MyPdo->sql_one: ($sql): \n {$e->getMessage()}");
+            return 'PDOError';
+        }
+
+        // Если запрос ничего не вернул
+        if( count($records) == 0 || count($records[0]) == 0) {
+            $logger->debug('return = ; //запрос ничего не вернул');
+            return '';
+        }
+
+        $logger->debug('return = ' . Lib::var_dump1($records[0]));
+        return $records[0];
+    }
+
 }
+
+
 
 //$mypdo = new MyPdo('mysql:host=93.189.42.2;dbname=myfs', 'boris', '54321');
 //$pdo = $mypdo->getDbh();

@@ -15,7 +15,14 @@ class App
         global $logger;
 
         $pathPath = explode('?', $_SERVER['REQUEST_URI']); // Отделяю GET-параметры
+
+        if ($pathPath[0] === '/') {
+            $pathPath[0] = '/users/home';
+//            header('location: /users/home');
+        }
+
         $pathParts = explode('/', $pathPath[0]);
+
 //        $pathParts = explode('/', $_SERVER['REQUEST_URI']);
         $controller = 'Controllers\\' . $pathParts[1] . 'Controller';
         $action = 'action' . ucfirst($pathParts[2]);

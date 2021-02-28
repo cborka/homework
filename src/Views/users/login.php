@@ -1,5 +1,5 @@
 <h1> Вход </h1>
-<form name="userlogin" action="/users/login" method="POST">
+<form name="userlogin" action="/users/userLogin" method="POST">
     <table class="form">
         <tr>
             <td><label>Логин</label></td>
