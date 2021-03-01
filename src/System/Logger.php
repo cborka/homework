@@ -43,7 +43,7 @@ class Logger extends AbstractLogger
 
     public function __construct()
     {
-        $this->logname = 'log2.txt';
+        $this->logname = 'log' . date("Y-m-d") . '.txt';
         $filename = "{$_SERVER['DOCUMENT_ROOT']}/logs/$this->logname";
 
         if (!$this->fp = fopen($filename, "a")) {

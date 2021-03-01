@@ -26,6 +26,14 @@ use System\Render;
 global $logger;
 global $dbh;
 
+$var = 'qqq';
+echo 'hi' . date("Y-m-d");
+
+//XDEBUG_SESSION_START=1
+
+
+die();
+
 // Создаю глобальный логгер
 try {
     $logger = new Logger();
