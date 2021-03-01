@@ -10,7 +10,6 @@ session_start();
 
 //echo bin2hex(random_bytes(32));
 //phpinfo();
-//die();
 
 // Подключаем файл реализующий автозагрузку
 require 'vendor/autoload.php';
@@ -19,6 +18,10 @@ use System\Logger;
 use System\MyPdo;
 use System\App;
 use System\Render;
+
+//use System\Lib;
+//Lib::var_dump($_SERVER);
+//die();
 
 global $logger;
 global $dbh;
@@ -31,18 +34,17 @@ try {
     exit;
 }
 
-$logger->info("------------------------ BEGIN ----------------------");
-
-
 // Подключаюсь к БД, глобальная ссылка на подключение
 $mypdo = new MyPdo();
 $dbh = $mypdo->getDbh();
-$logger->info("Подключена БД ");
+
+$logger->notice("-----BEGIN ----- {$_SERVER['SERVER_ADDR']} ----- {$_SERVER['HTTP_HOST']} --- {$_SERVER['REQUEST_URI']} ----- {$_SESSION['login']} -----");
 
 // Запускаем приложение
 try {
     App::run();
 } catch (\ErrorException $e) {
+    echo "App::run: " . $e->getMessage();
     $logger->warning( "App::run: " . $e->getMessage());
     Render::render( "App::run: " . $e->getMessage());
 }

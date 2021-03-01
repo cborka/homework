@@ -2,10 +2,8 @@
 
 namespace System;
 
-use mysql_xdevapi\Exception;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
-
 
 /**
  * Класс Logger реализует LoggerInterface PSR-3
@@ -84,11 +82,19 @@ class Logger extends AbstractLogger
             return;
         }
 
-   //     echo date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . '<br>';
+        //  Вывод на экран
+   //   echo date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . '<br>';
+
+        // Вывод в файл
         $this->addMessageToFile(date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . "\n");
-        //Render::render($level . $message . '<br>');
+
+        // Вывод в базу данных
+        $this->addMessageToLogs($this->levels[$level], $message);
     }
 
+    /*
+     * Запись строки в файл
+     */
     private function addMessageToFile($message)
     {
 //        $filename =$_SERVER['DOCUMENT_ROOT'] . '/logs/log2.txt';
@@ -105,5 +111,25 @@ class Logger extends AbstractLogger
 //        fclose($fp);
     }
 
+    /*
+     * Запись строки и сопутствующих данных в таблицу базы данных logs
+     */
+    private function addMessageToLogs($level, $message)
+    {
+        global $mypdo;
 
+        if (!isset($mypdo)) {
+            return;
+        }
+
+        $login = isset($_SESSION['login']) ? $_SESSION['login'] :  '';
+
+        $sql = "INSERT INTO logs (level, login, ip, host, uri, message) VALUES (?, ?, ?, ?, ?, ?)";
+
+        $values = [$level, $login, $_SERVER['SERVER_ADDR'], $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'], $message];
+
+        $result = $mypdo->sql_insert_into_logs($sql, $values);
+        Lib::checkPDOError($result);
+    }
+    
 }

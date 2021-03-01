@@ -27,6 +27,8 @@ class MyPdo
 
         try {
             $this->dbh = new \PDO($params[0], $params[1], $params[2],  [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
+
+            $logger->notice(self::class . " Подключился к БД $params[0] как $params[1]");
         } catch (\PDOException $e) {
             $logger->error(self::class . " Ошибка: " . $e->getMessage());
             echo self::class . " Ошибка: " . $e->getMessage() . "<br/>";
@@ -42,7 +44,6 @@ class MyPdo
         return $this->dbh;
     }
 
-
     /*
      *  Выполняет запрос НЕ возвращающий значений
      */
@@ -51,7 +52,7 @@ class MyPdo
         global $logger;
         $logger->debug(self::class . '::sql_update()');
 
-        $logger->debug('sql = ' . $sql);
+        $logger->debug('sql = ' . Lib::var_dump1($sql));
         $logger->debug('params = ' . Lib::var_dump1($params));
 
         try {
@@ -63,7 +64,7 @@ class MyPdo
         }
 
         // Количество строк затронутых оператором SQL
-        // хотел проветять на успешность выполнения, но это оказалось лишним
+        // хотел проверять на успешность выполнения, но это оказалось лишним
         // потому что если что, например, нарушение целостности, вызывается исключение
         // Но пусть будет, пригодится для других целей
 
@@ -77,9 +78,6 @@ class MyPdo
     {
         global $logger;
         $logger->debug(self::class . '::sql_one()');
-
-//        $post = var_export($_POST, true);
-//        $logger->notice('post = ' . $post);
 
         $logger->debug('sql = ' . $sql);
         $logger->debug('params = ' . Lib::var_dump1($params));
@@ -107,11 +105,10 @@ class MyPdo
         return $records[0][0];
     }
 
-
-
     /*
-     *  Выполняет запрос возвращающий ОДНУ строку (запись)
+     * Выполняет запрос возвращающий ОДНУ строку (запись)
      * первую, если вдруг запрос возвратил несколько строк
+     * Возвращает ассоциативный массив
      */
     public function sql_one_record($sql, $params='')
     {
@@ -140,9 +137,25 @@ class MyPdo
         return $records[0];
     }
 
+
+    /*
+     * Вставка в таблицу logs
+     * отдельная функция, потому что тут не нужно записывать логи в логи
+     */
+    public function sql_insert_into_logs($sql, $params=[])
+    {
+        try {
+            $statement = $this->dbh->prepare($sql);
+            $statement->execute($params);
+//        } catch (\Error $e) {     // Это не работает
+//        } catch (\Exception $e) { // А это работает
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+            die();
+//            return 'PDOError';
+        }
+
+        return $statement->rowCount();
+    }
+
 }
-
-
-
-//$mypdo = new MyPdo('mysql:host=93.189.42.2;dbname=myfs', 'boris', '54321');
-//$pdo = $mypdo->getDbh();

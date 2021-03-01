@@ -6,10 +6,13 @@ use System\Lib;
 use System\MyPdo;
 
 /*
- * Выполняет SQL-запросы и возвращает результат
+ * Здесь адреса для аякс-запросов
  */
 class ajaxController
 {
+    /*
+     * Выполняет SQL-запрос и возвращает результат
+     */
     public static function actionSql_one()
     {
         global $mypdo;

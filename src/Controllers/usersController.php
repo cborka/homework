@@ -9,7 +9,6 @@ use System\Mailer;
 
 /*
  * Работа с пользователями
- *
  */
 class usersController
 {
@@ -20,6 +19,7 @@ class usersController
         global $logger;
         $this->logger = $logger;
     }
+
     /*
      * Показать форму регистрации
      */
@@ -38,7 +38,6 @@ class usersController
     {
         $this->logger->debug(self::class . '->actionReg()');
 
-        // Models\Users\RegUser
         RegUser::regUser();
     }
 
@@ -49,7 +48,6 @@ class usersController
     {
         $this->logger->debug(self::class . '->actionConfirmation()');
 
-        // Models\Users\
         RegUser::emailConfirmation($_GET['token']);
     }
 
@@ -71,7 +69,6 @@ class usersController
     {
         $this->logger->debug(self::class . '->actionLogin()');
 
-        // Models\Users\RegUser
         RegUser::userLogin();
     }
 
@@ -83,7 +80,7 @@ class usersController
         $this->logger->debug(self::class . '->actionLogout()');
 
         $_SESSION = [];
-        header('location: /users/login');
+        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
     }
 
     /*
@@ -124,23 +121,19 @@ class usersController
     {
         $this->logger->debug(self::class . '->actionSaveAccount()');
 
-        // Models\Users\RegUser
         RegUser::saveAccount();
     }
+
     /*
-     * Сохранить данные акканунта пользователя
-     * сюда попадаем из формы личного кабинета, когда все поля заполнены и лежат в $_POST
+     * Изменить пароль
+     * показать форму смены пароля
      */
     public function actionChangePassword()
     {
         $this->logger->debug(self::class . '->actionChangePassword()');
 
-        // Models\Users\RegUser
         Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $_SESSION['login']]);
     }
-
-
-
 
     /*
      * Восстановлении пароля, шаг 0
@@ -168,8 +161,6 @@ class usersController
         // Сообщить о дальнейших действиях
         RegUser::restorePassword1();
     }
-
-
 
     /*
      * Восстановлении пароля, шаг 2
@@ -200,21 +191,17 @@ class usersController
     }
 
 
-
-
-
-
-    //
-    public function actionSendMail()
-    {
-        $this->logger->debug(self::class . '->sendMail()');
-
+    // Тестил почту, оставлю для истории
+//    public function actionSendMail()
+//    {
+//        $this->logger->debug(self::class . '->sendMail()');
+//
 //        Lib::var_dump($_POST);
 //
 //        Mailer::send('cborka@mail.ru',
 //            'Tema',
 //            'Привет от старых штиблет. Hi from old shoose.',
 //            'Old fart');
-    }
+//    }
 
 }

@@ -9,7 +9,6 @@ use System\Render;
  */
 class Lib
 {
-
     /*
      * Форматированный вывод переменной на экран
      */
@@ -25,10 +24,10 @@ class Lib
         print_r($variable);
         echo "</pre>";
     }
-    // Возвращает var_dump() в одну строку
+    // Возвращает как var_dump(), но в одну строку и убирает лишние пробелы
     public static function var_dump1($variable)
     {
-        return str_replace("  ", " ", str_replace("\n", "", var_export($variable, true)));
+        return preg_replace('/ {2,}/',' ',str_replace("\r", " " , str_replace("\n", " ", var_export($variable, true))));
     }
 
     /*
@@ -36,10 +35,10 @@ class Lib
      */
     public static function checkPDOError($str) {
         if ($str === "PDOError") {
+//            echo  "Ошибка выполнения запроса к базе данных. <br>Подробности смотрите в логах.";
             Render::render("Ошибка выполнения запроса к базе данных. <br>Подробности смотрите в логах.");
             die();
         }
     }
-
 
 }

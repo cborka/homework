@@ -8,11 +8,15 @@ use System\MyPdo;
 use System\Mailer;
 use System\Render;
 /*
- *  Регистрация нового пользователя, вся информация в $_POST
+ * Сначала класс был задума для регистрации нового пользователя,
+ * но сейчас здесь ещё восстановление пароля, вход, выход и личный кабинет
  */
 class RegUser
 {
 
+    /*
+     *  Регистрация нового пользователя
+     */
     public static function regUser()
     {
         global $logger;
@@ -54,7 +58,6 @@ class RegUser
                      перейдите по указанной в нём ссылке чтобы завершить регистрацию. <br>
                      Спасибо!"
         );
-
     }
 
     /*
@@ -94,7 +97,7 @@ class RegUser
         $flag = self::checkLogPass();
 
         if ($flag === '1' || $flag === '0') {
-            // начать сессию
+            // начать сессию, даже если почта не подтверждена
 
             self::sessionInit();
 
@@ -113,9 +116,8 @@ class RegUser
 
         // Пользователь не найден
         $_SESSION = [];
-         Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/notfound.php');
+        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/notfound.php');
     }
-
 
     /*
      * Сохранить данные акканунта пользователя
@@ -160,7 +162,6 @@ EOS;
         Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
     }
 
-
     /*
      * Проверить логин и пароль
      */
@@ -194,11 +195,10 @@ EOS;
         $logger->debug(self::class . '::sessionInit()');
 
         $_SESSION = [];
-
         $_SESSION['login'] = $_POST['login'];
 
         $data = $mypdo->sql_one_record('SELECT name, email, phone, birthday, flags, created_at, notes FROM users WHERE login = ? ', [$_SESSION['login']]);
-        Lib::checkPDOError($_SESSION['$data']);
+        Lib::checkPDOError($data);
 
         foreach ($data as $key => $value) {
             $_SESSION[$key] = $value;
@@ -207,9 +207,12 @@ EOS;
         $logger->debug('$_SESSION = ' . Lib::var_dump1($_SESSION) );
     }
 
-
     /*
      * Восстановлении пароля, шаг 1
+     *   Проверить, подтверждена ли почта
+     *   Добавить в БД хэш для восстановления пароля
+     *   Послать письмо со ссылкой на восстановление пароля
+     *   Сообщить пользователю о его дальнейших действиях (переходе по ссылке в письме)
      */
     public static function restorePassword1()
     {
@@ -243,11 +246,10 @@ EOS;
         }
 
         if ($result !== '1') {
-            $logger->error('Почта не подтверждена. Что-то вообще не так пошло... respone = ' .  Lib::var_dump1($respone));
-            Render::render('Неизвестаня природе фатальная ошибка.');
+            $logger->error('Почта не подтверждена. Что-то вообще не так пошло... respone = ' .  Lib::var_dump1($result));
+            Render::render('Неизвестаная природе фатальная ошибка.');
             return;
         }
-
 
         // Добавить в БД токен для восстановления пароля
 
@@ -268,7 +270,7 @@ EOS;
 
         // Послать письмо со ссылкой на восстановление пароля
 
-        // Если запрос на смену пароля только по логину
+        // Если запрос на смену пароля только по логину, получить email
         if ($email === '' ) {
             $email = $mypdo->sql_one('SELECT email FROM users WHERE login = ?', [$login]);
             // Здесь можно проверить адрес на правильность, но это вообще ...
@@ -280,7 +282,6 @@ EOS;
 
 //       Render::render($message);
 //       return;
-
 
         try {
             Mailer::send($email, $subject, $message);
@@ -315,7 +316,7 @@ EOS;
     }
 
     /*
-     * Восстановлении пароля, шаг 2
+     * Восстановлении пароля, шаг 3
      */
     public static function restorePassword3()
     {
@@ -334,6 +335,4 @@ EOS;
         // Вывести сообщение с ссылкой на форму входа
         Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass3_ok.php');
     }
-
-
 }
