@@ -33,18 +33,16 @@ class App
 //        echo $controller . '->' . $action . '<br>';
 
         if (!class_exists($controller)) {
-            throw new \ErrorException("Ошибка: $controller не существует.");
+            throw new \ErrorException("Ошибка: $pathParts[1] не существует.");
         }
 
         $objController = new $controller;
 
         if (!method_exists($objController, $action)) {
-            throw new \ErrorException("Ошибка: $action не существует.");
+            throw new \ErrorException("Ошибка: $pathParts[2] не существует.");
         }
 
         $objController->$action();
-
-
 
     }
 }

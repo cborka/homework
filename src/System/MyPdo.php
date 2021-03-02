@@ -18,7 +18,7 @@ class MyPdo
 
         // Получаю параметры подключения из файла
         try {
-            $params = explode(',', file_get_contents ($_SERVER['DOCUMENT_ROOT'] . '/db_connection.txt'));
+            $params = explode(',', file_get_contents ($_SERVER['DOCUMENT_ROOT'] . '/texts/db_connection.txt'));
         } catch (\Error $e) {
             $logger->error($e->getMessage());
             echo $e->getMessage();
@@ -27,8 +27,7 @@ class MyPdo
 
         try {
             $this->dbh = new \PDO($params[0], $params[1], $params[2],  [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-
-            $logger->notice(self::class . " Подключился к БД $params[0] как $params[1]");
+//            $logger->notice(self::class . " Подключился к БД $params[0] как $params[1]");
         } catch (\PDOException $e) {
             $logger->error(self::class . " Ошибка: " . $e->getMessage());
             echo self::class . " Ошибка: " . $e->getMessage() . "<br/>";

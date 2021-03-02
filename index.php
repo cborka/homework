@@ -1,7 +1,32 @@
 <?php
-
 // Включаем режим строгой типизации
 declare(strict_types=1);
+
+//// Валидация дебагера, раскомментирую когда будет надо
+//if ($_SERVER['REQUEST_URI'] === '/_intellij_phpdebug_validator.php') {
+//    header('HTTP/1.0 200 OK');
+//    echo "Wellcome";
+//    die();
+//}
+
+//echo substr($_SERVER['REQUEST_URI'], 0, 6);
+//die();
+
+// Всякие боты, прикидываюсь чайником
+$bot = (
+    (strpos($_SERVER['REQUEST_URI'], '.php') > 0) ||
+    (substr($_SERVER['REQUEST_URI'], 0, 7) === '/vendor') ||
+    (substr($_SERVER['REQUEST_URI'], 0, 6) === '/texts') ||
+    (substr($_SERVER['REQUEST_URI'], 0, 5) === '/logs') ||
+    (substr($_SERVER['REQUEST_URI'], 0, 4) === '/src') ||
+    (substr($_SERVER['REQUEST_URI'], 0, 7) === '/config')
+//    ($_SERVER['REMOTE_ADDR'] !== '192.168.72.1')
+);
+if ($bot) {
+    header('HTTP/1.0 418 I’m a teapot');
+//    die(); // а умрешь когда отчитаешься
+}
+
 session_start();
 
 //echo $_SERVER['REQUEST_URI'] . '<br>';
@@ -10,6 +35,8 @@ session_start();
 
 //echo bin2hex(random_bytes(32));
 //phpinfo();
+
+
 
 // Подключаем файл реализующий автозагрузку
 require 'vendor/autoload.php';
@@ -43,15 +70,21 @@ try {
 $mypdo = new MyPdo();
 $dbh = $mypdo->getDbh();
 
-$logger->notice("-----BEGIN ----- {$_SERVER['SERVER_ADDR']} ----- {$_SERVER['HTTP_HOST']} --- {$_SERVER['REQUEST_URI']} ----- {$_SESSION['login']} -----");
+if($bot) {
+//    echo "Bot";
+    $logger->notice("Bot {$_SERVER['REMOTE_ADDR']} --- {$_SERVER['HTTP_HOST']} - {$_SERVER['REQUEST_URI']} - {$_SESSION['login']} -");
+    die();
+}
+
+$logger->notice("-----BEGIN ----- {$_SERVER['REMOTE_ADDR']} ----- {$_SERVER['HTTP_HOST']} --- {$_SERVER['REQUEST_URI']} ----- {$_SESSION['login']} -----");
 
 // Запускаем приложение
 try {
     App::run();
 } catch (\ErrorException $e) {
-    echo "App::run: " . $e->getMessage();
     $logger->warning( "App::run: " . $e->getMessage());
-    Render::render( "App::run: " . $e->getMessage());
+    header('HTTP/1.0 404 Not found');
+    die();
 }
 
 $logger->error( "END!");

@@ -126,7 +126,7 @@ class Logger extends AbstractLogger
 
         $sql = "INSERT INTO logs (level, login, ip, host, uri, message) VALUES (?, ?, ?, ?, ?, ?)";
 
-        $values = [$level, $login, $_SERVER['SERVER_ADDR'], $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'], $message];
+        $values = [$level, $login, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'], $message];
 
         $result = $mypdo->sql_insert_into_logs($sql, $values);
         Lib::checkPDOError($result);

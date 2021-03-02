@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <td><label>О себе</label></td>
-            <td><textarea name="notes" rows="10" cols="80"><?= $_SESSION['notes'] ?></textarea></td>
+            <td><textarea name="notes" rows="10" cols="80" maxlength="2047"><?= $_SESSION['notes'] ?></textarea></td>
         </tr>
             <td></td>
             <td>
