@@ -1,7 +1,4 @@
 <aside class="left">
-    левая колонка
-    <div>
-    <?= $params['left_col']; ?>
-    </div>
+<?php include $params['left_col']; ?>
 </aside>
 

@@ -76,6 +76,9 @@ if($bot) {
     die();
 }
 
+// Render::render('Рендер строки, проверка переменных.', null, ['left_col' => '', 'menu' => '']);
+// die();
+
 $logger->notice("-----BEGIN ----- {$_SERVER['REMOTE_ADDR']} ----- {$_SERVER['HTTP_HOST']} --- {$_SERVER['REQUEST_URI']} ----- {$_SESSION['login']} -----");
 
 // Запускаем приложение

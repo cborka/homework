@@ -20,6 +20,10 @@ class Render
             $logger->error(self::class .'::render(): не найден файл .../' . basename($layout_file));
         }
 
+        foreach ($params as $key => $value) {
+            $$key = $value;
+        }
+
         include $layout_file;
     }
 
@@ -46,8 +50,9 @@ class Render
             self::render($e->getMessage());
         }
 
-        // Если текст, то заключаем в тег <pre>
         $extension = pathinfo($fullname, PATHINFO_EXTENSION);
+
+        // Если текст, то заключаем в тег <pre>
         if ($extension == 'txt') {
 //            $content = escapeshellcmd($content);
             $content = strip_tags($content);
@@ -55,7 +60,8 @@ class Render
 
             $fullname = null;
             $params = [];
-        }
+        } else
+        // Если маркдаун, то переводим в html
         if ($extension == 'md') {
             $Parsedown = new \Parsedown();
 //            $content = escapeshellcmd($content);

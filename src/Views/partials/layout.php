@@ -27,6 +27,7 @@
 
     <?php include 'header.php'; ?>
 
+<!--    --><?php //include 'left_col.php'; ?>
     <?php if ($params['left_col']) include 'left_col.php'; ?>
 
     <main>

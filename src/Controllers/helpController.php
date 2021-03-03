@@ -69,7 +69,9 @@ class helpController
     {
         $this->logger->debug(self::class . '->actionJqueryLearn()');
 
-        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/public/jquery.html');
+        $left = $_SERVER['DOCUMENT_ROOT'] . '/texts/todo.txt';
+//        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/public/jquery.html');
+        Render::render('xxx',$_SERVER['DOCUMENT_ROOT'] . '/public/jquery.html', ['left_col' => $left]);
     }
 
     public function actionMarkdown()

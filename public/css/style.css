@@ -117,3 +117,25 @@ input:invalid {
 }
 
 .red { color: red;}
+
+.title {
+    font-family: "Segoe Script", Helvetica, Arial, sans-serif;
+    padding-bottom: 0px;
+    margin-bottom: 2px;
+}
+.grad {
+    background:
+            linear-gradient(90deg,
+            rgba(204,204,204, 0) 48%,
+            lavender 48%,
+            lavender 50%,
+            rgba(204,204,204, 0) 50%,
+            rgba(204,204,204, 0) 100%),
+            linear-gradient(0,
+            white 48%,
+            lavender 48%,
+            lavender 50%,
+            white 50%,
+            white 100%);
+    background-size: 40px 40px;
+}
