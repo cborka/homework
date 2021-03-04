@@ -100,4 +100,14 @@ class helpController
 
     }
 
+    public function actionAjaxRenderTest()
+    {
+        $this->logger->debug(self::class . '->actionAjaxRenderTest()');
+
+//        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/test/ajax_page.php');
+//        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/src/Views/test/ajax_page.php');
+        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/src/Views/test/ajax_render.php');
+    }
+
+
 }

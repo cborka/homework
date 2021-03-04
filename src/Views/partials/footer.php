@@ -1,5 +1,6 @@
 <footer>
-    footer<br>
+    <span class="title">Homework</span>
+     2021<br>
     <?= $params['footer']; ?>
 </footer>
 
