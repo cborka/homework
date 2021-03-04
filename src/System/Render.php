@@ -17,15 +17,14 @@ class Render
         global $logger;
 
         $logger->debug(self::class .'::render()');
-//        $logger->debug(self::class .'::render(): ' . $content);
 
         $layout_file = __DIR__ . '/../Views/partials/layout.php';
 
         if (!file_exists($layout_file)) {
-            // echo self::class .'::render(): не найден файл .../' . basename($layout_file) . '<br>';
             $logger->error(self::class .'::render(): не найден файл .../' . basename($layout_file));
         }
 
+        // Переписываю параметры из ассоциативного массива в переменные
         foreach ($params as $key => $value) {
             $$key = $value;
         }
@@ -56,6 +55,7 @@ class Render
 
         $logger->debug(self::class .'::render_file_to_string(): ' . $filename . ', ' . Lib::var_dump1($params));
 
+        // Задано относительное имя в .../src/Views/ или абсолютное
         if (substr($filename[0], 0, 1) !== '/') {
             $fullname = $_SERVER['DOCUMENT_ROOT'] . '/src/Views/' . $filename;
         } else {
@@ -67,38 +67,38 @@ class Render
             return '';
         }
 
-        // Читаем содержимое файла в строку
+        // Читаем содержимое файла в строку, подставляем переменные
         try {
+            // Переписываю параметры из ассоциативного массива в переменные
             foreach ($params as $key => $value) {
                 if (is_numeric(substr($key, 0, 1))) {
+                    // если индекс - число, то добавляю букву
                     $key = 'p' . $key;
                 }
                 $$key = $value;
             }
 
             ob_start();
-//              echo file_get_contents ($fullname); // через эхо не работает пхп
-              include $fullname;
+                include $fullname;
             $content = ob_get_clean();
-//            $content = file_get_contents ($fullname);
          } catch (\E_WARNING $e) {
             $logger->error($e->getMessage());
             return '';
         }
 
+        // Определяем тип файла
         $extension = pathinfo($fullname, PATHINFO_EXTENSION);
 
-        // Если текст, то заключаем в тег <pre>
+        // Если текст, то преобразуем теги и затем заключаем в тег <pre>
         if ($extension == 'txt') {
-//            $content = escapeshellcmd($content);
-            $content = strip_tags($content);
+            $content = htmlspecialchars($content);
             $content = '<pre>' . $content . '</pre>';
         } else
 
-        // Если маркдаун, то переводим в html
+        // Если маркдаун, то преобразуем в html
         if ($extension == 'md') {
+            $content = htmlspecialchars($content);
             $Parsedown = new \Parsedown();
-//            $content = escapeshellcmd($content);
             $content = $Parsedown->text($content);
         }
 
