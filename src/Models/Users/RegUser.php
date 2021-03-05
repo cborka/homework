@@ -120,6 +120,27 @@ class RegUser
     }
 
     /*
+     * Login Guest
+     */
+    public static function userLoginGuest()
+    {
+        global $logger;
+
+        $logger->debug(self::class . '::loginUserGuest()');
+
+        // Обновляем переменные $_SESSION
+        $_SESSION['login'] =    'Guest';
+        $_SESSION['email'] =    'guest@email';
+        $_SESSION['name'] =     'Гость';
+        $_SESSION['birthday'] = '01.01.2021';
+        $_SESSION['phone'] =    '911';
+        $_SESSION['flags'] =     '1';
+        $_SESSION['notes'] =    '';
+
+        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+    }
+
+    /*
      * Сохранить данные акканунта пользователя
      * сюда попадаем из формы личного кабинета, когда все поля заполнены и лежат в $_POST
      */
@@ -335,4 +356,51 @@ EOS;
         // Вывести сообщение с ссылкой на форму входа
         Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass3_ok.php');
     }
+
+
+    /*
+     * Формирование меню, пока так
+     */
+    public static function getUserMenu ()
+    {
+
+        if (!isset($_SESSION['login'])) {
+            $menu = <<<EOL
+        <a href="/users/login">Вход | </a>
+        <a href="/users/showRegForm">Регистрация | </a>
+        <a href="/users/restorePassword">Восстановление пароля ||| </a>
+        <a href="/users/loginGuest">Зайти как гость ||| </a>
+        <a href="/mdn/view">Дневник ||| </a>
+EOL;
+        } else if ($_SESSION['login'] === 'Guest') {
+            $menu = <<<EOL
+        <a href="/mdn/view">Дневник ||| </a>
+        <a href="/users/logout">Выход | </a>
+EOL;
+        } else if ($_SESSION['login'] === 'nubasik13') {
+            $menu = <<<EOL
+        <a href="/mdn/edit">ajaxMdnEdit ||| </a>
+        <a href="/help/ajaxRenderTest">ajaxRender ||| </a>
+        <a href="/help/test">Тесты ||| </a>
+        <a href="/help/gitHelp">Git Help | </a>
+        <a href="/help/jqueryHelp">jQuery Help | </a>
+        <a href="/help/http">Http | </a>
+        <a href="/help/CreationLog">CreationLog | </a>
+        <a href="/help/jqueryLearn">jQuery Learn ||| </a>
+        <a href="/help/docs">Описание ||| </a>
+        <a href="/mdn/view">Дневник ||| </a>
+        <a href="/users/logout">Выход | </a>
+EOL;
+        } else {
+//            // И здесь хорошо бы проверить права
+            $menu = <<<EOL
+        <a href="/help/docs">Описание ||| </a>
+        <a href="/mdn/view">Дневник ||| </a>
+        <a href="/users/logout">Выход | </a>
+EOL;
+        }
+
+        return $menu;
+    }
+
 }

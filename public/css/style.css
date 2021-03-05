@@ -7,9 +7,11 @@ Author URI: https://github.com/cborka
 **      РАЗМЕТКА СТРАНИЦЫ большой экран
 */
 .grid-container {
+    /*overflow: auto;*/
     display: grid;
     max-width: 1366px;
-    min-height: 90vh;
+    /*min-height: 90vh;*/
+    height: 95vh;
     margin: auto;
 
     grid-template-areas:
@@ -107,11 +109,49 @@ body{
 
 }
 
-div{
-    word-wrap: break-word;
 
+/*
+ *  Расположить дивы в строку
+ */
+
+/* Включает в себя list и form1,
+ * которые располагаются рядом либо друг под другом
+ * в зависимости от ширины экрана и их самих
+*/
+div.edit {
+    overflow: auto;
+    /*height: 80%;*/
+    height: 50vh;
+    border-color: #176093;
+    border-width: 1px;
+    vertical-align: bottom;
+    background-color: #F0F7FC;
+    align: "center";
 }
 
+div.list {
+    overflow: auto;
+    float: left;
+    width: 500px;
+    height: 100%;
+    background-color: plum;
+    overflow-scrolling: touch;
+}
+
+div .form1 {
+
+    float: left;
+    width: 700px;
+    height: fit-content;
+    background-color: lightpink;
+}
+
+div{
+    word-wrap: break-word;
+}
+
+
+/* интересно будет это реализовать в js */
 input:invalid {
     border: 2px dashed red;
 }
@@ -123,6 +163,8 @@ input:invalid {
     padding-bottom: 0px;
     margin-bottom: 2px;
 }
+
+/* градиент, рисует крупную бледную клетку */
 .grad {
     background:
             linear-gradient(90deg,

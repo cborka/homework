@@ -73,6 +73,16 @@ class usersController
     }
 
     /*
+     * Войти как Гость
+     */
+    public function actionLoginGuest()
+    {
+        $this->logger->debug(self::class . '->actionLoginGuest()');
+
+        RegUser::userLoginGuest();
+    }
+
+    /*
      * Выход
      */
     public function actionLogout()
@@ -91,7 +101,11 @@ class usersController
         $this->logger->debug(self::class . '->actionHome()');
 
         if(isset($_SESSION['login'])) {
-            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
+            if($_SESSION['login'] === 'Guest') {
+                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+            } else {
+                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
+            }
         } else {
             $_SESSION = [];
             Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
@@ -106,7 +120,11 @@ class usersController
         $this->logger->debug(self::class . '->actionAccount()');
 
         if(isset($_SESSION['login'])) {
-            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/account.php');
+            if($_SESSION['login'] === 'Guest') {
+                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+            } else {
+                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/account.php');
+            }
         } else {
             $_SESSION = [];
             Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
@@ -132,7 +150,11 @@ class usersController
     {
         $this->logger->debug(self::class . '->actionChangePassword()');
 
-        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $_SESSION['login']]);
+        if($_SESSION['login'] === 'Guest') {
+            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+        } else {
+            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $_SESSION['login']]);
+        }
     }
 
     /*

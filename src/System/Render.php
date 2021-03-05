@@ -18,6 +18,11 @@ class Render
 
         $logger->debug(self::class .'::render()');
 
+        // Если задано относительное имя файла
+        if (isset($filename) && (substr($filename[0], 0, 1) !== '/')) {
+            $filename = $_SERVER['DOCUMENT_ROOT'] . '/src/Views/' . $filename;
+        }
+
         $layout_file = __DIR__ . '/../Views/partials/layout.php';
 
         if (!file_exists($layout_file)) {
@@ -104,8 +109,5 @@ class Render
 
         return $content;
     }
-
-
-
 
 }
