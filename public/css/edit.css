@@ -1,0 +1,77 @@
+.blue {
+    color: blue;
+    background-color: firebrick;
+    font-size: large;
+}
+
+.grid-container-edit {
+    display: grid;
+
+//    height: 30vh;
+
+    grid-template-areas:
+            "l e";
+
+    /*grid-template-columns: 1fr 1fr 1fr;*/
+    grid-template-columns: min-content 1fr;
+    /*grid-template-columns: 25% 50% 25%;*/
+    grid-template-rows: 1fr ;
+
+    grid-gap: 1px;
+    background-color: lightblue;
+}
+
+/*
+**      РАЗМЕТКА СТРАНИЦЫ смартфон
+*/
+@media screen and (min-width: 100px) and (max-width: 800px)
+{
+    .grid-container-edit {
+        display: grid;
+
+        grid-template-areas:
+                "l"
+                "e";
+
+        /*grid-template-columns: 1fr 1fr 1fr;*/
+        grid-template-columns: 1fr;
+        /*grid-template-columns: 25% 50% 25%;*/
+        grid-template-rows: min-content min-content;
+
+        grid-gap: 1px;
+        background-color: lightpink;
+    }
+}
+
+/*
+** СПИСОК
+*/
+aside.edit-list {
+    grid-area: l;
+//    overflow: auto;
+    background-color: floralwhite;
+    color: darkviolet;
+    padding: 5px;
+}
+
+/*
+** Элемент списка
+*/
+aside.edit-element {
+    grid-area: e;
+    background-color: whitesmoke;
+    padding: 5px;
+}
+
+div.div-list {
+    overflow: auto;
+    background-color: plum;
+    resize: both;
+}
+
+div.div-element {
+    overflow: auto;
+//    max-height: 50vh;
+    background-color: lavenderblush;
+    resize: both;
+}

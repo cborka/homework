@@ -32,3 +32,27 @@ function checkPDOError(str) {
         alert("Ошибка выполнения запроса к базе данных. <br>Подробности смотрите в логах.");
     }
 }
+
+/*
+ * Асинхронный рендер файла
+ * Возвращает строку, которую надо поместить в нужный элемент html
+ */
+function ajax_render(filename, params)
+{
+    $.ajaxSetup({async:false});
+
+    ar_result = 'ar_result';
+    $.post("/ajax/render_file",
+        {
+            filename: filename,
+            params: params
+        },
+        function (data, status) {
+            ar_result = data;
+        }
+    );
+
+    return ar_result;
+//     return 'vvv';
+}
+

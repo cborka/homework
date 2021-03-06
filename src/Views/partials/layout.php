@@ -17,7 +17,7 @@
 <!--    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>-->
 
 <!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />-->
-    <script src="/js/lib.js"></script>
+    <script src="/js/lib.js?dt=<?= date("Y-m-d H:i:s\: "); ?>"></script>
 
 </head>
 <body>

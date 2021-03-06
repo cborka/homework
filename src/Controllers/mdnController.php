@@ -71,8 +71,8 @@ class mdnController
     {
         $this->logger->debug(self::class . '->actionEdit()');
 
-//        Render::render('','mdn/mdnEdit.php');
-        Render::render_file('mdn/mdnEdit.php');
+        Render::render('','mdn/mdnEdit.php');
+//        Render::render_file('mdn/mdnEdit.php');
     }
 
 
