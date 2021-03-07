@@ -92,7 +92,6 @@ main {
     grid-area: c;
     background-color: white;
     padding: 5px;
-//    margin: 5%;
 }
 
 /*
@@ -183,4 +182,11 @@ input:invalid {
     background-size: 40px 40px;
 }
 
+.w100 {
+    width: 97%;
+}
 
+.selected {
+    background-color: darkviolet;
+    color: floralwhite;
+}

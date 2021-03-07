@@ -94,6 +94,13 @@ class Render
         // Определяем тип файла
         $extension = pathinfo($fullname, PATHINFO_EXTENSION);
 
+//        // Если php, то
+//        if ($extension == 'php') {
+//            $content = htmlspecialchars_decode ($content);
+//            $logger->debug('htmlspecialchars_decode');
+//
+//        } else
+
         // Если текст, то преобразуем теги и затем заключаем в тег <pre>
         if ($extension == 'txt') {
             $content = htmlspecialchars($content);

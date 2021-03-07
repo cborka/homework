@@ -89,7 +89,9 @@ class Logger extends AbstractLogger
         $this->addMessageToFile(date("Y-m-d H:i:s\: ") . $this->levels[$level] . '(' . $level . '): ' . $message . "\n");
 
         // Вывод в базу данных
-        $this->addMessageToLogs($this->levels[$level], $message);
+        if ($_SERVER['HTTP_HOST'] === '93.189.42.2') {
+            $this->addMessageToLogs($this->levels[$level], $message);
+        }
     }
 
     /*

@@ -27,7 +27,7 @@ class MyPdo
 
         try {
             $this->dbh = new \PDO($params[0], $params[1], $params[2],  [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
-//            $logger->notice(self::class . " Подключился к БД $params[0] как $params[1]");
+            $logger->notice(self::class . " Подключился к БД $params[0] как $params[1]");
         } catch (\PDOException $e) {
             $logger->error(self::class . " Ошибка: " . $e->getMessage());
             echo self::class . " Ошибка: " . $e->getMessage() . "<br/>";
@@ -132,8 +132,34 @@ class MyPdo
             return '';
         }
 
-        $logger->debug('return = ' . Lib::var_dump1($records[0]));
+//        $logger->debug('return = ' . Lib::var_dump1($records[0]));
         return $records[0];
+    }
+
+    /*
+     * Выполняет запрос возвращающий НЕСКОЛЬКО строк (записей)
+     * Возвращает массив ассоциативных массивов
+     */
+    public function sql_many($sql, $params='')
+    {
+        global $logger;
+        $logger->debug(self::class . '::sql_many()');
+
+        $logger->debug('sql = ' . $sql);
+        $logger->debug('params = ' . Lib::var_dump1($params));
+
+        try {
+            $statement = $this->dbh->prepare($sql);
+//            $statement->execute($params);
+            $statement->execute();
+            $records = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            $logger->error("MyPdo->sql_one: ($sql): \n {$e->getMessage()}");
+            return 'PDOError';
+        }
+
+//        $logger->debug('return = ' . Lib::var_dump1($records));
+        return $records;
     }
 
 

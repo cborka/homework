@@ -24,6 +24,28 @@ function sql_one(sql, params)
     return sql_one_result;
 }
 
+//
+// POST-запрос на выполенние update-SQL
+//
+function sql_update(sql, params)
+{
+    $.ajaxSetup({async:false});
+
+    sql_result = '';
+    $.post("/ajax/sql_update",
+        {
+            sql: sql,
+            params: params
+        },
+        function (data, status) {
+            sql_result = data;
+        }
+    );
+
+    checkPDOError(sql_result);
+    return sql_result;
+}
+
 /*
  * Проверка результатов выполнения запроса к БД
  */

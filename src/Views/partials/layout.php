@@ -31,7 +31,7 @@
     <?php if ($params['left_col']) include 'left_col.php'; ?>
 
     <main>
-    <div>
+
         <?php
             if ($filename) {
                 include $filename;
@@ -39,7 +39,7 @@
                 echo $content;
             }
         ?>
-    </div>
+
     </main>
 
     <?php if ($params['right_col']) include 'right_col.php'; ?>

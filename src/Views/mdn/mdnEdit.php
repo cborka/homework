@@ -1,75 +1,113 @@
-Редактирование дневника
-здесь надо расположить список записей и форму редактирования записи
-
-Можно расположить список в левой колонке, но этот вариант мне не нравится.
-
-Можно сделать табличную разметку.
-
-Можно дивами. <br>
-<div id="info" class="red">
-    info
-</div>
-
-
-
 <div class="grid-container-edit">
 
-    <aside class="edit-list">
+    <aside class="edit-list" id="list-id">
         Список
-        <div id="list-id" class="div-list">
-        списокwwwwwwwwwwwwwwwwwwww<br>список<br>список<br>писок<br>список<br>писок<br>список<br>список<br>список<br>список2<br>список3<br>список4<br>список5<br>список6<br>список7<br>список8<br>писок9<br>список11<br>
-        список1<br>список2<br>список3<br>список<br>список<br>список<br>список<br>писок<br>список<br>список<br>список<br>
-        список1<br>список2<br>список3<br>список<br>список<br>список<br>список<br>писок<br>список<br>список<br>список<br>
-        </div>
     </aside>
 
-    <aside class="edit-element">
+    <aside class="edit-element" id="element-id">
         Элемент списка
-        <div id="element-id" class="div-element">
-            списокwwwwwwwwwwwwwwwwwwww<br>список<br>список<br>писок<br>список<br>
-        </div>
     </aside>
 
-<button onclick="wd()">left</button>
+<!--<button onclick="wd()">left</button>-->
 
 </div>
 
 
 <script>
 
-    function wd()
+    render_list();
+    render_element({id: 0});
+
+    // Подгоняю высоту элемента под высоту списка, которую жестко задаю в edit.css
+    $("#element-id").height($("#list-id").height()+17);
+
+
+    // Рендер списка
+    function render_list(params = {})
     {
-        let w = $("#list-id").width();
-//        alert(w);
-        w = w + 3;
-//        alert(w);
-        $("#list-id").height(w);
-        $("#list-id").width(w);
+        $("#list-id").html(
+            ajax_render('mdn/mdnDaysList.php', params)
+        );
+    }
+
+    // Рендер элемента списка. Показ
+    function render_element(params = {})
+    {
+        el = ajax_render('mdn/mdnDayElement.php', params);
+        $("#element-id").html(el);
+
+        id = params.id;
+        $("tr.selected").removeClass("selected");
+        $("#tr"+id).addClass("selected");
+    }
+
+    // Рендер элемента списка. Редактирование
+    function render_element_edit(params = {})
+    {
+        el = ajax_render('mdn/mdnDayElementEdit.php', params);
+        $("#element-id").html(el);
     }
 
 
-    ar = ajax_render('mdn/mdnDaysList.php', ['Hi']);
-    //    $("#output").text(ar);
-    document.getElementById("list-id").innerHTML=ar;
+    function add_record() {
+        $("tr.selected").removeClass("selected");
+        render_element_edit({id: 0});
+    }
 
-    ar = ajax_render('mdn/mdnDayElement.php', ['Hi']);
-    $("#element-id").text(ar);
+    function save_record(frm) {
+        id = frm.id.value;
+        dt = frm.dt.value;
+        header = frm.header.value;
+        content = frm.content.value;
+        password = frm.password.value;
+
+        if (password !== '21') {
+            alert ('Неверный пароль!');
+            return;
+        }
+
+        if (id === '0') {
+            sql = 'INSERT INTO my_daily_news(dt, header, content) VALUES (?, ?, ?)';
+            ret = sql_update(sql, [dt, header, content]);
+        } else {
+            sql = `
+                UPDATE my_daily_news SET
+                    dt = ?,
+                    header = ?,
+                    content = ?
+                WHERE
+                    id = ? `;
+
+            ret = sql_update(sql, [dt, header, content, id]);
+        }
+
+        if (ret !== '1') {
+            alert('Странненько, так не должно быть в принципе, ret = ' + ret);
+        }
+
+        if (id === '0') {
+            id = sql_one('SELECT id FROM my_daily_news WHERE dt = ?', [dt]);
+            render_list();
+        }
+
+        render_element({id});
+    }
+
 
     /*
      * Подогнать высоту списка к высоте формы элемента списка
      */
-    function set_height()
+    function set_list_height()
     {
         let h = $("#element-id").height();
 
-        $("#info").text("Высота элемента = "+h)
+        $("#info").text("Высота элемента = "+h);
 
         if (h < 300) h = 300;
 
         $("#list-id").height(h);
     }
 
-    set_height();
 
 </script>
 

@@ -1,19 +1,15 @@
-.blue {
-    color: blue;
-    background-color: firebrick;
-    font-size: large;
-}
 
 .grid-container-edit {
     display: grid;
 
-//    height: 30vh;
+//    height: 70vh;
+//    height: 100%;
 
     grid-template-areas:
             "l e";
 
     /*grid-template-columns: 1fr 1fr 1fr;*/
-    grid-template-columns: min-content 1fr;
+    grid-template-columns: fit-content(50%) 1fr;
     /*grid-template-columns: 25% 50% 25%;*/
     grid-template-rows: 1fr ;
 
@@ -22,7 +18,46 @@
 }
 
 /*
+** СПИСОК
+*/
+aside.edit-list {
+    grid-area: l;
+    background-color: floralwhite;
+    color: darkviolet;
+    padding: 5px;
+
+    height: 75vh;
+
+    overflow: scroll;
+    white-space: nowrap;
+//    background-color: plum;
+    resize: both;
+
+}
+
+/*
+** Элемент списка
+*/
+aside.edit-element {
+    grid-area: e;
+    border: darkgreen;
+    border-width: medium;
+    background-color: whitesmoke;
+    padding: 5px;
+    overflow: scroll ;
+    white-space: normal;
+    resize: both;
+}
+
+
+
+div.div-element {
+}
+
+/*
 **      РАЗМЕТКА СТРАНИЦЫ смартфон
+** должна быть после основной разметки или же
+** основная разметка должна быть тоже с условием, что это большой экран
 */
 @media screen and (min-width: 100px) and (max-width: 800px)
 {
@@ -41,37 +76,16 @@
         grid-gap: 1px;
         background-color: lightpink;
     }
-}
 
-/*
-** СПИСОК
-*/
-aside.edit-list {
-    grid-area: l;
-//    overflow: auto;
-    background-color: floralwhite;
-    color: darkviolet;
-    padding: 5px;
-}
+    div.div-list {
+        overflow: auto;
+        background-color: #D7EDFC ;
+        resize: none ;
+    }
 
-/*
-** Элемент списка
-*/
-aside.edit-element {
-    grid-area: e;
-    background-color: whitesmoke;
-    padding: 5px;
-}
-
-div.div-list {
-    overflow: auto;
-    background-color: plum;
-    resize: both;
-}
-
-div.div-element {
-    overflow: auto;
-//    max-height: 50vh;
-    background-color: lavenderblush;
-    resize: both;
+    div.div-element {
+        overflow: auto;
+        background-color: lavenderblush;
+        resize: none ;
+    }
 }

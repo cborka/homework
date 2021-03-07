@@ -35,7 +35,7 @@ My daily news (mdn)<br>
 
 <!-- Вывод на экран-->
 <!--        --><?php //echo $rec['id']; ?><!--<br>-->
-        <?php echo $rec['dt']; ?>
+        <?php echo $rec['dt'] . date(' l', strtotime($rec['dt'])); ?>
         <h3><?php echo $rec['header']; ?></h3>
         <p><?php echo str_replace("\n", '<br>', $rec['content']); ?></p>
         <button>Редактировать</button>

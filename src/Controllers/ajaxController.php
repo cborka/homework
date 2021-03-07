@@ -27,6 +27,19 @@ class ajaxController
         echo $mypdo->sql_one($sql, $params);
     }
 
+    public static function actionSql_update()
+    {
+        global $mypdo;
+        global $logger;
+
+        $logger->debug(self::class . '::actionSql_update()');
+
+        $sql = $_POST['sql'];
+        $params = $_POST['params'];
+
+        echo $mypdo->sql_update($sql, $params);
+    }
+
     /*
      * Возвращает Render указанного файла
      */
@@ -39,12 +52,7 @@ class ajaxController
         $filename = $_POST['filename'];
         $params = $_POST['params'];
 
-//        echo Render::render_file_to_string($_SERVER['DOCUMENT_ROOT'] . '/public/jquery.html', ['yoyo']);
-        echo Render::render_file_to_string($filename, ['00000', 'z' => 'yoyo']);
-//        echo Render::render_file_to_string($filename, $params);
-
-//        $v = Lib::var_dump1($_POST);
-//        echo "fn = $filename, p = $params, POST = $v";
+        echo Render::render_file_to_string($filename, $params);
     }
 
 }

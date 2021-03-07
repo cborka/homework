@@ -370,11 +370,11 @@ EOS;
         <a href="/users/showRegForm">Регистрация | </a>
         <a href="/users/restorePassword">Восстановление пароля ||| </a>
         <a href="/users/loginGuest">Зайти как гость ||| </a>
-        <a href="/mdn/view">Дневник ||| </a>
+        <a href="/mdn/edit">Дневник ||| </a>
 EOL;
         } else if ($_SESSION['login'] === 'Guest') {
             $menu = <<<EOL
-        <a href="/mdn/view">Дневник ||| </a>
+        <a href="/mdn/edit">Дневник ||| </a>
         <a href="/users/logout">Выход | </a>
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
@@ -395,7 +395,7 @@ EOL;
 //            // И здесь хорошо бы проверить права
             $menu = <<<EOL
         <a href="/help/docs">Описание ||| </a>
-        <a href="/mdn/view">Дневник ||| </a>
+        <a href="/mdn/edit">Дневник ||| </a>
         <a href="/users/logout">Выход | </a>
 EOL;
         }

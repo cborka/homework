@@ -1,5 +1,6 @@
-04.03.2021
 
+        <td> <button onclick="render_element({id: <?= $rec['id']; ?>})">Показать</button></td>
+        <td> <button onclick="render_element_edit({id: <?= $rec['id']; ?>})">Изменить</button></td>
 
 
 
