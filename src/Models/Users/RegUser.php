@@ -379,6 +379,9 @@ EOL;
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
             $menu = <<<EOL
+        <a href="/storage/load">load ||| </a>
+        <a href="/storage/show">show ||| </a>
+        <a href="/storage/upload_file">upload_file ||| </a>
         <a href="/mdn/edit">ajaxMdnEdit ||| </a>
         <a href="/help/ajaxRenderTest">ajaxRender ||| </a>
         <a href="/help/test">Тесты ||| </a>
