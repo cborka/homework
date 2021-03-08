@@ -129,6 +129,7 @@ class RegUser
         $logger->debug(self::class . '::loginUserGuest()');
 
         // Обновляем переменные $_SESSION
+        $_SESSION['id'] =    '13';
         $_SESSION['login'] =    'Guest';
         $_SESSION['email'] =    'guest@email';
         $_SESSION['name'] =     'Гость';
@@ -218,7 +219,7 @@ EOS;
         $_SESSION = [];
         $_SESSION['login'] = $_POST['login'];
 
-        $data = $mypdo->sql_one_record('SELECT name, email, phone, birthday, flags, created_at, notes FROM users WHERE login = ? ', [$_SESSION['login']]);
+        $data = $mypdo->sql_one_record('SELECT id, name, email, phone, birthday, flags, created_at, notes FROM users WHERE login = ? ', [$_SESSION['login']]);
         Lib::checkPDOError($data);
 
         foreach ($data as $key => $value) {
@@ -379,10 +380,11 @@ EOL;
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
             $menu = <<<EOL
-        <a href="/storage/load">load ||| </a>
-        <a href="/storage/show">show ||| </a>
-        <a href="/storage/upload_file">upload_file ||| </a>
-        <a href="/mdn/edit">ajaxMdnEdit ||| </a>
+        <a href="/storage/catalog">catalog | </a>
+        <a href="/storage/load">load | </a>
+        <a href="/storage/show">show | </a>
+        <a href="/storage/upload_file">upload ||| </a>
+        <a href="/mdn/edit">ajaxMdn ||| </a>
         <a href="/help/ajaxRenderTest">ajaxRender ||| </a>
         <a href="/help/test">Тесты ||| </a>
         <a href="/help/gitHelp">Git Help | </a>

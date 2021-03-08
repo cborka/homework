@@ -12,6 +12,13 @@ use System\Lib;
 
 class storageController
 {
+    private $logger;
+
+    public function __construct()
+    {
+        global $logger;
+        $this->logger = $logger;
+    }
 
     /*
      * Загрузка файла
@@ -30,25 +37,40 @@ class storageController
     public static function actionSave_uploaded()
     {
         global $logger;
+        global $mypdo;
+
         $logger->debug(self::class . '::actionSave_uploaded()');
 
         $file = $_FILES['filename'];
-        $filename = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $file['name'];
+        $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $file['name'];
 //        Lib::var_dump($file);
+//        array (size=5)
+//  'name' => string 'Пагинация.jpg' (length=22)
+//  'type' => string 'image/jpeg' (length=10)
+//  'tmp_name' => string '/tmp/phpcgK0GN' (length=14)
+//  'error' => int 0
+//  'size' => int 68862
+//return;
 
-        move_uploaded_file($file['tmp_name'], $filename);
+        $user_id = $_SESSION['id'];
+        $file_name = $file['name'];
+        $file_token = bin2hex(random_bytes(32));
+//        $load_date = current_timestamp;
+        $file_size = $file['size'];
+        $file_type = $file['type'];
+//        $access_rights = 0;
+
+        $sql = 'INSERT INTO storage_catalog (user_id, file_name, file_type, file_token, file_size) VALUES (?, ?, ?, ?, ?)';
+
+        // Записываем данные в таблицу БД
+        $result = $mypdo->sql_update($sql, [$user_id, $file_name, $file_type, $file_token, $file_size]);
+        Lib::checkPDOError($result);
+
+        move_uploaded_file($file['tmp_name'], $fullname);
 
         $logger->debug("Файл  {$file['name']} загружен в хранилище.");
 
-        $copy = $_SERVER['DOCUMENT_ROOT'] . "/public/storage/" . $file;
-
-        Render::render_file("storage/show_image.php", ['file' => $file]);
-
-        $logger->debug("Удаляю $copy");
-
-        if (!unlink($copy)) {
-            $logger->debug("Файл $copy НЕ удален.");
-        }
+        Render::render_file("storage/show_image.php", ['file' => $file_name]);
     }
 
     public static function actionShow()
@@ -107,6 +129,17 @@ class storageController
 //            exit;
 //        }
 //    }
+
+
+    /*
+     * Каталог загруженных файлов
+     */
+    public function actionCatalog()
+    {
+        $this->logger->debug(self::class . '->actionCatalog()');
+
+        Render::render('','storage/catalog.php');
+    }
 
 
 }
