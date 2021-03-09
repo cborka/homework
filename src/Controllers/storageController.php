@@ -42,6 +42,8 @@ class storageController
 
         $file = $_FILES['filename'];
 
+        $logger->debug(Lib::var_dump1($_FILES));
+
 //        array (size=5)
 //  'name' => string 'Пагинация.jpg' (length=22)
 //  'type' => string 'image/jpeg' (length=10)
@@ -77,6 +79,8 @@ class storageController
         $id = $mypdo->sql_one('SELECT id FROM storage_catalog where file_token = ?', [$file_token]);
         Lib::checkPDOError($result);
 
+        $_SESSION['last_uploaded_id'] =  $id;
+
         header('location: /storage/catalog');
 //        Render::render_file("storage/show_image.php", ['file' => $file_name]);
 //        Render::render('','storage/catalog.php', ['id' => $id]);
@@ -87,10 +91,7 @@ class storageController
         global $logger;
         $logger->debug(self::class . '::actionShow()');
 
-//        $file = "Пагинация.jpg";
-        $file = "zxcv.jpg";
-
-
+        $file = "Пагинация.jpg";
         Render::render_file("storage/show_image.php", ['file' => $file]);
     }
 
@@ -116,18 +117,45 @@ class storageController
         global $logger;
         $logger->debug(self::class . '::actionLoad()');
 
-        $file = $_SERVER['DOCUMENT_ROOT'] . "/storage/zxcv.jpg";
-//        $file = $_SERVER['DOCUMENT_ROOT'] . "/publoc/favicon.ico";
+        $token = $_GET['token'];
+        $filename = $_GET['filename'];
+//        $token = $_POST['token'];
+//        $filename = $_POST['filename'];
+        $logger->debug(self::class . ':: ' . $filename);
 
+        $file = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $filename;
+
+        if (!file_exists($file)) {
+            echo 'Fайл <b>' . $file . '</b> не существует.';
+            $logger->debug('actionLoad: файл ' . $file . ' не существует.');
+            return;
+        }
+
+
+//        $file = $_SERVER['DOCUMENT_ROOT'] . "/public/favicon.ico";
+        $logger->debug(self::class . ':: ' . $file);
+
+//        header('Content-Description: File Transfer');
+//        header('Content-Type: application/octet-stream');
+//        //header('Content-Disposition: attachment; filename=' . $filename);
+//        header('Content-Disposition: attachment; filename=' . basename($file));
+//        header('Content-Transfer-Encoding: binary');
+//        header('Content-Length: ' . filesize($file));
+
+
+        // заставляем браузер показать окно сохранения файла
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename=123.jpg');
-        //header('Content-Disposition: attachment; filename=' . basename($file));
+        header('Content-Disposition: attachment; filename=' . basename($file));
         header('Content-Transfer-Encoding: binary');
-        header('Content-Length: ' . filesize($file));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+//        // читаем файл и отправляем его пользователю
+
 
         readfile($file);
-        exit();
+//        exit();
     }
 
 //    function file_force_download($file) {
@@ -147,7 +175,9 @@ class storageController
     {
         $this->logger->debug(self::class . '->actionCatalog()');
 
-        Render::render('','storage/catalog.php', ['id' => '1']);
+        $id = $_SESSION['last_uploaded_id']?? '1';
+
+        Render::render('','storage/catalog.php', ['id' => $id]);
     }
 
 

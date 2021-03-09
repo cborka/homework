@@ -2,60 +2,57 @@
     <h3>Каталог загруженных файлов</h3>
 </div>
 <div style="float: right;">
-    <button onclick="upload_file()" title="Загрузить новый"><br>+<br>&nbsp </button>
+<!--    <button onclick="upload_file()" title="Загрузить новый"><br>+<br>&nbsp </button>-->
+    <button onclick="render_element_upload()" title="Загрузить новый">+<br>+<br>+</button>
 </div>
 <br>
 <?php
 
-global $mypdo;
+f_catalog_list($params);
 
-//\System\Lib::var_dump($params);
+// Оборачиваю включаемые файлы в функции чтобы не было конфликтов переменных.
+function f_catalog_list($params)
+{
 
-$sql =  <<< EOL
-    SELECT c.id, c.user_id, u.login, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights 
-      FROM storage_catalog c
-        LEFT JOIN users u ON c.user_id = u.id 
-      ORDER BY login, file_name
+    global $mypdo;
+
+    //\System\Lib::var_dump($params);
+
+    $sql =  <<< EOL
+        SELECT c.id, c.user_id, u.login, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights 
+          FROM storage_catalog c
+            LEFT JOIN users u ON c.user_id = u.id 
+          ORDER BY login, file_name
 EOL;
-//echo $sql;
+    //echo $sql;
 
-$recs = $mypdo->sql_many($sql);
-//
-//\System\Lib::var_dump($recs);
-//\System\Lib::var_dump($_SESSION);
+    $recs = $mypdo->sql_many($sql);
+
 ?>
 
-<table id="list_table" border="1">
-    <thead>
-    <tr>
-        <td>Пользователь</td>
-        <td>Файл</td>
-        <td>Загружен</td>
-        <td>Размер</td>
-        <td>0-личный</td>
-<!--        <td>Токен</td>-->
-    </tr>
-    </thead>
-    <?php foreach ($recs as $rec) { ?>
-        <tr id="tr<?= $rec['id']; ?>" onclick="render_element({id: <?= $rec['id']; ?>})";>
-            <td> <?= $rec['login']; ?></td>
-            <td> <?= $rec['file_name']; ?></td>
-            <td><?= substr($rec['load_date'], 0, 10); ?></td>
-            <td align="right"> <?= $rec['file_size']; ?></td>
-            <td> <?= $rec['access_rights']; ?></td>
-<!--            <td> --><?//= $rec['file_token']; ?><!--</td>-->
-
-
-<!--            <td style="white-space: normal;";>--><?//= $rec['header']; ?><!--</td>-->
-
-            <!--А так более универсально, а если бы ещё знать здесь тип поля ...        -->
-<!--                    --><?php //foreach ($rec as $fld) { ?>
-<!--                        <td style="white-space: normal;">--><?//= $fld; ?><!--</td>-->
-<!--                    --><?php //} ?>
-
+    <table id="list_table" border="1">
+        <thead>
+        <tr>
+            <td>Пользователь</td>
+            <td>Файл</td>
+            <td>Загружен</td>
+            <td>Размер</td>
+            <td>0-личный</td>
+    <!--        <td>Токен</td>-->
         </tr>
-    <?php } ?>
+        </thead>
+        <?php foreach ($recs as $rec) { ?>
+            <tr id="tr<?= $rec['id']; ?>" onclick="render_element({id: <?= $rec['id']; ?>})";>
+                <td> <?= $rec['login']; ?></td>
+                <td> <?= $rec['file_name']; ?></td>
+                <td><?= substr($rec['load_date'], 0, 10); ?></td>
+                <td align="right"> <?= $rec['file_size']; ?></td>
+                <td> <?= $rec['access_rights']; ?></td>
+    <!--            <td> --><?//= $rec['file_token']; ?><!--</td>-->
+            </tr>
+        <?php } ?>
 
 
-</table>
+    </table>
 
+<?php } ?>

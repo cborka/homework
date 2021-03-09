@@ -14,6 +14,8 @@
     render_list();
     render_element({id: <?= $params['id']; ?>});
 
+//    document.getElementById("ref").select;
+
     // Подгоняю высоту элемента под высоту списка, которую жестко задаю в edit.css
     $("#element-id").height($("#list-id").height()+17);
 
@@ -30,12 +32,20 @@
     function render_element(params = {})
     {
         el = ajax_render('storage/show_file.php', params);
-        $("#element-id").html(el);
+//        $("#element-id").html(el);
+
+        document.getElementById("element-id").innerHTML=el;
 
         id = params.id;
         $("tr.selected").removeClass("selected");
         $("#tr"+id).addClass("selected");
     }
+
+    function render_element_upload(params = {})
+    {
+        el = ajax_render('storage/upload_file.php', params);
+        $("#element-id").html(el);
+     }
 
     // А после показа удаляю.
 //    setTimeout(delete_file, 3000);
@@ -51,6 +61,22 @@
         )
     }
 
+    function load_file(token, filename) {
+        $.post("/storage/load",
+            {
+                token: token,
+                filename: filename
+            },
+            function (data, status) {
+                //ar_result = data;
+            }
+        )
+
+    }
+
+    function copy_to() {
+        copyToClipboard('crjaljalsfjlsjflsjljsljsljs');
+    }
 
     // Перейти на страницу загрузки нового файла
     function upload_file() {
