@@ -1,5 +1,10 @@
-<h3>Каталог загруженных файлов</h3>
-
+<div style="float: left;">
+    <h3>Каталог загруженных файлов</h3>
+</div>
+<div style="float: right;">
+    <button onclick="upload_file()" title="Загрузить новый"><br>+<br>&nbsp </button>
+</div>
+<br>
 <?php
 
 global $mypdo;
@@ -18,9 +23,8 @@ $recs = $mypdo->sql_many($sql);
 //
 //\System\Lib::var_dump($recs);
 //\System\Lib::var_dump($_SESSION);
-
-
 ?>
+
 <table id="list_table" border="1">
     <thead>
     <tr>
@@ -33,7 +37,7 @@ $recs = $mypdo->sql_many($sql);
     </tr>
     </thead>
     <?php foreach ($recs as $rec) { ?>
-        <tr id="tr<?= $rec['id']; ?>" onclick="";>
+        <tr id="tr<?= $rec['id']; ?>" onclick="render_element({id: <?= $rec['id']; ?>})";>
             <td> <?= $rec['login']; ?></td>
             <td> <?= $rec['file_name']; ?></td>
             <td><?= substr($rec['load_date'], 0, 10); ?></td>

@@ -190,3 +190,7 @@ input:invalid {
     background-color: darkviolet;
     color: floralwhite;
 }
+
+img.preview {
+    max-width: 70%;
+}

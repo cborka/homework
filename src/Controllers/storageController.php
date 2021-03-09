@@ -5,7 +5,6 @@ namespace Controllers;
 use System\Render;
 use System\Lib;
 
-
 /*
  * Файловое хранилище
  */
@@ -21,7 +20,7 @@ class storageController
     }
 
     /*
-     * Загрузка файла
+     * Загрузка файла, форма выбора файла
      */
     public static function actionUpload_file()
     {
@@ -32,7 +31,7 @@ class storageController
     }
 
     /*
-    * Сохранение загруженного файла
+    * Сохранение выбранного загруженного файла
     */
     public static function actionSave_uploaded()
     {
@@ -42,8 +41,7 @@ class storageController
         $logger->debug(self::class . '::actionSave_uploaded()');
 
         $file = $_FILES['filename'];
-        $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $file['name'];
-//        Lib::var_dump($file);
+
 //        array (size=5)
 //  'name' => string 'Пагинация.jpg' (length=22)
 //  'type' => string 'image/jpeg' (length=10)
@@ -52,6 +50,8 @@ class storageController
 //  'size' => int 68862
 //return;
 
+        // Инициализация полей для вставки в таблицу-каталог
+        // закомментированные поля вставятся по умолчанию
         $user_id = $_SESSION['id'];
         $file_name = $file['name'];
         $file_token = bin2hex(random_bytes(32));
@@ -62,15 +62,24 @@ class storageController
 
         $sql = 'INSERT INTO storage_catalog (user_id, file_name, file_type, file_token, file_size) VALUES (?, ?, ?, ?, ?)';
 
-        // Записываем данные в таблицу БД
         $result = $mypdo->sql_update($sql, [$user_id, $file_name, $file_type, $file_token, $file_size]);
         Lib::checkPDOError($result);
 
-        move_uploaded_file($file['tmp_name'], $fullname);
+        $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $file['name'];
 
-        $logger->debug("Файл  {$file['name']} загружен в хранилище.");
+        if (!move_uploaded_file($file['tmp_name'], $fullname)) {
+            echo "Не удалось переместить";
+            $logger->debug("Файл  {$file['name']} не удалось переместить в хранилище");
+        } else {
+            $logger->debug("Файл  {$file['name']} загружен в хранилище как $file_token");
+        }
 
-        Render::render_file("storage/show_image.php", ['file' => $file_name]);
+        $id = $mypdo->sql_one('SELECT id FROM storage_catalog where file_token = ?', [$file_token]);
+        Lib::checkPDOError($result);
+
+        header('location: /storage/catalog');
+//        Render::render_file("storage/show_image.php", ['file' => $file_name]);
+//        Render::render('','storage/catalog.php', ['id' => $id]);
     }
 
     public static function actionShow()
@@ -138,7 +147,7 @@ class storageController
     {
         $this->logger->debug(self::class . '->actionCatalog()');
 
-        Render::render('','storage/catalog.php');
+        Render::render('','storage/catalog.php', ['id' => '1']);
     }
 
 

@@ -2,3 +2,28 @@
 - сделать константы флагов пользователей и в дальнейшем ими пользоваться: USER_EMAIL_CONFIRMED = 1 // почта подверждена
 - сделать измеритель времени выполнения
 
+- ограничить размер загружаемых файлов
+- ограничить типы загружаемых файлов
+- удаление файлов
+-
+
+        <img class="preview" src="<?= '/storage/' . $filename; ?>" alt="<?= $filename; ?>">
+
+
+<?php switch ($extension) {
+    case 'txt':
+//        $content = file_get_contents($copy);
+        ob_start();
+        include $copy;
+        $content = ob_get_clean();
+        ?>
+        <p><?php echo $content; ?></p>
+<?php
+        break;
+    case 'jpg':
+    case 'bmp':
+?>
+<?php
+        break;
+}
+?>

@@ -109,7 +109,7 @@ class MyPdo
      * первую, если вдруг запрос возвратил несколько строк
      * Возвращает ассоциативный массив
      */
-    public function sql_one_record($sql, $params='')
+    public function sql_one_record($sql, $params=''): array
     {
         global $logger;
         $logger->debug(self::class . '::sql_one_record()');
@@ -129,7 +129,8 @@ class MyPdo
         // Если запрос ничего не вернул
         if( count($records) == 0 || count($records[0]) == 0) {
             $logger->debug('return = ; //запрос ничего не вернул');
-            return '';
+//            return '';
+            return null;
         }
 
 //        $logger->debug('return = ' . Lib::var_dump1($records[0]));
