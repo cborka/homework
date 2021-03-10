@@ -401,6 +401,7 @@ EOL;
             $menu = <<<EOL
         <a href="/help/docs">Описание ||| </a>
         <a href="/mdn/edit">Дневник ||| </a>
+        <a href="/storage/catalog">Файлы ||| </a>
         <a href="/users/logout">Выход | </a>
 EOL;
         }

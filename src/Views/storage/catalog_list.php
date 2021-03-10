@@ -22,9 +22,11 @@ function f_catalog_list($params)
         SELECT c.id, c.user_id, u.login, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights 
           FROM storage_catalog c
             LEFT JOIN users u ON c.user_id = u.id 
+          WHERE c.user_id = {$_SESSION['id']}
+             OR c.access_rights > 0 
           ORDER BY login, file_name
 EOL;
-    //echo $sql;
+  //echo $sql;
 
     $recs = $mypdo->sql_many($sql);
 
@@ -42,7 +44,7 @@ EOL;
         </tr>
         </thead>
         <?php foreach ($recs as $rec) { ?>
-            <tr id="tr<?= $rec['id']; ?>" onclick="render_element({id: <?= $rec['id']; ?>})";>
+            <tr id="tr<?= $rec['id']; ?>" onclick="render_element({id: <?= $rec['id']; ?>, fn: '<?= $rec['file_name']; ?>'})";>
                 <td> <?= $rec['login']; ?></td>
                 <td> <?= $rec['file_name']; ?></td>
                 <td><?= substr($rec['load_date'], 0, 10); ?></td>

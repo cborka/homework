@@ -94,24 +94,19 @@ class Render
         // Определяем тип файла
         $extension = pathinfo($fullname, PATHINFO_EXTENSION);
 
-//        // Если php, то
-//        if ($extension == 'php') {
-//            $content = htmlspecialchars_decode ($content);
-//            $logger->debug('htmlspecialchars_decode');
-//
-//        } else
-
-        // Если текст, то преобразуем теги и затем заключаем в тег <pre>
-        if ($extension == 'txt') {
-            $content = htmlspecialchars($content);
-            $content = '<pre>' . $content . '</pre>';
-        } else
-
-        // Если маркдаун, то преобразуем в html
-        if ($extension == 'md') {
-            $content = htmlspecialchars($content);
-            $Parsedown = new \Parsedown();
-            $content = $Parsedown->text($content);
+        switch ($extension) {
+            // Если текст, то преобразуем теги и затем заключаем в тег <pre>
+            case 'bat':
+            case 'txt':
+                $content = htmlspecialchars($content);
+                $content = '<pre>' . $content . '</pre>';
+                break;
+            // Если маркдаун, то преобразуем в html
+            case 'md':
+                $content = htmlspecialchars($content);
+                $Parsedown = new \Parsedown();
+                $content = $Parsedown->text($content);
+                break;
         }
 
         return $content;

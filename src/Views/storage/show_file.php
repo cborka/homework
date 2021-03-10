@@ -41,22 +41,32 @@ EOL;
 //  'file_size' => string '72539' (length=5)
 //  'access_rights' => string '0' (length=1)
 
-
-    echo 'Файл ' . $rec['file_name'] . '<br>';
-    echo 'Владелец ' . $rec['name'] . '<br>';
-    echo 'Загружен ' . $rec['load_date'] . '<br>';
-    echo 'Размер ' . $rec['file_size'] . '<br>';
-    echo 'Доступ: ' . ($rec['access_rights'] === '0' ? 'приватный' : 'публичный');
-    echo '<br><br><br>';
-
+    $id = $rec['id'];
+    $is_owner = ($rec['user_id'] === $_SESSION['id']);
     $token = $rec['file_token'];
     $filename = $rec['file_name'];
-    $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $filename;
+    $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $token;
 
+    if ($is_owner) { ?>
+        <form action="/mdn/save" method="post">
+            Файл     <input type="text" name="filename" value="<?= $filename; ?>"><br>
+            Доступ   <?= ($rec['access_rights'] === '0' ? 'приватный' : 'публичный'); ?><br>
+            Описание<br><textarea name="notes" rows="2" cols="60"><?= 'Это хорошо!' ?></textarea><br>
+            <button>Сохранить</button>
+        </form>
+
+    <?php } else {
+        echo 'Файл: ' . $filename . '<br>';
+        echo 'Доступ: ' . ($rec['access_rights'] === '0' ? 'приватный' : 'публичный') . '<br>';
+    }
+    echo 'Владелец: ' . $rec['name'] . '<br>';
+    echo 'Загружен: ' . $rec['load_date'] . '<br>';
+    echo 'Размер: ' . $rec['file_size'] . '<br>';
+    echo '<br><br><br>';
 
     if (!file_exists($fullname)) {
         echo 'Fайл <b>' . $filename . '</b> не существует.';
-        $logger->debug('show_image: файл ' . $fullname . ' не существует.');
+        $logger->debug("'show_image: файл $fullname ($filename) не существует.");
         return;
     }
 
@@ -66,41 +76,48 @@ EOL;
         return;
     }
 
-    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 ?>
 
-    <div align="center" style="width: 100%;" onchange="setTimeout(delete_file, 3000)">
-
+    <div align="center" style="width: 100%;">
         <?php switch ($extension) {
+            case 'bat':
             case 'txt':
             case 'md':
                 $content = Render::render_file_to_string($copy);
                 ?>
-                <div align="left">
-                    <p align="left"><?php echo $content; ?></p>
-                </div>
+                    <div align="left">
+                        <p><?php echo $content; ?></p>
+                    </div>
                 <?php
+                break;
+            case 'xxx':
+                ?>
+                    <div align="left">
+                        <?php include $copy; ?>
+                    </div>
+                    <?php
                 break;
             case 'jpg':
             case 'png':
             case 'bmp':
                 ?>
-                <img class="preview" src="<?= '/storage/' . $filename; ?>" alt="<?= $filename; ?>">
+                    <img class="preview" src="<?= '/storage/' . $filename; ?>" alt="<?= $filename; ?>">
                 <?php
                 break;
         }
         ?>
     </div>
+    <br><br>
 
-    <a href="/storage/load?filename=<?= $filename; ?>&token='<?= $token; ?>">Скачать</a><br>
-    <div>
-    <input id="ref" type="url" width="100%" aria-selected="true" value="http://<?= $_SERVER['HTTP_HOST']; ?>/storage/load?filename=<?= $filename; ?>&token='<?= $token; ?>" readonly>
-    </div>
+    <a href="/storage/load?filename=<?= $filename; ?>&token=<?= $token; ?>">Скачать</a>
+    <input id="ref" type="url" value="http://<?= $_SERVER['HTTP_HOST']; ?>/storage/load?filename=<?= $filename; ?>&token=<?= $token; ?>" readonly >
+    <button onclick="copy_to()">Скопировать ссылку на скачивание в буфер обмена</button><br>
     <br>
-    <button onclick="load_file('<?= $token; ?>', '<?= $filename; ?>')">Скачать</button>
-    <button>Изменить доступ</button>
-    <button>Удалить</button>
-    <button onclick="copy_to()">Скопировать ссылку в буфер обмена</button>
+
+    <?php if ($is_owner) { ?>
+        <button onclick="delete_from_storage('<?= $id; ?>', '<?= $filename; ?>')">Удалить файл из хранилища</button>
+    <?php } ?>
 
 <?php } ?>
 
