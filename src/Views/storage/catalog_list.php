@@ -1,11 +1,17 @@
+<?php if ($_SESSION['login'] !== 'Guest13') { ?>
 <div style="float: left;">
     <h3>Каталог загруженных файлов</h3>
 </div>
+
 <div style="float: right;">
 <!--    <button onclick="upload_file()" title="Загрузить новый"><br>+<br>&nbsp </button>-->
     <button onclick="render_element_upload()" title="Загрузить новый">+<br>+<br>+</button>
 </div>
 <br>
+<?php } else { ?>
+    <h3>Каталог загруженных файлов</h3>
+<?php } ?>
+
 <?php
 
 f_catalog_list($params);

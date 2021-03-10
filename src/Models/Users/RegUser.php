@@ -376,16 +376,13 @@ EOL;
         } else if ($_SESSION['login'] === 'Guest') {
             $menu = <<<EOL
         <a href="/mdn/edit">Дневник ||| </a>
+        <a href="/storage/catalog">Файлы ||| </a>
         <a href="/users/logout">Выход | </a>
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
             $menu = <<<EOL
-        <a href="/storage/catalog">catalog | </a>
-        <a href="/storage/load">load | </a>
-        <a href="/storage/show">show | </a>
-        <a href="/storage/upload_file">upload ||| </a>
+        <a href="/storage/catalog">storage ||| </a>
         <a href="/mdn/edit">ajaxMdn ||| </a>
-        <a href="/help/ajaxRenderTest">ajaxRender ||| </a>
         <a href="/help/test">Тесты ||| </a>
         <a href="/help/gitHelp">Git Help | </a>
         <a href="/help/jqueryHelp">jQuery Help | </a>

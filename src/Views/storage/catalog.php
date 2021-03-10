@@ -71,7 +71,8 @@
     }
 
     // Удалить файл из хранилища
-    function delete_from_storage(id, filename) {
+    function delete_from_storage(id, filename)
+    {
         if (!confirm('Вы точно собираетесь удалить файл "'+filename+'" из хранилища?')) {
             alert('No, Uff');
             return;
@@ -92,8 +93,35 @@
         render_element({id: result, fn: 'x1'});
     }
     
+    // Сохранение записи
+    function save_record()
+    {
+       let id = rec_form.id.value;
+       let filename = rec_form.filename.value+'.'+rec_form.extension.value;
+       let acc = rec_form.access_right.value;
+       let notes = rec_form.notes.value;
+//       alert('x' + id + filename + extension + notes + acc );
+
+        let sql =
+            'UPDATE storage_catalog SET \
+                file_name = ?, \
+                access_rights = ?, \
+                notes = ? \
+             WHERE id = ?';
+
+        response = sql_update(sql, [String(filename), Number(acc), String(notes), Number(id)]);
+
+        if (response !== '1') {
+            alert("однако неудача" + response);
+            returnж
+        }
+        render_list();
+        render_element({id: id});
+    }
+
     // Скачивание файла
-    function load_file(token, filename) {
+    function load_file(token, filename)
+    {
         $.post("/storage/load",
             {
                 token: token,
@@ -105,9 +133,9 @@
         )
     }
 
-
     // Копирование ссылки на скачивание в буфер обмена
-    function copy_to() {
+    function copy_to()
+    {
         var copyText = document.getElementById("ref");
         copyText.select();
 

@@ -20,7 +20,7 @@ function f123($params)
     echo $params['id'] . '<br>';
 
     $sql = <<< EOL
-    SELECT c.id, c.user_id, u.login, u.name, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights 
+    SELECT c.id, c.user_id, u.login, u.name, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights, c.notes 
       FROM storage_catalog c
         LEFT JOIN users u ON c.user_id = u.id 
       WHERE c.id = ?
@@ -43,17 +43,34 @@ EOL;
 
     $id = $rec['id'];
     $is_owner = ($rec['user_id'] === $_SESSION['id']);
+
+    if ($rec['access_rights'] === '0') {
+        $selected0 = 'selected';
+        $selected1 = '';
+    } else {
+        $selected0 = '';
+        $selected1 = 'selected';
+    }
     $token = $rec['file_token'];
     $filename = $rec['file_name'];
     $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $token;
+    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    $basename = pathinfo($filename, PATHINFO_FILENAME);
 
     if ($is_owner) { ?>
-        <form action="/mdn/save" method="post">
-            Файл     <input type="text" name="filename" value="<?= $filename; ?>"><br>
-            Доступ   <?= ($rec['access_rights'] === '0' ? 'приватный' : 'публичный'); ?><br>
-            Описание<br><textarea name="notes" rows="2" cols="60"><?= 'Это хорошо!' ?></textarea><br>
-            <button>Сохранить</button>
+        <form name="rec_form" action="/storage/save_record" >
+            <input type="number" name="id" value="<?= $id; ?>" readonly hidden><br>
+            Файл     <input type="text" name="filename" value="<?= $basename; ?>">.<?= $extension; ?><br>
+            <input type="text" name="extension" value="<?= $extension; ?>" readonly hidden>
+            Доступ
+            <select size="1" name="access_right">
+                <option <?= $selected0; ?> value="0">Приватный</option>
+                <option <?= $selected1; ?> value="1">Публичный</option>
+            </select>
+            <br>
+            Описание<br><textarea name="notes" rows="2" cols="60"><?= $rec['notes'] ?></textarea><br>
         </form>
+        <button onclick="save_record()">Сохранить</button><br>
 
     <?php } else {
         echo 'Файл: ' . $filename . '<br>';
@@ -76,7 +93,7 @@ EOL;
         return;
     }
 
-    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+//    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 ?>
 
     <div align="center" style="width: 100%;">

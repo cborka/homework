@@ -26,8 +26,13 @@ class storageController
     {
         global $logger;
         $logger->debug(self::class . '::actionUpload_file()');
+        $logger->debug(self::class . '::actionUpload_file()' . $_SESSION['login'] . ' === Guest');
 
-        Render::render_file('storage/upload_file.php');
+        if ($_SESSION['login'] === 'Guest') {
+            Render::render('Сначала надо зарегистрироваться!');
+        } else {
+            Render::render_file('storage/upload_file.php');
+        }
     }
 
     /*
@@ -87,7 +92,6 @@ class storageController
 //        Render::render_file("storage/show_image.php", ['file' => $file_name]);
 //        Render::render('','storage/catalog.php', ['id' => $id]);
     }
-
 
     /*
      * Ajax-запрос на удаление временного файла
@@ -195,6 +199,18 @@ class storageController
 //        }
 //    }
 
+
+    /*
+     * Показать каталог загруженных файлов
+     */
+    public function actionSave_record()
+    {
+        $this->logger->debug(self::class . '->actionSave_record()');
+
+        $id = $_SESSION['last_uploaded_id']?? '1';
+
+        Render::render('','storage/catalog.php', ['id' => $id]);
+    }
 
     /*
      * Показать каталог загруженных файлов
