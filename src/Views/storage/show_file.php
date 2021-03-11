@@ -117,6 +117,7 @@ EOL;
                 break;
             case 'jpg':
             case 'png':
+            case 'gif':
             case 'bmp':
                 ?>
                     <img class="preview" src="<?= '/storage/' . $filename; ?>" alt="<?= $filename; ?>">
