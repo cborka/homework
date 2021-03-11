@@ -90,6 +90,7 @@ class Logger extends AbstractLogger
 
         // Вывод в базу данных
         if ($_SERVER['HTTP_HOST'] === '93.189.42.2') {
+//            echo 'db-> ' . $message . '<br>';
             $this->addMessageToLogs($this->levels[$level], $message);
         }
     }

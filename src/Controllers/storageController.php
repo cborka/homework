@@ -47,7 +47,7 @@ class storageController
 
         $file = $_FILES['filename'];
 
-        $logger->debug(Lib::var_dump1($_FILES));
+//        $logger->debug(Lib::var_dump1($_FILES));
 
 //        array (size=5)
 //  'name' => string 'Пагинация.jpg' (length=22)
@@ -61,7 +61,7 @@ class storageController
         // закомментированные поля вставятся по умолчанию
         $user_id = $_SESSION['id'];
         $file_name = $file['name'];
-        $file_token = bin2hex(random_bytes(32));
+        $file_token = bin2hex(random_bytes(30)) . '.xbz';
 //        $load_date = current_timestamp;
         $file_size = $file['size'];
         $file_type = $file['type'];
@@ -101,15 +101,12 @@ class storageController
         global $logger;
         $logger->debug(self::class . '::actionDelete()');
 
-//        $file = "Пагинация.jpg";
         $file = $_POST['filename'];
 
         $copy = $_SERVER['DOCUMENT_ROOT'] . "/public/storage/" . $file;
 
-        $logger->debug("Удаляю $copy");
-
         if (!unlink($copy)) {
-            $logger->debug("Файл $copy НЕ удален.");
+            $logger->warning("Файл $copy НЕ удален.");
         }
     }
 
@@ -200,19 +197,7 @@ class storageController
 //    }
 
 
-    /*
-     * Показать каталог загруженных файлов
-     */
-    public function actionSave_record()
-    {
-        $this->logger->debug(self::class . '->actionSave_record()');
-
-        $id = $_SESSION['last_uploaded_id']?? '1';
-
-        Render::render('','storage/catalog.php', ['id' => $id]);
-    }
-
-    /*
+     /*
      * Показать каталог загруженных файлов
      */
     public function actionCatalog()
