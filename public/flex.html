@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Flexbox wrap 0 — children overflowing</title>
+    <!--<meta http-equiv="refresh" content="5">-->
+
+    <style>
+
+        section.s1 {
+            display: flex;
+            /*flex-direction: row;*/
+            /*flex-wrap: wrap;*/
+            flex-flow: row wrap; /* Вместо верхних двух */
+            background-color: #D7EDFC;
+        }
+
+        section.s2 {
+            display: flex;
+            /*flex-direction: row;*/
+            /*flex-wrap: wrap;*/
+            flex-flow: row wrap; /* Вместо верхних двух */
+            background-color: aqua;
+        }
+
+        article {
+            flex: 1 100px;
+            background-color: bisque;
+        }
+        article:nth-of-type(3) {
+            flex: 2 100px;
+            background-color: cornsilk;
+        }
+
+        p {
+            background-color: lightgoldenrodyellow;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Изучаем flexbox</h1>
+</header>
+
+<form>
+    <fieldset>
+        <legend>Контактная информация</legend>
+        <p><label for="name">Имя <em>*</em></label><input type="text" id="name" size="55"></p>
+        <p><label for="email">E-mail</label><input type="email" id="email"></p>
+        <p>color <input type="search" id="color"></p>
+    </fieldset>
+    <p><input type="submit" value="Отправить"></p>
+</form>
+
+
+
+<section class="s2">
+
+    <button>11</button>
+    <button>12</button>
+    <br>
+    <video src="Smokie - What Can I Do (East Berlin 26.05.1976).mp4" controls muted >
+        <track src="todo.srt" kind="subtitles">
+        
+    </video>
+</section>
+
+<section class="s2">
+
+    <button>11</button>
+    <button>12</button>
+    <br>
+    <audio id="sound" src="/Amanda Lear - Egal.mp3" preload="auto" controls></audio>
+</section>
+
+
+<section class="s1">
+    <article>
+        <h2>Статья</h2>
+        <p>Абзац. Каждый хочет попробовать мягких французских булочек.</p>
+        <p>Затем он повернулся к доске и взял мел. Подумав несколько минут, он написал <var>E</var> = <var>m</var> <var>c</var><sup>2</sup>. Учитель выглядел довольным.</p>
+
+        <p>Компьютер сказал, что <samp>во втором лотке слишком много сыра</samp>, но я не знал, что это значит.</p>
+        <p>Чтобы заставить Джорджа съесть яблоко, нажмите <kbd><kbd>Shift</kbd>+<kbd>F3</kbd></kbd></p>
+        <p>Координаты <var>i</var>-той точки (<var>x<sub><var>i</var></sub></var>, <var>y<sub><var>i</var></sub></var>). Например, 10-я точка имеет координаты (<var>x<sub>10</sub></var>, <var>y<sub>10</sub></var>).</p>
+        <p>У меня также есть <mark>котята</mark>, которые посещают меня в эти дни. Они действительно милые. Я думаю, что им нравится мой сад! Может быть, я должен взять себе одного <mark>котенка</mark>.</p>
+
+        <ul>
+            <li>Пользователь <bdi>jcranmer</bdi>: 12 записей.
+            <li>Пользователь <bdi>hober</bdi>: 5 записей.
+            <li>Пользователь <bdi>إيان</bdi>: 3 записи.
+        </ul>
+
+    </article>
+    <article>
+        <h2>Статья</h2>
+        <p><s>Абзац.</s> Каждый хочет попробовать мягких французских булочек.</p>
+    </article>
+    <article>
+        <h2>Статья</h2>
+        <p>Абзац. Каждый хочет попробовать мягких французских булочек.</p>
+        <p><dfn title="Certificate Signing Request">CSR</dfn> — это ключ, генерируемый при запросе на выдачу SSL-сертификата.</p>
+        <p><dfn id=whatwg><abbr title="Web Hypertext Application Technology Working Group">WHATWG</abbr></dfn> это свободное неофициальное сотрудничество производителей веб-браузеров и заинтересованных сторон, которые хотят разрабатывать новые технологии, позволяющие авторам создавать и развертывать приложения через World Wide Web.</p>
+        <ruby>ruby<rt>аннотация</rt><rtc>дополнительная</rtc></ruby><ruby>И<rt><b>,</b></rt></ruby>
+        <ruby>語<rt>ご</rt></ruby>で<ruby>書<rt>か</rt></ruby>
+        いた<ruby>作<rt>さく</rt></ruby><ruby>文<rt>ぶん</rt></ruby>です。
+        <data value="44668">data Ноты. Травиата. Опера Джузеппе Верди</data><br>
+        <time>2011-11-18 14:54</time><br>
+        <time class="dtend" datetime="2005-10-07">7 октября</time><br>
+
+        <pre><code class="language-css">p {
+    font-size: 14px;
+}</code></pre>
+
+    </article>
+</section>
+
+</body>
+</html>
