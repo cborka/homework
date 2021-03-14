@@ -73,13 +73,15 @@ EOL;
         <button onclick="save_record()">Сохранить</button><br>
 
     <?php } else {
+
         echo 'Файл: ' . $filename . '<br>';
         echo 'Доступ: ' . ($rec['access_rights'] === '0' ? 'приватный' : 'публичный') . '<br>';
     }
     echo 'Владелец: ' . $rec['name'] . '<br>';
     echo 'Загружен: ' . $rec['load_date'] . '<br>';
     echo 'Размер: ' . $rec['file_size'] . '<br>';
-    echo '<br><br><br>';
+    echo '<pre>' . $rec['file_size'] . '</pre><br>';
+    echo '<br><br>';
 
     if (!file_exists($fullname)) {
         echo 'Fайл <b>' . $filename . '</b> не существует.';

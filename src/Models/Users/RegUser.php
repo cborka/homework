@@ -384,7 +384,11 @@ EOL;
             $menu = <<<EOL
         <a href="/storage/catalog">storage ||| </a>
         <a href="/mdn/edit">ajaxMdn ||| </a>
-        <a href="/help/ajaxRenderTest">ajaxRender ||| </a>
+        <!--<a href="/help/ajaxRenderTest">ajaxRender ||| </a>-->
+        <a href="/tailwind.html">tailwind | </a>
+        <a href="/bulma.html">bulma | </a>
+        <a href="/bootstrap.html">bootstarp | </a>
+        <a href="/flex.html">flex ||| </a>
         <a href="/help/test">Тесты ||| </a>
         <a href="/help/gitHelp">Git Help | </a>
         <a href="/help/jqueryHelp">jQuery Help | </a>
