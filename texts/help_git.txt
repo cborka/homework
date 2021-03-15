@@ -147,3 +147,59 @@ git branch --no-merged
 git branch -vv
 удаление ветки serverfix на удаленном сервере
 git push origin --delete serverfix
+
+
+#GitFlow
+
+git flow init
+    git branch develop
+    git push -u origin develop
+
+git flow feature start feature_branch
+    git checkout develop
+    git checkout -b feature_branch
+
+git flow feature finish feature_branch
+    git checkout develop
+    git merge feature_branch
+
+git flow release start 0.1.0
+    git checkout develop
+    git checkout -b release/0.1.0
+
+git checkout master
+git checkout merge release/0.1.0
+git flow release finish '0.1.0'
+    git checkout develop
+    git merge release/0.1.0
+
+git flow hotfix start hotfix_branch
+    git checkout master
+    git checkout -b hotfix_branch
+
+git flow hotfix finish hotfix_branch
+    git checkout master
+    git merge hotfix_branch
+    git checkout develop
+    git merge hotfix_branch
+    git branch -D hotfix_branch
+
+Примеры для feature и hotfix
+
+git checkout master
+git checkout -b develop
+git checkout -b feature_branch
+# работа ведется на ветке feature
+git checkout develop
+git merge feature_branch
+git checkout master
+git merge develop
+git branch -d feature_branch
+
+git checkout master
+git checkout -b hotfix_branch
+# работа сделана, коммиты добавлены в hotfix_branch
+git checkout develop
+git merge hotfix_branch
+git checkout master
+git merge hotfix_branch

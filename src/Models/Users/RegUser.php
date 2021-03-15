@@ -367,7 +367,7 @@ EOS;
 
         if (!isset($_SESSION['login'])) {
             $menu = <<<EOL
-        <a href="/users/login">Вход | </a>
+        &#9776;<a href="/users/login">Вход | </a>
         <a href="/users/showRegForm">Регистрация | </a>
         <a href="/users/restorePassword">Восстановление пароля ||| </a>
         <a href="/users/loginGuest">Зайти как гость ||| </a>
@@ -375,18 +375,18 @@ EOS;
 EOL;
         } else if ($_SESSION['login'] === 'Guest') {
             $menu = <<<EOL
-        <a href="/mdn/edit">Дневник.2 ||| </a>
+        <a href="/mdn/edit">&#10001;Дневник.2 ||| </a>
         <a href="/mdn/view">Дневник.1 ||| </a>
         <a href="/storage/catalog">Файлы ||| </a>
         <a href="/users/logout">Выход | </a>
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
             $menu = <<<EOL
-        <a href="/storage/catalog">storage ||| </a>
-        <a href="/mdn/edit">ajaxMdn ||| </a>
+        <a href="/storage/catalog">&#9733;storage ||| </a>
+        <a href="/mdn/edit">&#9873;ajaxMdn ||| </a>
         <!--<a href="/help/ajaxRenderTest">ajaxRender ||| </a>-->
         <a href="/tailwind.html">tailwind | </a>
-        <a href="/bulma.html">bulma | </a>
+        <a href="/bulma.html">&#9773;bulma | </a>
         <a href="/bootstrap.html">bootstarp | </a>
         <a href="/flex.html">flex ||| </a>
         <a href="/help/test">Тесты ||| </a>
@@ -397,7 +397,7 @@ EOL;
         <a href="/help/jqueryLearn">jQuery Learn ||| </a>
         <a href="/help/docs">Описание ||| </a>
         <a href="/mdn/view">Дневник ||| </a>
-        <a href="/users/logout">Выход | </a>
+        <a href="/users/logout">Выход | </a>&#9809;
 EOL;
         } else {
 //            // И здесь хорошо бы проверить права
