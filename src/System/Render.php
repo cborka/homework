@@ -20,10 +20,10 @@ class Render
 
         // Если задано относительное имя файла
         if (isset($filename) && (substr($filename[0], 0, 1) !== '/')) {
-            $filename = $_SERVER['DOCUMENT_ROOT'] . '/src/Views/' . $filename;
+            $filename = DOCUMENT_ROOT . '/src/Views/' . $filename;
         }
 
-        $layout_file = __DIR__ . '/../Views/partials/layout.php';
+        $layout_file = DOCUMENT_ROOT . '/src/Views/partials/layout.php';
 
         if (!file_exists($layout_file)) {
             $logger->error(self::class .'::render(): не найден файл .../' . basename($layout_file));
@@ -62,7 +62,7 @@ class Render
 
         // Задано относительное имя в .../src/Views/ или абсолютное
         if (substr($filename[0], 0, 1) !== '/') {
-            $fullname = $_SERVER['DOCUMENT_ROOT'] . '/src/Views/' . $filename;
+            $fullname = DOCUMENT_ROOT . '/src/Views/' . $filename;
         } else {
             $fullname = $filename;
         }

@@ -35,14 +35,14 @@ class helpController
 
         $this->logger->debug(self::class . '->actionGitHelp()');
 
-        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/texts/help_git.txt');
+        Render::render_file(DOCUMENT_ROOT . '/texts/help_git.txt');
     }
 
     public function actionJqueryHelp()
     {
         $this->logger->debug(self::class . '->actionJqueryHelp()');
 
-        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/texts/help_jquery.txt');
+        Render::render_file(DOCUMENT_ROOT . '/texts/help_jquery.txt');
     }
 
     public function actionHttp()
@@ -62,30 +62,30 @@ class helpController
     {
         $this->logger->debug(self::class . '->actionCreationLog()');
 
-        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/creation_log.txt');
+        Render::render_file(DOCUMENT_ROOT . '/creation_log.txt');
     }
 
     public function actionJqueryLearn()
     {
         $this->logger->debug(self::class . '->actionJqueryLearn()');
 
-        $left = $_SERVER['DOCUMENT_ROOT'] . '/texts/todo.txt';
-//        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/public/jquery.html');
-        Render::render('xxx',$_SERVER['DOCUMENT_ROOT'] . '/public/jquery.html', ['left_col' => $left]);
+        $left = DOCUMENT_ROOT . '/texts/todo.txt';
+//        Render::render_file(DOCUMENT_ROOT . '/public/jquery.html');
+        Render::render('xxx',DOCUMENT_ROOT . '/public/jquery.html', ['left_col' => $left]);
     }
 
     public function actionMarkdown()
     {
         $this->logger->debug(self::class . '->actionMarkdown()');
 
-        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/texts/markdown.md');
+        Render::render_file(DOCUMENT_ROOT . '/texts/markdown.md');
     }
 
     public function actionDocs()
     {
         $this->logger->debug(self::class . '->actionMarkdown()');
 
-        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/texts/docs.md');
+        Render::render_file(DOCUMENT_ROOT . '/texts/docs.md');
     }
 
     public function actionTest()
@@ -104,9 +104,9 @@ class helpController
     {
         $this->logger->debug(self::class . '->actionAjaxRenderTest()');
 
-//        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/test/ajax_page.php');
-//        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/src/Views/test/ajax_page.php');
-        Render::render_file($_SERVER['DOCUMENT_ROOT'] . '/src/Views/test/ajax_render.php');
+//        Render::render('', DOCUMENT_ROOT . '/src/Views/test/ajax_page.php');
+//        Render::render_file(DOCUMENT_ROOT . '/src/Views/test/ajax_page.php');
+        Render::render_file(DOCUMENT_ROOT . '/src/Views/test/ajax_render.php');
     }
 
 

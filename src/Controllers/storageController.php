@@ -73,7 +73,7 @@ class storageController
         Lib::checkPDOError($result);
 
         // Имя файла в хранилище
-        $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $file_token;
+        $fullname = DOCUMENT_ROOT . "/storage/" . $file_token;
 
         if (!move_uploaded_file($file['tmp_name'], $fullname)) {
             echo "Не удалось переместить";
@@ -103,7 +103,7 @@ class storageController
 
         $file = $_POST['filename'];
 
-        $copy = $_SERVER['DOCUMENT_ROOT'] . "/public/storage/" . $file;
+        $copy = DOCUMENT_ROOT . "/public/storage/" . $file;
 
         if (!unlink($copy)) {
             $logger->warning("Файл $copy НЕ удален.");
@@ -131,7 +131,7 @@ class storageController
         Lib::checkPDOError($ret);
 
         // Находим полное имя и удаляем файл
-        $file = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $token;
+        $file = DOCUMENT_ROOT . "/storage/" . $token;
         $logger->debug("Удаляю $file");
 
         if (!unlink($file)) {
@@ -159,7 +159,7 @@ class storageController
         $filename = $_GET['filename'];
         $logger->debug(self::class . ':: ' . $filename);
 
-        $file = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $token;
+        $file = DOCUMENT_ROOT . "/storage/" . $token;
 
         if (!file_exists($file)) {
             echo 'Fайл <b>' . $filename . '</b> не существует.';

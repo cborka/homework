@@ -27,7 +27,7 @@ class mdnController
         $this->logger->debug(self::class . '->actionView()');
 
         $records = MdnDb::getRecords();
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/mdn/mdnList.php', $records );
+        Render::render('',DOCUMENT_ROOT . '/src/Views/mdn/mdnList.php', $records );
     }
 
     // Редактировать запись в форме
@@ -35,7 +35,7 @@ class mdnController
     {
         $this->logger->debug(self::class . '->actionForm()');
 
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/mdn/mdnForm.php');
+        Render::render('',DOCUMENT_ROOT . '/src/Views/mdn/mdnForm.php');
     }
 
     // Сохранить запись из формы в БД

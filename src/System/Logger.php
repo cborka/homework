@@ -44,7 +44,7 @@ class Logger extends AbstractLogger
     public function __construct()
     {
         $this->logname = 'log' . date("Y-m-d") . '.txt';
-        $filename = "{$_SERVER['DOCUMENT_ROOT']}/logs/$this->logname";
+        $filename = DOCUMENT_ROOT . "/logs/$this->logname";
 
         if (!$this->fp = fopen($filename, "a")) {
             throw new \Error("Logger: Не могу открыть файл $this->logname");
@@ -100,7 +100,7 @@ class Logger extends AbstractLogger
      */
     private function addMessageToFile($message)
     {
-//        $filename =$_SERVER['DOCUMENT_ROOT'] . '/logs/log2.txt';
+//        $filename =DOCUMENT_ROOT . '/logs/log2.txt';
 //
 //        if (!$fp = fopen($filename, "a")) {
 //            echo "Не могу открыть логфайл";

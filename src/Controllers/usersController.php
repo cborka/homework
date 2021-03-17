@@ -27,7 +27,7 @@ class usersController
     {
         $this->logger->debug(self::class . '->actionShowRegForm()');
 
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/reg.php');
+        Render::render('',DOCUMENT_ROOT . '/src/Views/users/reg.php');
     }
 
     /*
@@ -58,7 +58,7 @@ class usersController
     {
         $this->logger->debug(self::class . '->actionShowLoginForm()');
 
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
+        Render::render('',DOCUMENT_ROOT . '/src/Views/users/login.php');
     }
 
     /*
@@ -90,7 +90,7 @@ class usersController
         $this->logger->debug(self::class . '->actionLogout()');
 
         $_SESSION = [];
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
+        Render::render('',DOCUMENT_ROOT . '/src/Views/users/login.php');
     }
 
     /*
@@ -102,13 +102,13 @@ class usersController
 
         if(isset($_SESSION['login'])) {
             if($_SESSION['login'] === 'Guest') {
-                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+                Render::render('', DOCUMENT_ROOT . '/src/Views/users/home_guest.php');
             } else {
-                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
+                Render::render('', DOCUMENT_ROOT . '/src/Views/users/home.php');
             }
         } else {
             $_SESSION = [];
-            Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
+            Render::render('',DOCUMENT_ROOT . '/src/Views/users/login.php');
         }
     }
 
@@ -121,13 +121,13 @@ class usersController
 
         if(isset($_SESSION['login'])) {
             if($_SESSION['login'] === 'Guest') {
-                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+                Render::render('', DOCUMENT_ROOT . '/src/Views/users/home_guest.php');
             } else {
-                Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/account.php');
+                Render::render('', DOCUMENT_ROOT . '/src/Views/users/account.php');
             }
         } else {
             $_SESSION = [];
-            Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/login.php');
+            Render::render('',DOCUMENT_ROOT . '/src/Views/users/login.php');
         }
     }
 
@@ -151,9 +151,9 @@ class usersController
         $this->logger->debug(self::class . '->actionChangePassword()');
 
         if($_SESSION['login'] === 'Guest') {
-            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+            Render::render('', DOCUMENT_ROOT . '/src/Views/users/home_guest.php');
         } else {
-            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $_SESSION['login']]);
+            Render::render('', DOCUMENT_ROOT . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $_SESSION['login']]);
         }
     }
 
@@ -166,7 +166,7 @@ class usersController
         $this->logger->debug(self::class . '->actionRestorePassword()');
         $this->logger->debug('$_POST = '. Lib::var_dump1($_POST));
 
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass1_get_mail.php');
+        Render::render('',DOCUMENT_ROOT . '/src/Views/users/restore_pass1_get_mail.php');
     }
 
     /*

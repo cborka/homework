@@ -53,7 +53,7 @@ EOL;
     }
     $token = $rec['file_token'];
     $filename = $rec['file_name'];
-    $fullname = $_SERVER['DOCUMENT_ROOT'] . "/storage/" . $token;
+    $fullname = DOCUMENT_ROOT . "/storage/" . $token;
     $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     $basename = pathinfo($filename, PATHINFO_FILENAME);
 
@@ -89,7 +89,7 @@ EOL;
         return;
     }
 
-    $copy = $_SERVER['DOCUMENT_ROOT'] . "/public/storage/" . $filename;
+    $copy = DOCUMENT_ROOT . "/public/storage/" . $filename;
     if (!copy($fullname, $copy)) {
         $logger->debug('show_image: Не удалось скопировать файл ' . $filename);
         return;

@@ -18,7 +18,7 @@ class MyPdo
 
         // Получаю параметры подключения из файла
         try {
-            $params = explode(',', file_get_contents ($_SERVER['DOCUMENT_ROOT'] . '/texts/db_connection.txt'));
+            $params = explode(',', file_get_contents (DOCUMENT_ROOT . '/texts/db_connection.txt'));
         } catch (\Error $e) {
             $logger->error($e->getMessage());
             echo $e->getMessage();

@@ -42,7 +42,7 @@ class RegUser
 
         // Отправляем письмо с просьбой подтвердить email
         $subject = 'Подтверждение почты. Email confirmation.';
-        $message = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/letter.html');
+        $message = file_get_contents(DOCUMENT_ROOT . '/src/Views/users/letter.html');
         $message = sprintf($message, $name, $token, $token, $token);
 
         try {
@@ -101,7 +101,7 @@ class RegUser
 
             self::sessionInit();
 
-            Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
+            Render::render('', DOCUMENT_ROOT . '/src/Views/users/home.php');
 
             return;
 //        } else if ($flag === '0') {
@@ -116,7 +116,7 @@ class RegUser
 
         // Пользователь не найден
         $_SESSION = [];
-        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/notfound.php');
+        Render::render('', DOCUMENT_ROOT . '/src/Views/users/notfound.php');
     }
 
     /*
@@ -138,7 +138,7 @@ class RegUser
         $_SESSION['flags'] =     '1';
         $_SESSION['notes'] =    '';
 
-        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home_guest.php');
+        Render::render('', DOCUMENT_ROOT . '/src/Views/users/home_guest.php');
     }
 
     /*
@@ -181,7 +181,7 @@ EOS;
         $_SESSION['phone'] =    $_POST['phone'];
         $_SESSION['notes'] =    $_POST['notes'];
 
-        Render::render('', $_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/home.php');
+        Render::render('', DOCUMENT_ROOT . '/src/Views/users/home.php');
     }
 
     /*
@@ -299,7 +299,7 @@ EOS;
         }
 
         $subject = 'Запрос на смену пароля';
-        $message = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass_letter.html');
+        $message = file_get_contents(DOCUMENT_ROOT . '/src/Views/users/restore_pass_letter.html');
         $message = sprintf($message, $login, $token, $token, $token);
 
 //       Render::render($message);
@@ -315,7 +315,7 @@ EOS;
         $logger->notice("Отправлено письмо пользователю $login с токеном $token");
 
         // Сообщить о дальнейших действиях
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass_msg.php');
+        Render::render('',DOCUMENT_ROOT . '/src/Views/users/restore_pass_msg.php');
     }
 
     /*
@@ -334,7 +334,7 @@ EOS;
         $login = $mypdo->sql_one('SELECT login FROM users WHERE token = ?', [$token]);
 
         // Показать форму ввода нового пароля
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $login]);
+        Render::render('',DOCUMENT_ROOT . '/src/Views/users/restore_pass2_get_pass.php', ['login' => $login]);
     }
 
     /*
@@ -355,7 +355,7 @@ EOS;
         $result = $mypdo->sql_update('UPDATE users SET password = ?, token = ? WHERE login = ?', [$pass, '', $login]);
 
         // Вывести сообщение с ссылкой на форму входа
-        Render::render('',$_SERVER['DOCUMENT_ROOT'] . '/src/Views/users/restore_pass3_ok.php');
+        Render::render('',DOCUMENT_ROOT . '/src/Views/users/restore_pass3_ok.php');
     }
 
 

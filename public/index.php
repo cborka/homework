@@ -17,10 +17,12 @@ declare(strict_types=1);
 
 //echo substr($_SERVER['REQUEST_URI'], 0, 6);
 //die();
+//echo substr($_SERVER['REQUEST_URI'], -10, 10);
+//die();
 
 // Всякие боты, прикидываюсь чайником
 $bot = (
-    (strpos($_SERVER['REQUEST_URI'], '.php') > 0) ||
+    ((strpos($_SERVER['REQUEST_URI'], '.php') > 0) && (substr($_SERVER['REQUEST_URI'], -10, 10) !== '/index.php')) ||
     (substr($_SERVER['REQUEST_URI'], 0, 7) === '/vendor') ||
     (substr($_SERVER['REQUEST_URI'], 0, 6) === '/texts') ||
     (substr($_SERVER['REQUEST_URI'], 0, 5) === '/logs') ||
@@ -39,6 +41,9 @@ if ($bot) {
 //    die(); // а умрешь когда отчитаешься
 }
 
+define("DOCUMENT_ROOT",    $_SERVER['DOCUMENT_ROOT'] . '/..');
+//echo DOCUMENT_ROOT;
+
 session_start();
 
 //echo $_SERVER['REQUEST_URI'] . '<br>';
@@ -51,7 +56,7 @@ session_start();
 
 
 // Подключаем файл реализующий автозагрузку
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use System\Logger;
 use System\MyPdo;
@@ -95,6 +100,7 @@ $logger->notice("-----BEGIN ----- {$_SERVER['REMOTE_ADDR']} ----- {$_SERVER['HTT
 
 // Запускаем приложение
 try {
+//    echo "app run";
     App::run();
 } catch (\ErrorException $e) {
     $logger->warning( "App::run: " . $e->getMessage());
