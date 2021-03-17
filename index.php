@@ -1,6 +1,12 @@
 <?php
+
 // Включаем режим строгой типизации
 declare(strict_types=1);
+
+
+//phpinfo();
+//die();
+
 
 //// Валидация дебагера, раскомментирую когда будет надо
 //if ($_SERVER['REQUEST_URI'] === '/_intellij_phpdebug_validator.php') {
