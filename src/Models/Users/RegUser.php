@@ -358,6 +358,37 @@ EOS;
         Render::render('',DOCUMENT_ROOT . '/src/Views/users/restore_pass3_ok.php');
     }
 
+    /*
+     * Свободен ли логин
+     * Возвращает количество найденных логинов, 0 или 1
+     */
+    public static function isLoginFree($login)
+    {
+        global $logger;
+        global $mypdo;
+
+        $logger->debug(self::class . "::isLoginFree($login)");
+
+        return $mypdo->sql_one('SELECT count(*) FROM users WHERE login = ?', [$login]);
+    }
+
+    /*
+     * Свободен ли email
+     * Возвращает количество найденных email, 0 или 1
+     */
+    public static function isEmailFree($email)
+    {
+        global $logger;
+        global $mypdo;
+
+        $logger->debug(self::class . "::isEmailFree($email)");
+
+        return $mypdo->sql_one('SELECT count(*) FROM users WHERE email = ?', [$email]);
+    }
+
+
+
+
 
     /*
      * Формирование меню, пока так

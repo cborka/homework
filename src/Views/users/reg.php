@@ -97,12 +97,21 @@
         let login = userreg.login.value.trim();
 
         // Запрос серверу на проверку не занят ли этот логин
-        response = sql_one('SELECT count(*) FROM users WHERE login = ? ', [String(login)]);
+        $.ajaxSetup({async:false});
+        response = '';
+            $.post("/users/isLoginFree",
+                {
+                    login: String(login)
+                },
+                function (data, status) {
+                    response = data;
+                }
+            );
 
         if (response !== '0') {
             $("#isloginfree").text("Логин занят");
         } else {
-            $("#isloginfree").text('');
+            $("#isloginfree").text('Free');
         }
 
         return check_data();
@@ -118,7 +127,16 @@
         let email = userreg.email.value.trim();
 
         // Запрос серверу на проверку не занят ли этот email
-        response = sql_one('SELECT count(*) FROM users WHERE email = ? ', [String(email)]);
+        $.ajaxSetup({async:false});
+        response = '';
+        $.post("/users/isEmailFree",
+            {
+                email: String(email)
+            },
+            function (data, status) {
+                response = data;
+            }
+        );
 
         if (response !== '0') {
             $("#isemailfree").text("Уже есть такая почта");

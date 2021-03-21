@@ -212,6 +212,36 @@ class usersController
         RegUser::restorePassword3();
     }
 
+    /*
+     * ============== AJAX ЗАПРОСЫ ================
+     */
+
+     /*
+     * Свободен ли логин
+     * Выводит количество найденных логинов, 0 или 1
+     */
+    public function actionIsLoginFree()
+    {
+        $this->logger->debug(self::class . '->actionIsLoginFree');
+        $this->logger->debug('$_POST = '. Lib::var_dump1($_POST));
+
+        // Выводит (это же ajax) количество найденных логинов, 0 или 1
+        echo RegUser::isLoginFree($_POST['login']);
+    }
+
+    /*
+    * Свободен ли email
+    * Выводит количество найденных email, 0 или 1
+    */
+    public function actionIsEmailFree()
+    {
+        $this->logger->debug(self::class . '->actionIsEmailFree');
+        $this->logger->debug('$_POST = '. Lib::var_dump1($_POST));
+
+        // Выводит (это же ajax) количество найденных email, 0 или 1
+        echo RegUser::isEmailFree($_POST['email']);
+    }
+
 
     // Тестил почту, оставлю для истории
 //    public function actionSendMail()
