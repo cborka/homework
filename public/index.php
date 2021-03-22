@@ -30,7 +30,7 @@ $bot = (
     (substr($_SERVER['REQUEST_URI'], 0, 6) === '/shell') ||
     (substr($_SERVER['REQUEST_URI'], 0, 4) === '/js/') ||
     (substr($_SERVER['REQUEST_URI'], 0, 5) === '/site') ||
-    (substr($_SERVER['REQUEST_URI'], 0, 2) === '/?') ||
+//    (substr($_SERVER['REQUEST_URI'], 0, 2) === '/?') ||
     (substr($_SERVER['REQUEST_URI'], 0, 2) === '//') ||
     (substr($_SERVER['REQUEST_URI'], 0, 3) === '//?') ||
     (substr($_SERVER['REQUEST_URI'], 0, 7) === '/config')
