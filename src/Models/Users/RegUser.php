@@ -25,7 +25,7 @@ class RegUser
         $logger->debug(self::class . '::regUser()');
 
         // Отладочные сообщения
-        $logger->notice('post = ' . Lib::var_dump1($_POST) );
+        $logger->debug('post = ' . Lib::var_dump1($_POST) );
 
         $email = $_POST['email'];
         $login = $_POST['login'];
@@ -413,6 +413,7 @@ EOL;
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
             $menu = <<<EOL
+        <a href="/tree/show">tree ||| </a>
         <a href="/storage/catalog">&#9733;storage ||| </a>
         <a href="/mdn/edit">&#9873;ajaxMdn ||| </a>
         <!--<a href="/help/ajaxRenderTest">ajaxRender ||| </a>-->
