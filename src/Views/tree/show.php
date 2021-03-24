@@ -1,4 +1,4 @@
-<div class="grid-container-edit">
+<div id="grid-id" class="grid-container-edit">
 
     <aside class="edit-list" id="list-id">
         Список
@@ -37,7 +37,7 @@
 
         <div>
             <span>Tree</span>
-            <ul onclick="AppendLi(this)">
+            <ul onclick="AppendLiX(this)">
                 <li id="n1" onclick="InsertNode(this)">111</li>
                 <li>222</li>
                 <li>333</li>
@@ -45,7 +45,7 @@
                     <li>111</li>
                     <li>222</li>
                     <li>333</li>
-                    <ul onclick="AppendLi(this)">
+                    <ul onclick="AppendLiX(this)">
                         <li>111</li>
                         <li id="lii2">222777</li>
                         <li>333</li>
@@ -57,9 +57,9 @@
                                 <li>111</li>
                                 <li>222</li>
                                 <li>333</li>
-                                <ul id="ulll">
+                                <ul id="ul_id">
                                     <li>111</li>
-                                    <li id="lii" onclick="AppendLiP()">222</li>
+                                    <li id="li_id" onclick="AppendLiP()">222</li>
                                     <li>333</li>
                                 </ul>
                             </ul>
@@ -68,14 +68,39 @@
                 </ul>
             </ul>
 
-
         </div>
 
 <span id="info"></span>
 
+<!--        <div class="popup_menu" id="pm0" onmouseleave="hide_pm2(this)" hidden>-->
+        <div class="popup_menu" id="pm0" hidden>
+            <button class="popup_menu_item" id="menu_item" onclick="alert(gen_tree(this))">K.y</button>
+            <div class="popup_menu_item" id="qqq_menu_item" onclick="alert(this.id + ',' + this.parentNode.id)">Ky</div>
+            <div class="popup_menu_item" id="q3_menu_item" onclick="AppendLi()">AppendLi()</div>
+            <div class="popup_menu_item"><a href="#">Вход</a></div>
+            <div class="popup_menu_item"><a href="#">Регистрация</a></div>
+        </div>
 
 
+        <div id="div1">
+            div1
+        </div>
+        <div id="div2">
+            div2
+        </div>
 
+        <?php
+        echo
+        '<div id="tmi0" class="top_menu_item" oncontextmenu="show_pm2(); return false;" >' .
+            ' <span id="tmin0">Что?</span> ' .
+        '</div> '
+;
+
+
+//onmouseleave = "hide_pm2('pm0')
+
+
+ //var_dump($params['recs']) ?>
 
 
         <?php //var_dump($params['recs']) ?>
@@ -85,39 +110,77 @@
 
 <script>
 
+    //
+    // Показать всплывающее меню
+    //
+    function show_pm2()
+    {
+        let element = event.target;                 // Элемент из которого вызываем меню
+        let menu  =  document.getElementById('pm0');
+        menu.style.display = 'block';
+        menu.parent = element;
+
+        // Располагаем меню по координатам мыши
+        menu.style.left = event.clientX - 1 +'px';
+        menu.style.top = event.clientY - 1 +'px';
+        menu.onmouseleave = hide_pm2;
+
+        return false; // чтобы не всплывало стандартное контекстное меню
+    }
+
+    //
+    // Спрятать всплывающее меню
+    //
+    function hide_pm2(el)
+    {
+        event.target.style.display = 'none';
+    }
+
+    //
+    // Добавление листочка-брата
+    // Вызов из mi (из пункта всплывающего меню вызванного из листочка)
+    //
+    function AppendLi()
+    {
+        let mi = event.target;      // Пункт всплывающиего меню
+        let pm = mi.parentElement;  // Всплывающее меню
+        let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
+        let ul = li.parentElement;  // Элемент ul - папка (ветка) дерева на котором растёт li
+
+        // let ul = event.target.parentElement.parent.parentElement; // это ужасно
+
+        // alert(event.target.id);
+        // alert(menu.id);
+        // alert(menu.parent.id);
+        // alert(menu.parent.parentElement.id);
+
+        let li_new = document.createElement('li');
+        li_new.innerHTML = 'Я новый листочек';
+//        li_new.id = "li_id";
+        li_new.oncontextmenu = show_pm2;
+//        li.onclick = event.target.onclick;
+        ul.append(li_new);
+    }
+
+    //
+    // Добавление листочка
+    // Вызов (onclick) из елемента Li (листочка)
+    //
     function AppendLiP()
     {
-//        alert(ol.id);
-
-        let ol = document.getElementById('lii');
-        let el2 = document.getElementById('lii2');
-
+        let ul = event.target.parentElement;
         let li = document.createElement('li');
-        li.innerHTML = el2.innerHTML; //'prepend222';
-        ol.parentElement.append(li);
-
-        el2.onclick = AppendLiP;
-//        el2.onclick = ol.onclick;
-//        ol.append(li);
+        li.innerHTML = 'prepend222';
+        li.id = "li2_id";
+//        li.onclick = AppendLiP;
+        li.oncontextmenu = show_pm2;
+//        li.onclick = event.target.onclick;
+        ul.append(li);
     }
 
-    function AppendLi(ol)
-    {
-        // let li = document.createElement('li');
-        // let li2 = document.createElement('li');
-        // li.innerHTML = 'prepend';
-        // li2.innerHTML = 'append';
-        // ol.prepend(li); // вставить liFirst в начало <ol>
-        // ol.append(li2); // вставить liFirst в начало <ol>
-    }
 
-    function InsertNode(el)
-    {
-//        alert(el.id);
 
-         $('#info').html(print_r(el));
-//         $(#info).html(print_r(p));
-    }
+// ====================================================
 
 
     function print_r(el) {
@@ -131,25 +194,27 @@
         // }
         return s;
     }
+    function o2s(obj)
+    {
+        var ret = 'x';
+        for (let key in obj) {
+            if (obj[key])
+                ret +=  key + ' => ' + obj[key] + '<br>\n';
+        }
+        return ret;
+    }
+
+    // Генеалогическое древо елемента
+    function gen_tree(el)
+    {
+        let elem = el;
+        ret = elem.id + '/';
+        while(elem = elem.parentNode) { // идти наверх до <html>
+            ret += elem.id + '/';
+        }
+        return ret;
+    }
 
 
 
-    //var current_filename = '';
-    //var result = '';
-    //
-    //render_list();
-    //render_element({id: <?//= $params['id']; ?>//});
-    //
-    //// Подгоняю высоту элемента под высоту списка, которую жестко задаю в edit.css
-    //$("#element-id").height($("#list-id").height()+17);
-    //
-    //// Рендер списка
-    //function render_list(params = {})
-    //{
-    //    $("#list-id").html(
-    //        ajax_render('storage/catalog_list.php', params)
-    //    );
-    //}
-
-
- </script>
+</script>
