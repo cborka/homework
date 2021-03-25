@@ -37,71 +37,29 @@
 
         <div>
             <span>Tree</span>
-            <ul onclick="AppendLiX(this)">
-                <li id="n1" onclick="InsertNode(this)">111</li>
-                <li>222</li>
-                <li>333</li>
-                <ul>
-                    <li>111</li>
-                    <li>222</li>
-                    <li>333</li>
-                    <ul onclick="AppendLiX(this)">
-                        <li>111</li>
-                        <li id="lii2">222777</li>
-                        <li>333</li>
-                        <ul>
-                            <li>111</li>
-                            <li>222</li>
-                            <li>333</li>
-                            <ul>
-                                <li>111</li>
-                                <li>222</li>
-                                <li>333</li>
-                                <ul id="ul_id">
-                                    <li>111</li>
-                                    <li id="li_id" onclick="AppendLiP()">222</li>
-                                    <li>333</li>
-                                </ul>
-                            </ul>
-                        </ul>
+            <ul id="top" oncontextmenu="show_pm2(); return false;">
+                <li id="f1"> Tree
+                    <ul id="u1">
+
                     </ul>
-                </ul>
+                </li>
             </ul>
 
         </div>
 
-<span id="info"></span>
+        <span id="info"></span>
 
 <!--        <div class="popup_menu" id="pm0" onmouseleave="hide_pm2(this)" hidden>-->
-        <div class="popup_menu" id="pm0" hidden>
-            <button class="popup_menu_item" id="menu_item" onclick="alert(gen_tree(this))">K.y</button>
-            <div class="popup_menu_item" id="qqq_menu_item" onclick="alert(this.id + ',' + this.parentNode.id)">Ky</div>
-            <div class="popup_menu_item" id="q3_menu_item" onclick="AppendLi()">AppendLi()</div>
-            <div class="popup_menu_item"><a href="#">Вход</a></div>
-            <div class="popup_menu_item"><a href="#">Регистрация</a></div>
+
+        <div class="popup_menu" id="pmFolder" hidden>
+            <div class="popup_menu_item" id="miAppendFolder" onclick="AppendLi()">Добавить папку</div>
+            <div class="popup_menu_item" id="miAppendItem" onclick="AppendLi()">Добавить пункт</div>
+            <div class="popup_menu_item" id="miDelete" onclick="DeleteLi()">Удалить</div>
         </div>
 
-
-        <div id="div1">
-            div1
+        <div class="popup_menu" id="pmItem" hidden>
+            <div class="popup_menu_item" id="q3_menu_item" onclick="DeleteLi()">Удалить</div>
         </div>
-        <div id="div2">
-            div2
-        </div>
-
-        <?php
-        echo
-        '<div id="tmi0" class="top_menu_item" oncontextmenu="show_pm2(); return false;" >' .
-            ' <span id="tmin0">Что?</span> ' .
-        '</div> '
-;
-
-
-//onmouseleave = "hide_pm2('pm0')
-
-
- //var_dump($params['recs']) ?>
-
 
         <?php //var_dump($params['recs']) ?>
     </aside>
@@ -110,13 +68,28 @@
 
 <script>
 
+    var counter = 1;
+
     //
     // Показать всплывающее меню
     //
     function show_pm2()
     {
-        let element = event.target;                 // Элемент из которого вызываем меню
-        let menu  =  document.getElementById('pm0');
+        let element = event.target;   // Элемент из которого вызываем меню
+        let pm_name = 'xxx';
+
+        if(element.id.substring(0, 1) === 'i') {
+            pm_name = 'pmItem';
+        } else if(element.id.substring(0, 1) === 'f') {
+            pm_name = 'pmFolder';
+        } else {
+            alert('Ошибка: непонятно какое меню показывать!');
+            return;
+        }
+
+//        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName);
+
+        let menu  =  document.getElementById(pm_name);
         menu.style.display = 'block';
         menu.parent = element;
 
@@ -131,14 +104,14 @@
     //
     // Спрятать всплывающее меню
     //
-    function hide_pm2(el)
+    function hide_pm2()
     {
         event.target.style.display = 'none';
     }
 
     //
-    // Добавление листочка-брата
-    // Вызов из mi (из пункта всплывающего меню вызванного из листочка)
+    // Добавление пункта или папки
+    // Вызов из mi (menu_item) (из пункта всплывающего меню вызванного из листочка)
     //
     function AppendLi()
     {
@@ -146,36 +119,51 @@
         let pm = mi.parentElement;  // Всплывающее меню
         let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
         let ul = li.parentElement;  // Элемент ul - папка (ветка) дерева на котором растёт li
-
         // let ul = event.target.parentElement.parent.parentElement; // это ужасно
 
-        // alert(event.target.id);
-        // alert(menu.id);
-        // alert(menu.parent.id);
-        // alert(menu.parent.parentElement.id);
+        let new_name = prompt('Добавление нового пункта, введите название');
 
         let li_new = document.createElement('li');
-        li_new.innerHTML = 'Я новый листочек';
-//        li_new.id = "li_id";
-        li_new.oncontextmenu = show_pm2;
-//        li.onclick = event.target.onclick;
-        ul.append(li_new);
+
+        // Прицепляем новый элемент к папке
+        li.firstElementChild.append(li_new);
+
+        // Настройка нового пункта или папки
+        if (mi.id === 'miAppendItem') {
+            li_new.innerHTML = '- ' + new_name;
+            li_new.id = 'i'+counter++;
+        } else if (mi.id === 'miAppendFolder') {
+            li_new.innerHTML = '&#10010; ' + new_name;
+            li_new.id = 'f'+counter++;
+            // К новой папке цепляем новыый элемент ul
+            let ul_new = document.createElement('ul');
+            li_new.append(ul_new);
+        }
     }
 
     //
-    // Добавление листочка
-    // Вызов (onclick) из елемента Li (листочка)
+    // Удаление пункта или папки
     //
-    function AppendLiP()
+    function DeleteLi()
     {
-        let ul = event.target.parentElement;
-        let li = document.createElement('li');
-        li.innerHTML = 'prepend222';
-        li.id = "li2_id";
-//        li.onclick = AppendLiP;
-        li.oncontextmenu = show_pm2;
-//        li.onclick = event.target.onclick;
-        ul.append(li);
+        let mi = event.target;      // Пункт всплывающиего меню
+        let pm = mi.parentElement;  // Всплывающее меню
+        let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
+
+        // Проверка: это пункт или папка?
+        if (li.id.substring(0, 1) === 'i') {
+            li.remove();
+        } else if(li.id.substring(0, 1) === 'f') {
+            let childsNum = li.firstElementChild.childElementCount;
+            if (childsNum > 0) {
+                alert("Папка не пуста, содержит " +  childsNum + " элементов.")
+            } else {
+                li.remove();
+            }
+        }
+
+        // Скрыть меню
+        pm.style.display = 'none';
     }
 
 
