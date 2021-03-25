@@ -234,12 +234,28 @@ div.top_menu_item {
 {
     text-decoration: underline;
 }
+.li {
+    background-color: #F0F7FC;
+}
+
+.li:hover {
+    background-color: mistyrose;
+}
+.li:focus {
+    border-color: red;
+    background-color: darkviolet;
+    color: floralwhite;
+}
 
 li {
-    background-image: url(/public/favicon.png);
+    /*background-image: url(/favicon.png);*/
     /*background-color: mistyrose;*/
+    width: fit-content;
+    color: darkviolet;
+    background-color: floralwhite;
+
 }
 
 ul {
-    list-style-image: url(/public/favicon.png);
+    /*list-style-image: url(/favicon.png);*/
 }

@@ -37,12 +37,8 @@
 
         <div>
             <span>Tree</span>
-            <ul id="top" oncontextmenu="show_pm2(); return false;">
-                <li id="f1"> Tree
-                    <ul id="u1">
-
-                    </ul>
-                </li>
+            <ul id="top"  oncontextmenu="show_pm2(); return false;" onkeypress="li_onkeypress()">
+                <li id="f0"><span class="li" tabindex="21">Tree</span><ul id="u0"></ul></li>
             </ul>
 
         </div>
@@ -70,13 +66,26 @@
 
     var counter = 1;
 
+    function li_onkeypress() {
+        let element = event.target;   // Элемент из которого вызываем меню
+        element = element.parentElement;
+        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName);
+//        alert(element.id);
+
+    }
+
+
+
     //
     // Показать всплывающее меню
     //
     function show_pm2()
     {
         let element = event.target;   // Элемент из которого вызываем меню
+        element = element.parentElement;
         let pm_name = 'xxx';
+
+//        alert(element.id);
 
         if(element.id.substring(0, 1) === 'i') {
             pm_name = 'pmItem';
@@ -117,24 +126,34 @@
     {
         let mi = event.target;      // Пункт всплывающиего меню
         let pm = mi.parentElement;  // Всплывающее меню
+//        let sp = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
         let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
-        let ul = li.parentElement;  // Элемент ul - папка (ветка) дерева на котором растёт li
-        // let ul = event.target.parentElement.parent.parentElement; // это ужасно
+//        let ul = li.parentElement;  // Элемент ul - папка (ветка) дерева на котором растёт li
+
+//        alert(pm.id + ', ' + li.id + ', ' + ul.id);
+
+
 
         let new_name = prompt('Добавление нового пункта, введите название');
 
         let li_new = document.createElement('li');
+        let span_new = document.createElement('span');
+        span_new.className = "li";
+        span_new.tabIndex = 20 + counter++;
+        li_new.append(span_new);
 
         // Прицепляем новый элемент к папке
-        li.firstElementChild.append(li_new);
+        // li.span.ul
+        li.childNodes[1].append(li_new);
 
         // Настройка нового пункта или папки
         if (mi.id === 'miAppendItem') {
-            li_new.innerHTML = '- ' + new_name;
-            li_new.id = 'i'+counter++;
+//            li_new.innerHTML = '- ' + new_name;
+            span_new.innerHTML = '- ' + new_name;
+            li_new.id = 'i'+counter;
         } else if (mi.id === 'miAppendFolder') {
-            li_new.innerHTML = '&#10010; ' + new_name;
-            li_new.id = 'f'+counter++;
+            span_new.innerHTML = '&#10010; ' + new_name;
+            li_new.id = 'f'+counter;
             // К новой папке цепляем новыый элемент ul
             let ul_new = document.createElement('ul');
             li_new.append(ul_new);
@@ -154,7 +173,7 @@
         if (li.id.substring(0, 1) === 'i') {
             li.remove();
         } else if(li.id.substring(0, 1) === 'f') {
-            let childsNum = li.firstElementChild.childElementCount;
+            let childsNum = li.childNodes[1].childElementCount;
             if (childsNum > 0) {
                 alert("Папка не пуста, содержит " +  childsNum + " элементов.")
             } else {
