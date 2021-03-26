@@ -35,9 +35,9 @@
 
         </table>
 
-        <div>
+        <div id="div_tree">
             <span>Tree</span>
-            <ul id="top"  oncontextmenu="show_pm2(); return false;" onkeypress="li_onkeypress()">
+            <ul id="top"  oncontextmenu="show_pm2(); return false;">
                 <li id="f0"><span class="li" tabindex="21">Tree</span><ul id="u0"></ul></li>
             </ul>
 
@@ -66,15 +66,119 @@
 
     var counter = 1;
 
-    function li_onkeypress() {
+    top.onkeyup = li_onkeyup;
+    function li_onkeyup(e) {
+
         let element = event.target;   // Элемент из которого вызываем меню
         element = element.parentElement;
-        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName);
+
+        switch (e.code) {
+            case 'ArrowUp':
+//                alert('Стрелка вверх');
+                move_up(element);
+                break;
+            case 'ArrowDown':
+//                alert('Стрелка вниз');
+                move_down(element);
+                break;
+ //
+            //           default:
+ //                alert(e.code);
+        }
+
+//        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName + '=' + e.code);
 //        alert(element.id);
 
     }
 
+    // У пункта один потомок - SPAN,
+    // у папки 2 потомка: SPAN и UL, в котором находится содержимое - LI[].
+    // Фокус делаем на SPAN
 
+    //
+    // Стрелка вверх
+    //
+    function move_up(el)
+    {
+        // Потолок
+        if (el.id === 'f0') {
+            return;
+        }
+
+        if (el.previousElementSibling) {                // Если есть старший брат
+             el = find_last(el.previousElementSibling); //  то переходим последнего потомка его последнего потомка ...
+             el.firstElementChild.focus();
+             // el.SPAN.Focus()
+        }
+        else {                                          // Если нет старшего брата
+            el.parentElement.parentElement.firstElementChild.focus(); // Переходим на родителя
+           //el.UL.LI.SPAN.Focus()
+        }
+    }
+
+    //
+    // Найти последнего потомка
+    //
+    function find_last(el)
+    {
+        // == 1 - Это пункт, а не папка, т.к. отсутствует второй потомок, который UL,
+        // == 0 - непонятно что, но ладно, всё равно возвращаю то, что пришло
+        if (el.childElementCount <= 1) {
+            return el;
+        }
+
+        // Это папка без потомков (пустой UL)
+        if (el.childNodes[1].childElementCount === 0) {
+            return el;
+        }
+
+        // Папка с потомками, всё сначала (рекурсия)
+        return find_last(el.childNodes[1].lastElementChild);
+    }
+
+    //
+    // Стрелка вниз
+    //
+    function move_down(el)
+    {
+        // Если есть потомки. Если папка и не пустая
+        if ((el.childElementCount > 1) && (el.childNodes[1].childElementCount > 0)) {
+            // Переходим на первого потомка
+            el.childNodes[1].firstElementChild.firstElementChild.focus();
+            // el.UL.LI.SPAN.focus();
+        } else {
+            // Возвращаемся вверх пока не найдем предка у котого есть потомки ниже
+            el = find_next(el);
+            // И переходим на первого потомка этого предка
+            if(el !== null) {
+                el.firstElementChild.focus();
+                // el.SPAN.Focus()
+            } else {
+//                alert('// Уже в самом низу');
+            }
+        }
+    }
+
+    //
+    // Найти ближайшего предка с потомками и перейти на первого потомка
+    //
+    function find_next(el)
+    {
+//        alert('==> ' + el.id);
+
+        // Потомков нет, есть ли младшие братья?
+        if (el.nextElementSibling) {
+            return el.nextElementSibling;
+        }
+
+        // Если нет младших братьев, то ищем младших братьев родителя
+        el = el.parentElement.parentElement;
+        if (el.id === 'f0') { // Адам, выше только DIV
+            return null;
+        } else {
+            return find_next(el);
+        }
+    }
 
     //
     // Показать всплывающее меню
@@ -92,7 +196,7 @@
         } else if(element.id.substring(0, 1) === 'f') {
             pm_name = 'pmFolder';
         } else {
-            alert('Ошибка: непонятно какое меню показывать!');
+            alert('Ошибка: непонятно какое меню показывать! element.id = ' + element.id);
             return;
         }
 
@@ -132,9 +236,11 @@
 
 //        alert(pm.id + ', ' + li.id + ', ' + ul.id);
 
+        // Скрыть меню
+        pm.style.display = 'none';
 
-
-        let new_name = prompt('Добавление нового пункта, введите название');
+//        let new_name = prompt('Добавление нового пункта, введите название');
+        let new_name = 'node_'; // + (counter + 1);
 
         let li_new = document.createElement('li');
         let span_new = document.createElement('span');
@@ -149,13 +255,16 @@
         // Настройка нового пункта или папки
         if (mi.id === 'miAppendItem') {
 //            li_new.innerHTML = '- ' + new_name;
-            span_new.innerHTML = '- ' + new_name;
             li_new.id = 'i'+counter;
+                new_name = li_new.id;
+            span_new.innerHTML = '- ' + new_name;
         } else if (mi.id === 'miAppendFolder') {
-            span_new.innerHTML = '&#10010; ' + new_name;
             li_new.id = 'f'+counter;
+                new_name = li_new.id;
+            span_new.innerHTML = '&#10010; ' + new_name;
             // К новой папке цепляем новыый элемент ul
             let ul_new = document.createElement('ul');
+            ul_new.id = 'ul'+counter;
             li_new.append(ul_new);
         }
     }
