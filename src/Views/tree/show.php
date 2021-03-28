@@ -35,6 +35,37 @@
 
         </table>
 
+<!--
+        СТРУКТУРА ДЕРЕВА
+
+        // ПУНКТЫ
+        // У пункта один потомок - SPAN,
+        // id пункта начинается с буквы i, а id папки с f
+        //   по этому признаку смотрю какое всплывающее меню показывать
+        //   (этот признак я собирался использовать для различения и при движении по дереву, но не стал,
+        //    папки и пункты различаю по количеству прямых потомков, 2 или 1
+        //    возможно со всплывающим меню это тоже надо переделать, я подумаю)
+        <li id="i1">
+            <span class="li" tabindex="21">Tree</span>
+        </li>
+
+        // ПАПКИ
+        // у папок по 2 потомка: SPAN и UL
+        //   в UL будет находится веточка дерева, то есть элементы LI (пункты и папки).
+        // id папки начинается с f
+        <li id="f0">
+            // Фокус делаем на SPAN
+            //   для этого у него есть tabindex,
+            //   хотя в перемещении по дереву стрелками он не участвует
+            <span class="li" tabindex="21">Tree</span>
+            <ul id="u0"></ul>
+        </li>
+
+        // В реальной жизни всё это без пробелов,
+        //  так как пробелы это компоненты html,
+        //  которые мешают когда работаем с деревом из JavaScript
+        // У корневой папки id="f0", это пока изспользуется в логике программы
+-->
         <div id="div_tree">
             <span>Tree</span>
             <ul id="top"  oncontextmenu="show_pm2(); return false;">
@@ -47,12 +78,14 @@
 
 <!--        <div class="popup_menu" id="pm0" onmouseleave="hide_pm2(this)" hidden>-->
 
+        <!--Всплывающее меню для ПАПКИ -->
         <div class="popup_menu" id="pmFolder" hidden>
             <div class="popup_menu_item" id="miAppendFolder" onclick="AppendLi()">Добавить папку</div>
             <div class="popup_menu_item" id="miAppendItem" onclick="AppendLi()">Добавить пункт</div>
             <div class="popup_menu_item" id="miDelete" onclick="DeleteLi()">Удалить</div>
         </div>
 
+        <!--Всплывающее меню для ПУНКТА-->
         <div class="popup_menu" id="pmItem" hidden>
             <div class="popup_menu_item" id="q3_menu_item" onclick="DeleteLi()">Удалить</div>
         </div>
@@ -64,7 +97,7 @@
 
 <script>
 
-    var counter = 1;
+    var counter = 1; // Глобальный счетчик для формирования уникальных id создаваемых компонентов дерева
 
     top.onkeyup = li_onkeyup;
     function li_onkeyup(e) {
@@ -74,21 +107,17 @@
 
         switch (e.code) {
             case 'ArrowUp':
-//                alert('Стрелка вверх');
                 move_up(element);
                 break;
             case 'ArrowDown':
-//                alert('Стрелка вниз');
                 move_down(element);
                 break;
- //
-            //           default:
- //                alert(e.code);
+//          default:
+ //            alert(e.code);
         }
 
 //        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName + '=' + e.code);
 //        alert(element.id);
-
     }
 
     // У пункта один потомок - SPAN,
@@ -96,7 +125,7 @@
     // Фокус делаем на SPAN
 
     //
-    // Стрелка вверх
+    // Нажата стрелка вверх
     //
     function move_up(el)
     {
@@ -115,9 +144,9 @@
            //el.UL.LI.SPAN.Focus()
         }
     }
-
+    // Если нет пустой строки между функциями, значит нижняя вызывается из верхней и больше ниоткуда
     //
-    // Найти последнего потомка
+    // Найти последнего потомка (сына или внука или даже пра...правнука, как получится)
     //
     function find_last(el)
     {
@@ -137,19 +166,19 @@
     }
 
     //
-    // Стрелка вниз
+    // Нажата стрелка вниз
     //
     function move_down(el)
     {
-        // Если есть потомки. Если папка и не пустая
+        // Если есть потомки (если прямой потомок - папка И она не пустая)
         if ((el.childElementCount > 1) && (el.childNodes[1].childElementCount > 0)) {
             // Переходим на первого потомка
             el.childNodes[1].firstElementChild.firstElementChild.focus();
             // el.UL.LI.SPAN.focus();
         } else {
-            // Возвращаемся вверх пока не найдем предка у котого есть потомки ниже
+            // Возвращаемся вверх пока не найдем предка у которого есть потомки ниже
             el = find_next(el);
-            // И переходим на первого потомка этого предка
+            // И если нашли, то переходим на первого потомка этого предка
             if(el !== null) {
                 el.firstElementChild.focus();
                 // el.SPAN.Focus()
@@ -158,15 +187,12 @@
             }
         }
     }
-
     //
-    // Найти ближайшего предка с потомками и перейти на первого потомка
+    // Найти ближайшего предка с потомками и перейти на первого потомка этого предка
     //
     function find_next(el)
     {
-//        alert('==> ' + el.id);
-
-        // Потомков нет, есть ли младшие братья?
+        // Есть ли младшие братья?
         if (el.nextElementSibling) {
             return el.nextElementSibling;
         }
@@ -185,9 +211,10 @@
     //
     function show_pm2()
     {
-        let element = event.target;   // Элемент из которого вызываем меню
-        element = element.parentElement;
-        let pm_name = 'xxx';
+        let element = event.target;         // Элемент из которого вызываем меню SPAN
+        element = element.parentElement;    // LI
+
+        let pm_name = 'xxx';                // Определяю переменную здесь (из-за области видимости LET)
 
 //        alert(element.id);
 
@@ -196,7 +223,9 @@
         } else if(element.id.substring(0, 1) === 'f') {
             pm_name = 'pmFolder';
         } else {
-            alert('Ошибка: непонятно какое меню показывать! element.id = ' + element.id);
+            // Бывает если нажали на значок ul,
+            // это родтельское UL и непонятно какое LI (кого из потомков) брать, поэтому игнорируем
+//            alert('Ошибка: непонятно какое меню показывать! element.id = ' + element.id);
             return;
         }
 
@@ -205,11 +234,11 @@
         let menu  =  document.getElementById(pm_name);
         menu.style.display = 'block';
         menu.parent = element;
+        menu.onmouseleave = hide_pm2;
 
         // Располагаем меню по координатам мыши
         menu.style.left = event.clientX - 1 +'px';
         menu.style.top = event.clientY - 1 +'px';
-        menu.onmouseleave = hide_pm2;
 
         return false; // чтобы не всплывало стандартное контекстное меню
     }
@@ -230,13 +259,12 @@
     {
         let mi = event.target;      // Пункт всплывающиего меню
         let pm = mi.parentElement;  // Всплывающее меню
-//        let sp = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
         let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
 //        let ul = li.parentElement;  // Элемент ul - папка (ветка) дерева на котором растёт li
 
 //        alert(pm.id + ', ' + li.id + ', ' + ul.id);
 
-        // Скрыть меню
+        // Скрыть всплывающее меню
         pm.style.display = 'none';
 
 //        let new_name = prompt('Добавление нового пункта, введите название');
@@ -248,8 +276,8 @@
         span_new.tabIndex = 20 + counter++;
         li_new.append(span_new);
 
-        // Прицепляем новый элемент к папке
-        // li.span.ul
+        // Прицепляем новый элемент к папке. Это папка, так как вызов этой функции возможен только из папки
+        // li.ul.append()
         li.childNodes[1].append(li_new);
 
         // Настройка нового пункта или папки
@@ -262,6 +290,7 @@
             li_new.id = 'f'+counter;
                 new_name = li_new.id;
             span_new.innerHTML = '&#10010; ' + new_name;
+
             // К новой папке цепляем новыый элемент ul
             let ul_new = document.createElement('ul');
             ul_new.id = 'ul'+counter;
