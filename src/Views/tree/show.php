@@ -7,7 +7,7 @@
     <aside class="edit-element" id="element-id">
         Элемент списка
 
-
+        <!-- Дерево в виде таблицы -->
         <table id="list_table" border="1">
             <thead>
             <tr>
