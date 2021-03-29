@@ -113,7 +113,7 @@
 
         if (response !== '1') {
             alert("однако неудача" + response);
-            returnж
+            return;
         }
         render_list();
         render_element({id: id});
