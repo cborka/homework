@@ -122,7 +122,7 @@ class MyPdo
             $statement->execute($params);
             $records = $statement->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $logger->error("MyPdo->sql_one: ($sql): \n {$e->getMessage()}");
+            $logger->error("MyPdo->sql_one_record: ($sql): \n {$e->getMessage()}");
             return 'PDOError';
         }
 
@@ -152,10 +152,10 @@ class MyPdo
         try {
             $statement = $this->dbh->prepare($sql);
 //            $statement->execute($params);
-            $statement->execute();
+            $statement->execute($params);
             $records = $statement->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            $logger->error("MyPdo->sql_one: ($sql): \n {$e->getMessage()}");
+            $logger->error("MyPdo->sql_many: ($sql): \n {$e->getMessage()}");
             return 'PDOError';
         }
 

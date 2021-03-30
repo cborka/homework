@@ -16,7 +16,9 @@
                 <!--        t.id, t.folder, t.list, t.flags, t.ccount, t.name, t.path -->
             </tr>
             </thead>
-            <?php foreach ($recs as $rec) { ?>
+            <?php
+//            $records = json_decode($recs, true);
+            foreach ($recs as $rec) { ?>
                 <tr id="tr<?= $rec['id']; ?>">
                     <td align="id"> <?= $rec['id']; ?></td>
                     <td align="right"> <?= $rec['folder']; ?></td>
@@ -88,6 +90,8 @@
         <div class="popup_menu" id="pmFolder" hidden>
             <div class="popup_menu_item" id="miAppendFolder" onclick="AppendLi()">Добавить папку</div>
             <div class="popup_menu_item" id="miAppendItem" onclick="AppendLi()">Добавить пункт</div>
+            <div class="popup_menu_item" id="miExpand" onclick="ExpandLi()">Развернуть</div>
+            <div class="popup_menu_item" id="miRename" onclick="RenameLi()">Переименовать</div>
             <div class="popup_menu_item" id="miDelete" onclick="DeleteLi()">Удалить</div>
         </div>
 
@@ -100,30 +104,54 @@
     </aside>
 
 <!--    <button onclick="draw_folder('f0')">DATA</button>-->
-    <button onclick="draw_folder('root')">DATA</button>
+    <button onclick="draw_folder('ul1', 'root')">DATA</button>
 
 </div>
 
 <script>
 
-    var counter = 1; // Глобальный счетчик для формирования уникальных id создаваемых компонентов дерева
+    var counter = 1; // Глобальный счетчик для формирования tabIndex создаваемых компонентов дерева
 
 
-//    function draw_folder (li_id)
-    function draw_folder (root_id)
+
+    //
+    // Рисуем веточку дерева
+    //
+    function draw_folder (ul_id, target_ul = '')
     {
-        let tree = document.getElementById('div_tree');
+        let ul;
+        let data;
 
-        let ul = document.getElementById(root_id);
+        // Читаем данные из БД
+        $.ajaxSetup({async:false});
+        var result = '';
+        $.post("/tree/getFolder",
+            {
+                folder: ul_id
+            },
+            function (res, status) {
+                result = res;
+            }
+        );
+
+        if (result === 'PDOError') {
+            alert('Ошибка чтения из Базы Данных');
+            return;
+        }
+
+//        data = <?php //echo json_encode($recs); ?>;
+        data = JSON.parse(result);
+
+        if (target_ul === 'root') {
+            ul = document.getElementById(target_ul);
+        } else {
+            ul = document.getElementById(ul_id);
+        }
 
         // Очищаем элемент к которому будем цеплять веточку
         while (ul.childElementCount > 0) {
              ul.childNodes[0].remove();
         }
-
-        let data = [];
-
-        data = <?php echo json_encode($recs); ?>;
 
         document.getElementById('info').innerHTML = '';
 //        SELECT t.id, t.folder, t.list, t.flags, t.ccount, t.name, t.path
@@ -140,7 +168,7 @@
             ul.append(li_new);
 
             let flag = data[i].flags;
-            if ((flag & 2) === 1) { // Это пункт
+            if ((flag & 1) === 1) { // Это пункт
                 li_new.id = 'i'+data[i].id;
                 span_new.innerHTML =  li_new.id + '- ' + span_new.innerHTML;
             } else {                // Это папка
@@ -156,9 +184,9 @@
     }
 
 
-
-
-
+    //
+    //  При отжатии клавиши
+    //
     top.onkeyup = li_onkeyup;
     function li_onkeyup(e) {
 
@@ -172,8 +200,17 @@
             case 'ArrowDown':
                 move_down(element);
                 break;
-//          default:
- //            alert(e.code);
+            case 'ArrowRight':
+                expand_folder(element);
+                break;
+            case 'ArrowLeft':
+                hide_folder(element);
+                break;
+            case 'F2':
+                rename_node(element);
+                break;
+         // default:
+         //    alert(e.code);
         }
 
 //        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName + '=' + e.code);
@@ -266,6 +303,7 @@
         }
     }
 
+
     //
     // Показать всплывающее меню
     //
@@ -310,6 +348,42 @@
     }
 
     //
+    // Рисуем веточку дерева
+    //
+
+    // При нажатии стрелки вправо
+    function expand_folder(el) {
+        // Если это папка
+        if (el.childElementCount > 1) {
+            draw_folder(el.childNodes[1].id);
+        }
+    }
+    // При выборе пункта всплывающего меню
+    function ExpandLi () {
+        let mi = event.target;      // Пункт всплывающиего меню
+        let pm = mi.parentElement;  // Всплывающее меню
+        let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
+
+        // Скрыть всплывающее меню
+        pm.style.display = 'none';
+
+        draw_folder(li.childNodes[1].id);
+    }
+
+    //
+    // Спрятать веточку дерева при нажатии стрелки влево
+    //
+    function hide_folder(el) {
+        // Если это папка
+        if (el.childElementCount > 1) {
+            let ul = el.childNodes[1];
+            while (ul.childElementCount > 0) {
+                ul.childNodes[0].remove();
+            }
+        }
+    }
+
+    //
     // Добавление пункта или папки
     // Вызов из mi (menu_item) (из пункта всплывающего меню вызванного из листочка)
     //
@@ -320,6 +394,7 @@
         let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
 //        let ul = li.parentElement;  // Элемент ul - папка (ветка) дерева на котором растёт li
 
+        let new_id = 0;
         let flags = 1; // Признак Пункта в БД
 //        alert(pm.id + ', ' + li.id + ', ' + ul.id);
 
@@ -333,7 +408,6 @@
         } else if (mi.id === 'miAppendFolder') {
             flags = 2; // Признак Папки в БД
         }
-
 
         // Вставляем запись в таблицу БД
         $.ajaxSetup({async:false});
@@ -349,11 +423,12 @@
             }
         );
 
-        alert(result);
-
-//        INSERT INTO `tree`(`id`, `folder`, `list`, `flags`, `ccount`, `name`, `path`) VALUES ([value-1],[value-2],[value-3],[value-4],[value-5],[value-6],[value-7])
-// Узнать folder
-
+        if (result === 'PDOError') {
+            alert('Ошибка записи в Базу Данных, возможно такое имя уже есть в этой папке.');
+            return;
+        } else {
+            new_id = result;
+        }
 
         let li_new = document.createElement('li');
         let span_new = document.createElement('span');
@@ -367,15 +442,15 @@
 
         // Настройка нового пункта или папки
         if (mi.id === 'miAppendItem') {
-            li_new.id = 'i'+counter;
+            li_new.id = 'i'+new_id;
             span_new.innerHTML = '- ' + new_name;
         } else if (mi.id === 'miAppendFolder') {
-            li_new.id = 'f'+counter;
+            li_new.id = 'f'+new_id;
             span_new.innerHTML = '&#10010; ' + new_name;
 
             // К новой папке цепляем новыый элемент ul
             let ul_new = document.createElement('ul');
-            ul_new.id = 'ul'+counter;
+            ul_new.id = 'ul'+new_id;
             li_new.append(ul_new);
         }
     }
@@ -389,22 +464,78 @@
         let pm = mi.parentElement;  // Всплывающее меню
         let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
 
-        // Проверка: это пункт или папка?
-        if (li.id.substring(0, 1) === 'i') {
-            li.remove();
-        } else if(li.id.substring(0, 1) === 'f') {
-            let childsNum = li.childNodes[1].childElementCount;
-            if (childsNum > 0) {
-                alert("Папка не пуста, содержит " +  childsNum + " элементов.")
-            } else {
-                li.remove();
-            }
-        }
-
         // Скрыть меню
         pm.style.display = 'none';
+
+        // Удаление из БД
+        $.ajaxSetup({async:false});
+        var result = '';
+        $.post("/tree/deleteNode",
+            {
+                node: li.id
+            },
+            function (data, status) {
+                result = data;
+            }
+        );
+
+        if (result === 'PDOError') {
+            alert('Ошибка удаления записи из Базы Данных.');
+            return;
+        }
+
+        if (result !== '0') {
+            alert("Папка не пуста, содержит " +  result + " элементов.");
+            return;
+        }
+
+        li.remove();
     }
 
+    //
+    // Переименовать узел
+    //
+    // При выборе пункта всплывающего меню
+    function RenameLi () {
+        let mi = event.target;      // Пункт всплывающиего меню
+        let pm = mi.parentElement;  // Всплывающее меню
+        let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
+
+        rename_node(li);
+    }
+    // При нажатии F2
+    function rename_node(el) {
+
+        span = el.childNodes[0];
+
+        let new_name = 'zxcv';
+        // let new_name = prompt('Введите новое имя для', span.innerHTML);
+        // if(!new_name) {
+        //     return;
+        // }
+
+        // Переименовать узел в БД
+        $.ajaxSetup({async:false});
+        var result = '';
+        $.post("/tree/renameNode",
+            {
+                node: el.id,
+                name: new_name
+            },
+            function (data, status) {
+                result = data;
+            }
+        );
+
+        alert(result);
+        return;
+        if (result === 'PDOError') {
+            alert('Ошибка переименования узла в Базе Данных');
+            return;
+        }
+
+        span.innerHTML = new_name;
+    }
 
 
 // ====================================================
