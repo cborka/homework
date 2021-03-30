@@ -52,6 +52,7 @@ EOL;
             LEFT JOIN tree f ON t.folder = f.id) 
             LEFT JOIN tree l ON t.list = l.id) 
           WHERE t.folder = ? 
+            AND t.id != t.folder
           ORDER BY 1
 EOL;
 
@@ -150,7 +151,7 @@ EOL;
         $path = $rec['path'] . $rec['name'] . '/';
 
         // Переименовать узел
-//        $count = $mypdo->sql_update('UPDATE tree SET name = ? WHERE id = ?', [$name, $node]);
+        $count = $mypdo->sql_update('UPDATE tree SET name = ? WHERE id = ?', [$name, $node]);
 
         // Обновить все пути (path) у узла и всех его потомков
         // ...
@@ -158,20 +159,37 @@ EOL;
 
         $s = '=';
         foreach ($recs as $rec) {
-//            update_path($rec['id']);
-            $s .= $rec['id'] . ',';
+            self::UpdatePath($rec['id']);
         }
-//        var_dump($recs);
 
-return $s;
-//return Lib::var_dump1($recs) . '>>>' . $s . '<<<';
-
-//        if ($count === 1) {
-//            return 'OK';
-//        }
-
-        return -1; // До этого места вообще не должны дойти
+        return 'OK';
     }
 
+    /*
+     * Переименовать узел (пункт или папку)
+     * вернуть OK в случае успеха
+     */
+    public static function UpdatePath($node)
+    {
+        global $logger;
+        global $mypdo;
+
+        $logger->debug(self::class . "::UpdatePath($node)");
+
+
+        $rec = $mypdo->sql_one_record('SELECT folder FROM tree WHERE id = ?', [$node]);
+        $id = $rec['folder'];
+
+        $path = '/';
+        while ($id != '1') {
+            $rec = $mypdo->sql_one_record('SELECT folder, name FROM tree WHERE id = ?', [$id]);
+            $id = $rec['folder'];
+            $path = '/' . $rec['name'] . $path;
+        }
+
+        $count = $mypdo->sql_update('UPDATE tree SET path = ? WHERE id = ?', [$path, $node]);
+
+        $logger->debug(self::class . "::UpdatePath = $path");
+    }
 
 }

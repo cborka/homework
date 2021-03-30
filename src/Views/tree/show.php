@@ -37,6 +37,8 @@
                 </tr>
             <?php } ?>
         </table>
+        <button onclick="draw_folder('ul1', '')">DATA</button>
+
     </aside>
 
     <aside class="edit-element" id="element-id">
@@ -77,7 +79,7 @@
         <div id="f0" class="tree">
             <span>Tree</span>
             <ul id="root" oncontextmenu="show_pm2(); return false;">
-<!--                <li id="f0"><span class="li" tabindex="21"> </span><ul id="u0"></ul></li>-->
+                <li id="f0"><span class="li" tabindex="21">/</span><ul id="ul1"></ul></li>
             </ul>
 
         </div>
@@ -104,7 +106,6 @@
     </aside>
 
 <!--    <button onclick="draw_folder('f0')">DATA</button>-->
-    <button onclick="draw_folder('ul1', 'root')">DATA</button>
 
 </div>
 
@@ -170,10 +171,10 @@
             let flag = data[i].flags;
             if ((flag & 1) === 1) { // Это пункт
                 li_new.id = 'i'+data[i].id;
-                span_new.innerHTML =  li_new.id + '- ' + span_new.innerHTML;
+//                span_new.innerHTML =  li_new.id + '- ' + span_new.innerHTML;
             } else {                // Это папка
                 li_new.id = 'f'+data[i].id;
-                span_new.innerHTML = li_new.id + '&#10010; ' + span_new.innerHTML;
+//                span_new.innerHTML = li_new.id + '&#10010; ' + span_new.innerHTML;
 
                 // К новой папке цепляем новыый элемент ul
                 let ul_new = document.createElement('ul');
@@ -396,18 +397,28 @@
 
         let new_id = 0;
         let flags = 1; // Признак Пункта в БД
+        let msg = 'нового пункта';
 //        alert(pm.id + ', ' + li.id + ', ' + ul.id);
 
         // Скрыть всплывающее меню
         pm.style.display = 'none';
 
-//        let new_name = prompt('Добавление нового пункта, введите название');
-        let new_name = 'node_' + (counter + 1); // Для отладки
 
-        if (mi.id === 'miAppendItem') {
-        } else if (mi.id === 'miAppendFolder') {
+//        let new_name = 'node_' + (counter + 1); // Для отладки
+
+        // if (mi.id === 'miAppendItem') {
+        //     //
+        // } else
+        if (mi.id === 'miAppendFolder') {
             flags = 2; // Признак Папки в БД
+            msg = 'новой папки';
         }
+
+        let new_name = prompt('Добавление ' + msg + ', введите название');
+        if(!new_name) { // Нажали отмену
+            return;
+        }
+
 
         // Вставляем запись в таблицу БД
         $.ajaxSetup({async:false});
@@ -508,11 +519,11 @@
 
         span = el.childNodes[0];
 
-        let new_name = 'zxcv';
-        // let new_name = prompt('Введите новое имя для', span.innerHTML);
-        // if(!new_name) {
-        //     return;
-        // }
+//        let new_name = 'zxcv';
+        let new_name = prompt('Введите новое имя для', span.innerHTML);
+        if(!new_name) { // Нажали отмену
+            return;
+        }
 
         // Переименовать узел в БД
         $.ajaxSetup({async:false});
@@ -527,8 +538,6 @@
             }
         );
 
-        alert(result);
-        return;
         if (result === 'PDOError') {
             alert('Ошибка переименования узла в Базе Данных');
             return;
