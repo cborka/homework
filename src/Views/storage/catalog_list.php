@@ -28,13 +28,13 @@ function f_catalog_list($params)
         SELECT c.id, c.user_id, u.login, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights 
           FROM storage_catalog c
             LEFT JOIN users u ON c.user_id = u.id 
-          WHERE c.user_id = {$_SESSION['id']}
+          WHERE c.user_id = ?
              OR c.access_rights > 0 
           ORDER BY login, file_name
 EOL;
   //echo $sql;
 
-    $recs = $mypdo->sql_many($sql);
+    $recs = $mypdo->sql_many($sql, [$_SESSION['id']]);
 
 ?>
 

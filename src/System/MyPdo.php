@@ -141,7 +141,7 @@ class MyPdo
      * Выполняет запрос возвращающий НЕСКОЛЬКО строк (записей)
      * Возвращает массив ассоциативных массивов
      */
-    public function sql_many($sql, $params='')
+    public function sql_many($sql, $params=[])
     {
         global $logger;
         $logger->debug(self::class . '::sql_many()');

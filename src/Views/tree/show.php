@@ -1,3 +1,14 @@
+<?php
+f_tree_show($params);
+
+// Оборачиваю включаемые файлы в функции чтобы не было конфликтов переменных.
+function f_tree_show($params)
+{
+    $recs = $params['recs'];
+//    var_dump($recs);
+?>
+
+
 <div id="grid-id" class="grid-container-edit">
 
     <aside class="edit-list" id="list-id">
@@ -78,7 +89,7 @@
 -->
         <div id="f0" class="tree">
             <span>Tree</span>
-            <ul id="root" oncontextmenu="show_pm2(); return false;">
+            <ul id="root" oncontextmenu="show_pm2(); return false;" ondblclick="dblclick_expand_folder()">
                 <li id="f0"><span class="li" tabindex="21">/</span><ul id="ul1"></ul></li>
             </ul>
 
@@ -111,8 +122,9 @@
 
 <script>
 
-    var counter = 1; // Глобальный счетчик для формирования tabIndex создаваемых компонентов дерева
+//    var counter = 1; // Глобальный счетчик для формирования tabIndex создаваемых компонентов дерева
 
+// ================= Затолкать это всё в отдельный js-файл, который подключать когда рендерим дерево. ======================
 
 
     //
@@ -384,6 +396,28 @@
         }
     }
 
+    // Раскрыть/свернуть веточку по двойному клику
+    // Кликаем либо на SPAN, либо на IL
+    function dblclick_expand_folder() {
+        let li = event.target;    // Пункт всплывающиего меню
+        // let pm = mi.parentElement;  // Всплывающее меню
+        // let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
+
+        if (li.tagName === 'SPAN') {
+            li = li.parentElement;
+        }
+
+        // Если это папка
+        if (li.childElementCount > 1) {
+            // и она развернута, то свернуть
+            if (li.childNodes[1].childElementCount > 0) {
+                hide_folder(li);
+            } else {
+                draw_folder(li.childNodes[1].id);
+            }
+        }
+//        alert(li.id);
+    }
     //
     // Добавление пункта или папки
     // Вызов из mi (menu_item) (из пункта всплывающего меню вызванного из листочка)
@@ -404,7 +438,7 @@
         pm.style.display = 'none';
 
 
-//        let new_name = 'node_' + (counter + 1); // Для отладки
+//        let new_name = 'node_44' + (counter + 1); // Для отладки
 
         // if (mi.id === 'miAppendItem') {
         //     //
@@ -444,7 +478,7 @@
         let li_new = document.createElement('li');
         let span_new = document.createElement('span');
         span_new.className = "li";
-        span_new.tabIndex = 20 + counter++;
+        span_new.tabIndex = 20 + new_id;
         li_new.append(span_new);
 
         // Прицепляем новый элемент к папке. Это папка, так как вызов этой функции возможен только из папки
@@ -585,3 +619,5 @@
 
 
 </script>
+
+<?php } ?>

@@ -136,7 +136,7 @@ EOL;
      * Переименовать узел (пункт или папку)
      * вернуть OK в случае успеха
      */
-    public static function RenameNode($node, $name)
+    public static function RenameNode($node, $new_name)
     {
         global $logger;
         global $mypdo;
@@ -147,27 +147,41 @@ EOL;
 
 
         // Информация о переименовываемом узле
-        $rec = $mypdo->sql_one_record('SELECT name, path FROM tree WHERE id = ?', [$node]);
-        $path = $rec['path'] . $rec['name'] . '/';
+        $rec = $mypdo->sql_one_record('SELECT flags, name, path FROM tree WHERE id = ?', [$node]);
+        $old_node_path = $rec['path'];
+        $old_full_name = $rec['path'] . $rec['name'] . '/';
 
         // Переименовать узел
-        $count = $mypdo->sql_update('UPDATE tree SET name = ? WHERE id = ?', [$name, $node]);
+        $count = $mypdo->sql_update('UPDATE tree SET name = ? WHERE id = ?', [$new_name, $node]);
 
-        // Обновить все пути (path) у узла и всех его потомков
-        // ...
-        $recs = $mypdo->sql_many('SELECT id FROM tree WHERE (id = ?) OR (path LIKE ?)', [$node, $path . '%']);
+        // Если это пункт, то есть потомков нету
+        if ( $rec['flags'] & 1 === 1) {
+            return 'OK';
+        }
 
-        $s = '=';
+        // Обновить пути (path) у всех потомков
+
+        // все потомки
+        $recs = $mypdo->sql_many('SELECT id, path FROM tree WHERE path LIKE ?', [$old_full_name . '%']);
+//        $recs = $mypdo->sql_many('SELECT id, path FROM tree WHERE path LIKE ?', ['/%']);
         foreach ($recs as $rec) {
-            self::UpdatePath($rec['id']);
+            if ($old_node_path === '/') {
+                $old_node_path = '';
+            }
+            $new_path =  $old_node_path . '/' . $new_name . '/' .  substr($rec['path'], strlen($old_full_name));
+
+            $count = $mypdo->sql_update('UPDATE tree SET path = ? WHERE id = ?', [$new_path, $rec['id']]);
+
+            // Первый вариант, оставлю на всякий случай
+//            self::UpdatePath($rec['id']);
         }
 
         return 'OK';
     }
 
     /*
-     * Переименовать узел (пункт или папку)
-     * вернуть OK в случае успеха
+     * Обновить path у узла
+     * Не используется, но оставлю, вдруг пригодится, здесь путь от потомка к самому первому предку
      */
     public static function UpdatePath($node)
     {
@@ -191,5 +205,6 @@ EOL;
 
         $logger->debug(self::class . "::UpdatePath = $path");
     }
+
 
 }
