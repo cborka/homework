@@ -4,10 +4,15 @@ f_tree_show($params);
 // Оборачиваю включаемые файлы в функции чтобы не было конфликтов переменных.
 function f_tree_show($params)
 {
-//    var_dump($params);
-    echo 'params = ' . $params[0];
-    ?>
+    global $logger;
+    global $mypdo;
 
+//    var_dump($params);
+//    echo 'Узел ' . $params[0];
+    $root_id =  $params[0];
+    $root_name = $mypdo->sql_one('SELECT name FROM tree WHERE id = ?', [$root_id]);
+
+    ?>
 
             <!--
                     СТРУКТУРА ДЕРЕВА
@@ -40,12 +45,24 @@ function f_tree_show($params)
                     //   которые мешают работе с деревом из JavaScript
                     // У корневой папки id="f0", это пока изспользуется в логике программы
             -->
-            <div id="f0" class="tree">
-                <span>Tree</span>
-                <ul id="root" oncontextmenu="show_pm2(); return false;" ondblclick="dblclick_expand_folder()">
-                    <li id="f0"><span class="li" tabindex="21">/</span><ul id="ul1"></ul></li>
-                </ul>
+            <div class="box" id="box_tree">
+                <div>
+                    <nav>
+                    <button id="btnAppendItem" onclick="append_node(tree_current_li, false)">+</button>
+                    <button id="btnAppendFolder" onclick="append_node(tree_current_li, true)">++</button>
+                    <button id="btnDelete" onclick="delete_node(tree_current_li)"> - </button>
+                    <button id="btnExpand" onclick="expand_folder(tree_current_li)"> > </button>
+                    <button id="btnHide" onclick="hide_folder(tree_current_li)""> < </button>
+                    <button id="btnRename" onclick="">~</button>
+                    </nav>
+                </div>
+                <div id="f0" class="tree">
+<!--                    <ul id="root" oncontextmenu="show_pm2(); return false;" ondblclick="dblclick_expand_folder()">-->
+                    <ul id="root" ondblclick="dblclick_expand_folder()">
+                        <li id="f0"><span id="xxx" class="li" tabindex="21" onfocus="remember_me()"><?= $root_name ?></span><ul id="ul<?= $root_id ?>"></ul></li>
+                    </ul>
 
+                </div>
             </div>
 
             <span id="info"></span>
@@ -74,10 +91,24 @@ function f_tree_show($params)
 
     <script>
 
+        let tree_current_li;
+
+        draw_folder("ul<?= $root_id ?>");
         //    var counter = 1; // Глобальный счетчик для формирования tabIndex создаваемых компонентов дерева
 
         // ================= Затолкать это всё в отдельный js-файл, который подключать когда рендерим дерево. ======================
 
+        function remember_me() {
+            let element = event.target;         // Элемент из которого вызываем меню SPAN
+            tree_current_li = element.parentElement;    // LI
+
+//            document.getElementById('info').innerHTML = tree_current_li.tagName + '-' + tree_current_li.id;
+//            alert(element.tagName);
+        }
+
+        function appItem() {
+            document.getElementById('info').innerHTML = 'Текущий узел: ' + tree_current_li.id;
+        }
 
         //
         // Рисуем веточку дерева
@@ -118,16 +149,17 @@ function f_tree_show($params)
                 ul.childNodes[0].remove();
             }
 
-            document.getElementById('info').innerHTML = '';
+            // document.getElementById('info').innerHTML = '';
 //        SELECT t.id, t.folder, t.list, t.flags, t.ccount, t.name, t.path
             for (let i = 0; i < data.length; i++) {
-                document.getElementById('info').innerHTML += data[i].name + data[i].id + '<br>';
+//                document.getElementById('info').innerHTML += data[i].name + data[i].id + '<br>';
 
                 let li_new = document.createElement('li');
                 let span_new = document.createElement('span');
                 span_new.className = "li";
                 span_new.tabIndex = 20 + data[i].id;
                 span_new.innerHTML = data[i].name;
+                span_new.onfocus = remember_me;
 
                 li_new.append(span_new);
                 ul.append(li_new);
@@ -174,8 +206,11 @@ function f_tree_show($params)
                 case 'F2':
                     rename_node(element);
                     break;
+                case 'Delete':
+                    delete_node(element);
+                    break;
                 // default:
-                //    alert(e.code);
+                //     alert(e.code);
             }
 
 //        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName + '=' + e.code);
@@ -274,8 +309,9 @@ function f_tree_show($params)
         //
         function show_pm2()
         {
-            let element = event.target;         // Элемент из которого вызываем меню SPAN
-            element = element.parentElement;    // LI
+            let ev = event.target;         // Элемент из которого вызываем меню SPAN
+//            let element = event.target;         // Элемент из которого вызываем меню SPAN
+            let element = ev.parentElement;    // LI
 
             let pm_name = '';                   // Определяю переменную здесь (из-за области видимости LET)
 
@@ -293,10 +329,19 @@ function f_tree_show($params)
 //        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName);
 
             let menu = document.getElementById(pm_name);
-            menu.style.position = "absolute";
+
+            menu.style.position = "absolut";
             menu.style.display = 'block';
             menu.parent = element;
             menu.onmouseleave = hide_pm2;
+
+//             coord = getCoords(event.target);
+//             alert(coord.top + '-' + coord.left + ', ' + event.clientY + '-' + event.clientX);
+            // return;
+//            menu.style.left = coord.left - 1 +'px';
+//            menu.style.top = (coord.top + 15 - 1) +'px';
+//            menu.style.top = (coord.top + event.target.style.height - 1) +'px';
+//            alert(ev.id + '=' + ev.style.height);
 
             // Располагаем меню по координатам мыши
             menu.style.left = event.clientX - 1 +'px';
@@ -375,30 +420,21 @@ function f_tree_show($params)
         // Добавление пункта или папки
         // Вызов из mi (menu_item) (из пункта всплывающего меню вызванного из листочка)
         //
-        function AppendLi()
+        function append_node(li, is_folder)
         {
-            let mi = event.target;      // Пункт всплывающиего меню
-            let pm = mi.parentElement;  // Всплывающее меню
-            let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
-//        let ul = li.parentElement;  // Элемент ul - папка (ветка) дерева на котором растёт li
+            if (li.childElementCount < 2) {
+                // Пытаемся добавить к пункту (li это не папка)
+                return;
+            }
 
             let new_id = 0;
-            let flags = 1; // Признак Пункта в БД
-            let msg = 'нового пункта';
-//        alert(pm.id + ', ' + li.id + ', ' + ul.id);
 
-            // Скрыть всплывающее меню
-            pm.style.display = 'none';
-
-
-//        let new_name = 'node_44' + (counter + 1); // Для отладки
-
-            // if (mi.id === 'miAppendItem') {
-            //     //
-            // } else
-            if (mi.id === 'miAppendFolder') {
+            if (is_folder) {
                 flags = 2; // Признак Папки в БД
                 msg = 'новой папки';
+            } else {
+                let flags = 1; // Признак Пункта в БД
+                let msg = 'нового пункта';
             }
 
             let new_name = prompt('Добавление ' + msg + ', введите название');
@@ -439,16 +475,15 @@ function f_tree_show($params)
             li.childNodes[1].append(li_new);
 
             // Настройка нового пункта или папки
-            if (mi.id === 'miAppendItem') {
-                li_new.id = 'i'+new_id;
-
-            } else if (mi.id === 'miAppendFolder') {
+            if (is_folder) {
                 li_new.id = 'f'+new_id;
 
                 // К новой папке цепляем новыый элемент ul
                 let ul_new = document.createElement('ul');
                 ul_new.id = 'ul'+new_id;
                 li_new.append(ul_new);
+            } else {
+                li_new.id = 'i'+new_id;
             }
         }
 

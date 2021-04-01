@@ -341,6 +341,7 @@ function f_tree_show($params)
 //        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName);
 
         let menu = document.getElementById(pm_name);
+        menu.style.position = "absolute";
         menu.style.display = 'block';
         menu.parent = element;
         menu.onmouseleave = hide_pm2;

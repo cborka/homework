@@ -217,7 +217,7 @@ div.top_menu, .popup_menu {
     /*color: dimgrey;*/
     /*background: lavender;*/
     display: none;
-    position: absolute;
+    /*position: absolute;*/
 }
 
 .popup_menu_item {

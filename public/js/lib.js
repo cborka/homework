@@ -78,3 +78,15 @@ function ajax_render(filename, params)
 //     return 'vvv';
 }
 
+// Получение координат элемента
+function getCoords(elem) // кроме IE8-
+{
+    var box = elem.getBoundingClientRect();
+
+    return {
+        top: box.top + pageYOffset,
+        left: box.left + pageXOffset
+    };
+}
+
+

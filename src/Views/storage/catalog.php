@@ -1,22 +1,26 @@
 <div class="grid-container-edit">
-
-    <aside class="edit-list" id="list-id">
-        Список
-    </aside>
-
-    <aside class="edit-element" id="element-id">
-
-        <span>Элемент списка</span><br>
-        <span  class="li" tabindex="21" oncontextmenu="render_test(); return false;">Элемент списка</span>
-
-        <div class="popup_menu" id="div_test"> hiwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-        </div>
-
-    </aside>
-
-    <button onclick="div_test.style.display = 'none';">menu</button>
-
+<!---->
+<!--    <aside class="edit-list" id="list-id">-->
+<!--        Список-->
+<!--    </aside>-->
+<!---->
+<!--    <aside class="edit-element" id="element-id">-->
+<!---->
+<!--        <span>Элемент списка</span><br>-->
+<!--        <span  class="li" tabindex="21" oncontextmenu="render_test(); return false;">Элемент списка</span>-->
+<!---->
+<!--        <div class="popup_menu" id="div_test"> hiwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww-->
+<!--        </div>-->
+<!---->
+<!--    </aside>-->
+<!---->
+<!--    <button onclick="div_test.style.display = 'none';">menu</button>-->
+<!---->
 </div>
+
+<div class="" id="div_test"> hiwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+</div>
+<span  class="li" tabindex="21" oncontextmenu="render_test(); return false;">Элемент списка</span>
 
 
 <!--<div id="div_test"> hiwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww </div>-->
@@ -25,20 +29,19 @@
     var current_filename = '';
     var result = '';
 
-
 //     render_test();
 
     function render_test()
     {
         $("#div_test").html(
-            ajax_render('tree/show_tree.php', ['7'])
+            ajax_render('tree/show_tree.php', ['36'])
 //            ajax_render('tree/render_test.php', [])
         );
 //        let element = event.target;
 //        alert(element.tagName);
 
         let menu = document.getElementById('div_test');
-        menu.style.position = "absolute";
+        menu.style.position = "fixed";
         menu.style.display = 'block';
 
         // menu.onmouseleave = function () {
@@ -46,8 +49,8 @@
         // };
 
         // Располагаем меню по координатам мыши
-         menu.style.left = event.clientX - 1 +'px';
-         menu.style.top = event.clientY - 1 +'px';
+        menu.style.left = event.clientX - 1 +'px';
+        menu.style.top = event.clientY - 1 +'px';
 
         return false; // чтобы не всплывало стандартное контекстное меню надо возвращать false НА МЕСТЕ ВЫЗОВА МЕНЮ!!!
     }
