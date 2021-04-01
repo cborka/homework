@@ -53,7 +53,7 @@ function f_tree_show($params)
                     <button id="btnDelete" onclick="delete_node(tree_current_li)"> - </button>
                     <button id="btnExpand" onclick="expand_folder(tree_current_li)"> > </button>
                     <button id="btnHide" onclick="hide_folder(tree_current_li)""> < </button>
-                    <button id="btnRename" onclick="">~</button>
+                    <button id="btnRename" onclick="rename_node(tree_current_li)">~</button>
                     </nav>
                 </div>
                 <div id="f0" class="tree">
@@ -178,6 +178,7 @@ function f_tree_show($params)
                     li_new.append(ul_new);
                 }
             }
+            ul.parentElement.childNodes[0].focus();
         }
 
 
@@ -392,6 +393,7 @@ function f_tree_show($params)
                     ul.childNodes[0].remove();
                 }
             }
+            el.focus();
         }
 
         // Раскрыть/свернуть веточку по двойному клику
@@ -429,12 +431,11 @@ function f_tree_show($params)
 
             let new_id = 0;
 
+            let flags = 1; // Признак Пункта в БД
+            let msg = 'нового пункта';
             if (is_folder) {
                 flags = 2; // Признак Папки в БД
                 msg = 'новой папки';
-            } else {
-                let flags = 1; // Признак Пункта в БД
-                let msg = 'нового пункта';
             }
 
             let new_name = prompt('Добавление ' + msg + ', введите название');
@@ -485,19 +486,20 @@ function f_tree_show($params)
             } else {
                 li_new.id = 'i'+new_id;
             }
+
+            span_new.focus();
         }
 
         //
         // Удаление пункта или папки
         //
-        function DeleteLi()
+        function delete_node(li)
         {
-            let mi = event.target;      // Пункт всплывающиего меню
-            let pm = mi.parentElement;  // Всплывающее меню
-            let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
+            if (!confirm('Удалить узел ' + li.childNodes[0].innerHTML + ' ?')) {
+                return;
+            }
 
-            // Скрыть меню
-            pm.style.display = 'none';
+            move_up(li);
 
             // Удаление из БД
             $.ajaxSetup({async:false});
@@ -527,20 +529,10 @@ function f_tree_show($params)
         //
         // Переименовать узел
         //
-        // При выборе пункта всплывающего меню
-        function RenameLi () {
-            let mi = event.target;      // Пункт всплывающиего меню
-            let pm = mi.parentElement;  // Всплывающее меню
-            let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
-
-            rename_node(li);
-        }
-        // При нажатии F2
         function rename_node(el) {
 
             span = el.childNodes[0];
 
-//        let new_name = 'zxcv';
             let new_name = prompt('Введите новое имя для', span.innerHTML);
             if(!new_name) { // Нажали отмену
                 return;
@@ -565,6 +557,7 @@ function f_tree_show($params)
             }
 
             span.innerHTML = new_name;
+            span.focus();
         }
 
 

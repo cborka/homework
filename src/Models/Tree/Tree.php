@@ -111,6 +111,7 @@ EOL;
     {
         global $logger;
         global $mypdo;
+        global $dbh;
 
         $logger->debug(self::class . '::DeleteNode($node)');
 
@@ -123,13 +124,26 @@ EOL;
             return $child_num;
         }
 
-        $count = $mypdo->sql_update('DELETE FROM tree WHERE id = ?', [$node]);
+        // Ищем папку (папка здесь звучит двусмысленно)
+        $folder = $mypdo->sql_one('SELECT folder FROM tree WHERE id = ?', [$node]);
 
-        if ($count === 1) {
-            return 0;
+        try {
+            $dbh->beginTransaction();
+
+            $statement = $dbh->prepare('DELETE FROM tree WHERE id = ?');
+            $statement->execute([$node]);
+
+            $statement = $dbh->prepare('UPDATE tree SET ccount = ccount - 1 WHERE id = ?');
+            $statement->execute([$folder]);
+
+            $dbh->commit();
+        } catch (\PDOException $e) {
+            $dbh->rollBack();
+            $logger->error("DeleteNode exception: \n {$e->getMessage()}");
+            return 'PDOError';
         }
 
-        return -1; // До этого места вообще не должны дойти
+        return 0;
     }
 
     /*
@@ -168,7 +182,7 @@ EOL;
             if ($old_node_path === '/') {
                 $old_node_path = '';
             }
-            $new_path =  $old_node_path . '/' . $new_name . '/' .  substr($rec['path'], strlen($old_full_name));
+            $new_path =  $old_node_path . $new_name . '/' .  substr($rec['path'], strlen($old_full_name));
 
             $count = $mypdo->sql_update('UPDATE tree SET path = ? WHERE id = ?', [$new_path, $rec['id']]);
 
