@@ -54,22 +54,40 @@ function f_tree_show($params)
 
     <aside class="edit-element" id="element-id">
         Элемент списка
-    </aside>
 
+        <div class="edit-element" id="tree-id">
+        </div>
+
+
+
+    </div>
+
+    <span id="info2"></span>
 <!--    <button onclick="draw_folder('f0')">DATA</button>-->
+    <button onclick="show_folder('36', 'Cbcntvf36')">BATON</button>
 
 </div>
 
 <script>
 
-    render_test('1');
+    function on_xx (id) {
+          alert('on_xx='+id);
+    }
+    function on_ok (id) {
+//        alert('on_ok='+id);
+        document.getElementById('tree_box').hidden = true;
+    }
 
-    function render_test(id)
+    function render_test(id, on_ok, on_xx)
     {
-        $("#element-id").html(
+        $("#tree-id").html(
             ajax_render('tree/show_tree.php', [id])
         );
     }
+
+    render_test('1', on_ok, on_xx);
+
+//    alert('current = ' + tree_current_li.id);
 
 </script>
 

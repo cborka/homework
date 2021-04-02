@@ -14,89 +14,81 @@ function f_tree_show($params)
 
     ?>
 
-            <!--
-                    СТРУКТУРА ДЕРЕВА
+    <!--
+            СТРУКТУРА ДЕРЕВА
 
-                    // ПУНКТЫ
-                    // У пункта один потомок - SPAN,
-                    // id пункта начинается с буквы i, а id папки с f
-                    //   по этому признаку смотрю какое всплывающее меню показывать
-                    //   (этот признак я собирался использовать для различения и при движении по дереву, но не стал,
-                    //    папки и пункты различаю по количеству прямых потомков, 2 или 1
-                    //    возможно со всплывающим меню это тоже надо переделать, я подумаю)
-                    <li id="i1">
-                        <span class="li" tabindex="21">Tree</span>
-                    </li>
+            // ПУНКТЫ
+            // У пункта один потомок - SPAN,
+            // id пункта начинается с буквы i, а id папки с f
+            //   по этому признаку смотрю какое всплывающее меню показывать
+            //   (этот признак я собирался использовать для различения и при движении по дереву, но не стал,
+            //    папки и пункты различаю по количеству прямых потомков, 2 или 1
+            //    возможно со всплывающим меню это тоже надо переделать, я подумаю)
+            <li id="i1">
+                <span class="li" tabindex="21">Tree</span>
+            </li>
 
-                    // ПАПКИ
-                    // у папок по 2 потомка: SPAN и UL
-                    //   в UL будет находится веточка дерева, то есть элементы LI (пункты и папки).
-                    // id папки начинается с f
-                    <li id="f0">
-                        // Фокус делаем на SPAN
-                        //   для этого у него есть tabindex,
-                        //   хотя в перемещении по дереву стрелками он не участвует
-                        <span class="li" tabindex="21">Tree</span>
-                        <ul id="u0"></ul>
-                    </li>
+            // ПАПКИ
+            // у папок по 2 потомка: SPAN и UL
+            //   в UL будет находится веточка дерева, то есть элементы LI (пункты и папки).
+            // id папки начинается с f
+            <li id="f0">
+                // Фокус делаем на SPAN
+                //   для этого у него есть tabindex,
+                //   хотя в перемещении по дереву стрелками он не участвует
+                <span class="li" tabindex="21">Tree</span>
+                <ul id="u0"></ul>
+            </li>
 
-                    // В реальной жизни всё это без пробелов,
-                    //   так как пробелы это компоненты html,
-                    //   которые мешают работе с деревом из JavaScript
-                    // У корневой папки id="f0", это пока изспользуется в логике программы
-            -->
-            <div class="box" id="box_tree">
-                <div>
-                    <nav>
-                    <button id="btnAppendItem" onclick="append_node(tree_current_li, false)">+</button>
-                    <button id="btnAppendFolder" onclick="append_node(tree_current_li, true)">++</button>
-                    <button id="btnDelete" onclick="delete_node(tree_current_li)"> - </button>
-                    <button id="btnExpand" onclick="expand_folder(tree_current_li)"> > </button>
-                    <button id="btnHide" onclick="hide_folder(tree_current_li)""> < </button>
-                    <button id="btnRename" onclick="rename_node(tree_current_li)">~</button>
-                    </nav>
-                </div>
-                <div id="f0" class="tree">
-<!--                    <ul id="root" oncontextmenu="show_pm2(); return false;" ondblclick="dblclick_expand_folder()">-->
-                    <ul id="root" ondblclick="dblclick_expand_folder()">
-                        <li id="f0"><span id="xxx" class="li" tabindex="21" onfocus="remember_me()"><?= $root_name ?></span><ul id="ul<?= $root_id ?>"></ul></li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <span id="info"></span>
-
-            <!--        <div class="popup_menu" id="pm0" onmouseleave="hide_pm2(this)" hidden>-->
-
-            <!--Всплывающее меню для ПАПКИ -->
-            <div class="popup_menu" id="pmFolder" hidden>
-                <div class="popup_menu_item" id="miAppendFolder" onclick="AppendLi()">Добавить папку</div>
-                <div class="popup_menu_item" id="miAppendItem" onclick="AppendLi()">Добавить пункт</div>
-                <div class="popup_menu_item" id="miExpand" onclick="ExpandLi()">Развернуть</div>
-                <div class="popup_menu_item" id="miRename" onclick="RenameLi()">Переименовать</div>
-                <div class="popup_menu_item" id="miDelete" onclick="DeleteLi()">Удалить</div>
-            </div>
-
-            <!--Всплывающее меню для ПУНКТА-->
-            <div class="popup_menu" id="pmItem" hidden>
-                <div class="popup_menu_item" id="q3_menu_item" onclick="DeleteLi()">Удалить</div>
-            </div>
-
-            <?php //var_dump($params['recs']) ?>
-
-        <!--    <button onclick="draw_folder('f0')">DATA</button>-->
+            // В реальной жизни всё это без пробелов,
+            //   так как пробелы это компоненты html,
+            //   которые мешают работе с деревом из JavaScript
+            // У корневой папки id="f0", это пока изспользуется в логике программы
+    -->
+    <div class="tree_box" id="tree_box">
+        <div>
+            <nav>
+            <button id="btnAppendItem" onclick="append_node(tree_current_li, false)">+</button>
+            <button id="btnAppendFolder" onclick="append_node(tree_current_li, true)">++</button>
+            <button id="btnDelete" onclick="delete_node(tree_current_li)"> - </button>
+            <button id="btnExpand" onclick="expand_folder(tree_current_li)"> > </button>
+            <button id="btnHide" onclick="hide_folder(tree_current_li)""> < </button>
+            <button id="btnRename" onclick="rename_node(tree_current_li)">~</button>
+            </nav>
+        </div>
+        <div id="f0" class="tree">
+            <ul id="root" oncontextmenu="dblclick_expand_folder(); return false;" ondblclick="return_node_id()">
+                <li id="f1"><span id="span1" class="li" tabindex="21" onfocus="remember_me()"><?= $root_name ?></span><ul id="ul<?= $root_id ?>"></ul></li>
+            </ul>
+        </div>
+        <div>
+            <nav>
+                <button id="btnOK" onclick="return_node_id()">Выбор</button>
+                <button id="btnEsc" onclick="return_node_id()">Отмена</button>
+            </nav>
+        </div>
 
     </div>
+
+
+    <span id="info"></span>
 
     <script>
 
         let tree_current_li;
 
-        draw_folder("ul<?= $root_id ?>");
-        //    var counter = 1; // Глобальный счетчик для формирования tabIndex создаваемых компонентов дерева
+        function return_node_id() {
+//            alert('ok');
+            document.getElementById('info2').innerHTML = tree_current_li.id;
+            //            $params[1](tree_current_li.id);
 
-        // ================= Затолкать это всё в отдельный js-файл, который подключать когда рендерим дерево. ======================
+            on_ok(tree_current_li.id);
+        }
+
+
+        draw_folder("ul<?= $root_id ?>");
+
+        // ================= Затолкать это всё в отдельный js-файл, который подключать когда рендерим дерево? ======================
 
         function remember_me() {
             let element = event.target;         // Элемент из которого вызываем меню SPAN
@@ -109,6 +101,21 @@ function f_tree_show($params)
         function appItem() {
             document.getElementById('info').innerHTML = 'Текущий узел: ' + tree_current_li.id;
         }
+
+        //
+        // Рисуем веточку дерева от корня
+        //
+        function show_folder (id, name='')
+        {
+            let f0 = document.getElementById('f1');
+            document.getElementById('span1').innerHTML = name; // По идее здесь надо находить название по id, но что-то пока лень
+//            let ul = f0.childNodes[1];
+            f0.childNodes[1].id = 'ul' + id;
+//            f0.childNodes[0].focus();
+            draw_folder('ul' + id);
+            document.getElementById('tree_box').hidden = false;
+        }
+
 
         //
         // Рисуем веточку дерева
@@ -138,11 +145,7 @@ function f_tree_show($params)
 //        data = <?php //echo json_encode($recs); ?>;
             data = JSON.parse(result);
 
-            if (target_ul === 'root') {
-                ul = document.getElementById(target_ul);
-            } else {
-                ul = document.getElementById(ul_id);
-            }
+            ul = document.getElementById(ul_id);
 
             // Очищаем элемент к которому будем цеплять веточку
             while (ul.childElementCount > 0) {
@@ -167,9 +170,11 @@ function f_tree_show($params)
                 let flag = data[i].flags;
                 if ((flag & 1) === 1) { // Это пункт
                     li_new.id = 'i'+data[i].id;
+                    li_new.className = "item";
 //                span_new.innerHTML =  li_new.id + '- ' + span_new.innerHTML;
                 } else {                // Это папка
                     li_new.id = 'f'+data[i].id;
+                    li_new.className = "folder_closed";
 //                span_new.innerHTML = li_new.id + '&#10010; ' + span_new.innerHTML;
 
                     // К новой папке цепляем новыый элемент ul
@@ -179,6 +184,7 @@ function f_tree_show($params)
                 }
             }
             ul.parentElement.childNodes[0].focus();
+            ul.parentElement.className = "folder_opened";
         }
 
 
@@ -210,6 +216,9 @@ function f_tree_show($params)
                 case 'Delete':
                     delete_node(element);
                     break;
+                // case 'Enter':
+                //     delete_node(element);
+                //     break;
                 // default:
                 //     alert(e.code);
             }
@@ -370,17 +379,6 @@ function f_tree_show($params)
                 draw_folder(el.childNodes[1].id);
             }
         }
-        // При выборе пункта всплывающего меню
-        function ExpandLi () {
-            let mi = event.target;      // Пункт всплывающиего меню
-            let pm = mi.parentElement;  // Всплывающее меню
-            let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
-
-            // Скрыть всплывающее меню
-            pm.style.display = 'none';
-
-            draw_folder(li.childNodes[1].id);
-        }
 
         //
         // Спрятать веточку дерева при нажатии стрелки влево
@@ -394,6 +392,7 @@ function f_tree_show($params)
                 }
             }
             el.focus();
+            el.className = "folder_closed";
         }
 
         // Раскрыть/свернуть веточку по двойному клику
@@ -478,6 +477,7 @@ function f_tree_show($params)
             // Настройка нового пункта или папки
             if (is_folder) {
                 li_new.id = 'f'+new_id;
+                li_new.className = "folder_closed";
 
                 // К новой папке цепляем новыый элемент ul
                 let ul_new = document.createElement('ul');
@@ -485,6 +485,7 @@ function f_tree_show($params)
                 li_new.append(ul_new);
             } else {
                 li_new.id = 'i'+new_id;
+                li_new.className = "item";
             }
 
             span_new.focus();

@@ -229,33 +229,59 @@ div.top_menu_item {
 
 }
 
+/* ======================= ДЕРЕВО ======================= */
 
-.top_menu_item:hover, .popup_menu_item:hover
-{
-    text-decoration: underline;
+/*.top_menu_item:hover, .popup_menu_item:hover*/
+/*{*/
+    /*text-decoration: underline;*/
+/*}*/
+
+div.tree_box {
+    color: darkviolet;
+    background-color: floralwhite;
+    border: 1px solid lightgrey;
+
+    width: fit-content;
 }
+
+
 .li {
-    background-color: #F0F7FC;
+    background-color: floralwhite;
 }
 
 .li:hover {
-    background-color: mistyrose;
+    background-color: plum;
+    color: white;
 }
 .li:focus {
-    border-color: red;
+    /*border-color: red;*/
     background-color: darkviolet;
     color: floralwhite;
 }
 
 li {
-    /*background-image: url(/favicon.png);*/
-    /*background-color: mistyrose;*/
+    list-style-type: none; /* Убираем маркеры у списка */
+
     width: fit-content;
     color: darkviolet;
     background-color: floralwhite;
+}
 
+li.folder_closed {
+    list-style-image: url(/img/Tree/Folder.bmp);
+}
+li.folder_opened {
+    list-style-image: url(/img/Tree/FolderOpened.bmp);
+}
+li.item {
+    list-style-image: url(/img/Tree/Item.bmp);
+}
+
+li:before {
+    /* content: "ƥ "; /*  Добавляем в качестве маркера символ */
 }
 
 ul {
+    padding-left: 20px;
     /*list-style-image: url(/favicon.png);*/
 }
