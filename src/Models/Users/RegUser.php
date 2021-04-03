@@ -406,6 +406,7 @@ EOS;
 EOL;
         } else if ($_SESSION['login'] === 'Guest') {
             $menu = <<<EOL
+        <a href="/tree/show">Дерево ||| </a>
         <a href="/mdn/edit">&#10001;Дневник.2 ||| </a>
         <a href="/mdn/view">Дневник.1 ||| </a>
         <a href="/storage/catalog">Файлы ||| </a>
@@ -434,6 +435,7 @@ EOL;
         } else {
 //            // И здесь хорошо бы проверить права
             $menu = <<<EOL
+        <a href="/tree/show">Дерево ||| </a>
         <a href="/help/docs">Описание ||| </a>
         <a href="/mdn/edit">Дневник ||| </a>
         <a href="/storage/catalog">Файлы ||| </a>

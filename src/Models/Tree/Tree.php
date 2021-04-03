@@ -29,6 +29,7 @@ class Tree
           FROM tree
           ORDER BY 2, 1
 EOL;
+ //       WHERE path LIKE '/Тест/%'
 
         $recs = $mypdo->sql_many($sql,[]);
         Render::render('','tree/show.php', ['recs' => $recs]);

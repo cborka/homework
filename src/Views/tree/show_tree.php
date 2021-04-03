@@ -45,29 +45,28 @@ function f_tree_show($params)
             //   которые мешают работе с деревом из JavaScript
             // У корневой папки id="f0", это пока изспользуется в логике программы
     -->
-    <div class="tree_box" id="tree_box">
+    <div class="tree_box" id="tree_box" hidden>
         <div>
-            <nav>
-            <button id="btnAppendItem" onclick="append_node(tree_current_li, false)">+</button>
-            <button id="btnAppendFolder" onclick="append_node(tree_current_li, true)">++</button>
-            <button id="btnDelete" onclick="delete_node(tree_current_li)"> - </button>
-            <button id="btnExpand" onclick="expand_folder(tree_current_li)"> > </button>
-            <button id="btnHide" onclick="hide_folder(tree_current_li)""> < </button>
-            <button id="btnRename" onclick="rename_node(tree_current_li)">~</button>
+            <nav id="navTreeTop">
+            <button id="btnAppendItem" tabindex="15" onclick="append_node(tree_current_li, false)" title="Добавить пункт"> + </button>
+            <button id="btnAppendFolder" tabindex="16" onclick="append_node(tree_current_li, true)" title="Добавить папку"> ++ </button>
+            <button id="btnDelete" tabindex="17" onclick="delete_node(tree_current_li)" title="Удалить узел (Delete)"> - </button>
+            <button id="btnExpand" tabindex="18" onclick="expand_folder(tree_current_li)" title="Открыть папку (Стрелка вправо, ПКМ)"> > </button>
+            <button id="btnHide" tabindex="19" onclick="hide_folder(tree_current_li)" title="Закрыть папку (Стрелка влево, ПКМ)"> < </button>
+            <button id="btnRename" tabindex="20" onclick="rename_node(tree_current_li)" title="Переименовать узел (F2)"> ~ </button>
             </nav>
         </div>
         <div id="f0" class="tree">
-            <ul id="root" oncontextmenu="dblclick_expand_folder(); return false;" ondblclick="return_node_id()">
-                <li id="f1"><span id="span1" class="li" tabindex="21" onfocus="remember_me()"><?= $root_name ?></span><ul id="ul<?= $root_id ?>"></ul></li>
+            <ul id="root" oncontextmenu="dblclick_expand_folder(); return false;" ondblclick="return_node_id(true)">
+                <li id="f1"><span id="span1" class="li" tabindex="27" onfocus="remember_me()"><?= $root_name ?></span><ul id="ul<?= $root_id ?>"></ul></li>
             </ul>
         </div>
         <div>
-            <nav>
-                <button id="btnOK" onclick="return_node_id()">Выбор</button>
-                <button id="btnEsc" onclick="return_node_id()">Отмена</button>
+            <nav id="navTreeBottom">
+                <button id="btnOK" onclick="return_node_id(true)"  tabindex="776">Выбор</button>
+                <button id="btnEsc" onclick="return_node_id(false)" onkeydown="next_focus(e)" tabindex="777">Отмена</button>
             </nav>
         </div>
-
     </div>
 
 
@@ -75,27 +74,53 @@ function f_tree_show($params)
 
     <script>
 
-        let tree_current_li;
+        // При показе в модальном окне не должны уходить из него по Tab
+        // поэтому верхние кнопки буду иметь tabindex от 15, нижние заканчиваться на 777,
+        // а между ними будут узлы дерева, вряд ли их будет больше, хотя присваивать tabindex надо по другому
+        // чтобы как по стрелкам ходить, а так получится вразброс, знаю как сделать, но пусть пока так
+        let next_tabindex = '33';
+        let tree_current_li; // Здесь запомнинаме узел на котором фокусиремся чтобы затем возвратить его
 
-        function return_node_id() {
-//            alert('ok');
-            document.getElementById('info2').innerHTML = tree_current_li.id;
-            //            $params[1](tree_current_li.id);
+        //
+        //  Зацикливаю переход по Tab внутри дерева
+        //
+        document.getElementById('btnEsc').onkeydown = function(e)
+        {
+            if (e.key == 'Tab' && !e.shiftKey) {
+                document.getElementById('btnAppendItem').focus();
+                return false;
+            }
+        };
+        document.getElementById('btnAppendItem').onkeydown = function(e)
+        {
+            if (e.key == 'Tab' && e.shiftKey) {
+                document.getElementById('btnEsc').focus();
+                return false;
+            }
+        };
 
-            on_ok(tree_current_li.id);
+        //
+        // Возвращаем выбранный узел
+        //
+        function return_node_id(is_ok)
+        {
+            on_ok(is_ok ? tree_current_li.id : undefined);
         }
 
 
-        draw_folder("ul<?= $root_id ?>");
+//        draw_folder("ul<?= $root_id ?>");
+//      show_folder("<?= $root_id ?>");
 
         // ================= Затолкать это всё в отдельный js-файл, который подключать когда рендерим дерево? ======================
 
-        function remember_me() {
-            let element = event.target;         // Элемент из которого вызываем меню SPAN
-            tree_current_li = element.parentElement;    // LI
 
-//            document.getElementById('info').innerHTML = tree_current_li.tagName + '-' + tree_current_li.id;
-//            alert(element.tagName);
+        //
+        // Запомнить узел на котором фокусиремся
+        //
+        function remember_me()
+        {
+            let element = event.target;
+            tree_current_li = element.parentElement;    // LI
         }
 
         function appItem() {
@@ -110,10 +135,16 @@ function f_tree_show($params)
             let f0 = document.getElementById('f1');
             document.getElementById('span1').innerHTML = name; // По идее здесь надо находить название по id, но что-то пока лень
 //            let ul = f0.childNodes[1];
+//            alert('ul' + id);
             f0.childNodes[1].id = 'ul' + id;
+            f0.id = 'f' + id;
 //            f0.childNodes[0].focus();
-            draw_folder('ul' + id);
+            document.getElementById('tree_box').parentElement.style.zIndex = 9999;
+            document.getElementById('tree_box').style.zIndex = 9999;
             document.getElementById('tree_box').hidden = false;
+            document.getElementById('tree_box').parentElement.hidden = false;
+
+            draw_folder('ul' + id);
         }
 
 
@@ -160,7 +191,7 @@ function f_tree_show($params)
                 let li_new = document.createElement('li');
                 let span_new = document.createElement('span');
                 span_new.className = "li";
-                span_new.tabIndex = 20 + data[i].id;
+                span_new.tabIndex = 20 + next_tabindex++;
                 span_new.innerHTML = data[i].name;
                 span_new.onfocus = remember_me;
 
@@ -187,15 +218,15 @@ function f_tree_show($params)
             ul.parentElement.className = "folder_opened";
         }
 
-
         //
         //  При отжатии клавиши
         //
-        top.onkeyup = li_onkeyup;
+//        top.onkeyup = li_onkeyup;
+        document.getElementById("tree_box").onkeyup = li_onkeyup;
         function li_onkeyup(e) {
 
-            let element = event.target;         // Элемент из которого вызываем меню SPAN
-            element = element.parentElement;    // LI
+            let el = event.target;         // Элемент из которого вызываем меню SPAN
+            let element = el.parentElement;    // LI
 
             switch (e.code) {
                 case 'ArrowUp':
@@ -216,9 +247,25 @@ function f_tree_show($params)
                 case 'Delete':
                     delete_node(element);
                     break;
-                // case 'Enter':
-                //     delete_node(element);
-                //     break;
+                case 'Enter':
+                    return_node_id(true);
+                    break;
+                case 'Escape':
+                    return_node_id(false);
+//                    alert(element.tabIndex + ',' + element.tagName+ ',' + element.id);
+//                    alert(el.id);
+//                     if (el.id !== 'btnAppendItem') {
+//                         alert('ret');
+//                         return_node_id(false);
+//                     } else {
+//                         let span1 = document.getElementById("span1").focus();
+//                         alert(span1.id);
+//                         event.stopPropagation();
+//                     }
+                    break;
+                case 'Tab':
+//                    alert(el.tabIndex + ',' + el.tagName+ ',' + el.id);
+                    break;
                 // default:
                 //     alert(e.code);
             }
@@ -439,6 +486,7 @@ function f_tree_show($params)
 
             let new_name = prompt('Добавление ' + msg + ', введите название');
             if(!new_name) { // Нажали отмену
+                alert ('Отменили');
                 return;
             }
 
@@ -466,7 +514,8 @@ function f_tree_show($params)
             let li_new = document.createElement('li');
             let span_new = document.createElement('span');
             span_new.className = "li";
-            span_new.tabIndex = 20 + new_id;
+//            li_new.tabIndex = 20 + new_id;
+            span_new.tabIndex = 20 + next_tabindex++;
             span_new.innerHTML = new_name;
             li_new.append(span_new);
 
@@ -497,6 +546,7 @@ function f_tree_show($params)
         function delete_node(li)
         {
             if (!confirm('Удалить узел ' + li.childNodes[0].innerHTML + ' ?')) {
+                alert ('Отменили');
                 return;
             }
 
@@ -596,7 +646,6 @@ function f_tree_show($params)
             }
             return ret;
         }
-
 
 
     </script>

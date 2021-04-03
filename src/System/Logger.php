@@ -5,6 +5,9 @@ namespace System;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
+define("DOCUMENT_ROOT",    $_SERVER['DOCUMENT_ROOT'] . '/..');
+
+
 /**
  * Класс Logger реализует LoggerInterface PSR-3
  *
@@ -47,7 +50,7 @@ class Logger extends AbstractLogger
         $filename = DOCUMENT_ROOT . "/logs/$this->logname";
 
         if (!$this->fp = fopen($filename, "a")) {
-            throw new \Error("Logger: Не могу открыть файл $this->logname");
+            throw new \Error("Logger: Не могу открыть файл $this->logname , $filename");
         }
     }
     function __destruct()

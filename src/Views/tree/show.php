@@ -52,42 +52,103 @@ function f_tree_show($params)
 
     </aside>
 
-    <aside class="edit-element" id="element-id">
-        Элемент списка
+    <aside class="edit-element" id="element-id" oncontextmenu="show_tree_on_right_click('1', 'Тест');return false;">
+        <span id="info2" style="color: red;"></span><br>
+        <h1>Тестовая веточка дерева</h1>
+        Кликнуть правой кнопкой мыши в правой части экрана.<br><br>
+        Свернуть-развернуть ветки - ПКМ (правая кнопка мыши), стрелки влево и вправо<br>
+        Выбрать - ОК, или двойной клик или кнопка Выбрать.<br>
+        Отмена - Esc или кнопка Отменить.<br>
+        Переименовать - F2 или кнопка [~]<br>
+        На верхних кнопках есть подсказки.<br>
+        <br>
+        Таблица слева обновляется при обновлении страницы, это как есть в базе данных.<br>
+        <br>
 
-        <div class="edit-element" id="tree-id">
-        </div>
 
+        <div class="tree_box" id="tree-id" hidden></div>
 
+    </aside>
 
-    </div>
+    <span id="info3"></span>
 
-    <span id="info2"></span>
-<!--    <button onclick="draw_folder('f0')">DATA</button>-->
-    <button onclick="show_folder('36', 'Cbcntvf36')">BATON</button>
+<!--    <button onclick=" render_tree('1');">DATA</button>-->
+<!--    <button onclick="show_folder('36', 'Cbcntvf36')"> BATON </button>-->
 
 </div>
 
 <script>
 
-    function on_xx (id) {
-          alert('on_xx='+id);
+    // Показать полупрозрачный DIV, чтобы затенить страницу
+    // (форма располагается не внутри него, а рядом, потому что она не должна быть полупрозрачной)
+    function showCover() {
+        let coverDiv = document.createElement('div');
+        coverDiv.id = 'cover-div';
+
+        // убираем возможность прокрутки страницы во время показа модального окна с формой
+        document.body.style.overflowY = 'hidden';
+
+        document.body.append(coverDiv);
     }
-    function on_ok (id) {
-//        alert('on_ok='+id);
-        document.getElementById('tree_box').hidden = true;
+    function hideCover() {
+        document.getElementById('cover-div').remove();
+        document.body.style.overflowY = '';
     }
 
-    function render_test(id, on_ok, on_xx)
+    //
+    // Обработка результатов выбора узла из дерева
+    //
+    function on_ok (id)
     {
-        $("#tree-id").html(
+        document.getElementById('info2').innerHTML = id;
+        hideCover();
+        document.getElementById('tree_box').hidden = true;
+        document.getElementById('tree-id').hidden = true;
+        document.getElementById('tree_box').style.zIndex = -1;
+        document.getElementById('tree-id').style.zIndex = -1;
+    }
+
+    //
+    // Показ дерева по координатам мыши по правой кнопке мыши
+    //
+    function show_tree_on_right_click(id)
+    {
+        if (event.target.id !== "element-id") {
+            return;
+        }
+
+        showCover();
+
+        let menu = document.getElementById('tree-id');
+        menu.style.position = "fixed";
+        menu.style.display = 'block';
+
+        // menu.onmouseleave = function () {
+        //     event.target.style.display = 'none';
+        // };
+
+        // Располагаем меню по координатам мыши
+        menu.style.left = event.clientX - 1 +'px';
+        menu.style.top = event.clientY - 1 +'px';
+
+        // menu.style.display = 'block';
+        menu.hidden = false;
+
+        show_folder(id, 'node_'+id);
+    }
+
+    //
+    //  Дерево нарисовано, но пока скрыто
+    //
+    function render_tree(id)
+    {
+         $("#tree-id").html(
             ajax_render('tree/show_tree.php', [id])
         );
+
     }
 
-    render_test('1', on_ok, on_xx);
-
-//    alert('current = ' + tree_current_li.id);
+    render_tree('1');
 
 </script>
 
