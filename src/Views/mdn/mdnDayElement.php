@@ -10,7 +10,20 @@ $rec = $mypdo->sql_one_record($sql, [$params['id']]);
 
 <!-- Вывод на экран-->
 <!--        --><?php //echo $rec['id']; ?><!--<br>-->
-<?php echo $rec['dt'] . date(' l', strtotime($rec['dt'])); ?>
+<?php
+
+$week_day = date('l', strtotime($rec['dt']));
+
+if ($week_day === 'Sunday') {
+    $week_day = '<span class="red bold"> ' . $week_day . '</span>';
+}
+if ($week_day === 'Saturday') {
+    $week_day = '<span class="green bold"> ' . $week_day . '</span>';
+}
+
+echo $rec['dt'] . ' ' . $week_day;
+
+?>
 
 <h3><?php echo $rec['header']; ?></h3>
 

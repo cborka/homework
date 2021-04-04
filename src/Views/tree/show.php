@@ -48,11 +48,11 @@ function f_tree_show($params)
                 </tr>
             <?php } ?>
         </table>
-        <button onclick="draw_folder('ul1', '')">DATA</button>
+<!--        <button onclick="draw_folder('ul1', '')">DATA</button>-->
 
     </aside>
 
-    <aside class="edit-element" id="element-id" oncontextmenu="show_tree_on_right_click('1', 'Тест');return false;">
+    <aside class="edit-element" id="element-id" oncontextmenu="show_tree_on_right_click('2', 'Тест');return false;">
         <span id="info2" style="color: red;"></span><br>
         <h1>Тестовая веточка дерева</h1>
         Кликнуть правой кнопкой мыши в правой части экрана.<br><br>
@@ -111,8 +111,10 @@ function f_tree_show($params)
     //
     // Показ дерева по координатам мыши по правой кнопке мыши
     //
-    function show_tree_on_right_click(id)
+    function show_tree_on_right_click(id, name='')
     {
+//        alert(event.target.id);
+
         if (event.target.id !== "element-id") {
             return;
         }
@@ -134,7 +136,9 @@ function f_tree_show($params)
         // menu.style.display = 'block';
         menu.hidden = false;
 
-        show_folder(id, 'node_'+id);
+//        alert(menu.id);
+
+        show_folder(id, name);
     }
 
     //
@@ -148,7 +152,7 @@ function f_tree_show($params)
 
     }
 
-    render_tree('1');
+    render_tree('200');
 
 </script>
 

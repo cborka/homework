@@ -27,7 +27,7 @@ class Tree
         $sql =  <<< EOL
         SELECT id, folder, list, flags, ccount, name, path
           FROM tree
-          ORDER BY 2, 1
+          ORDER BY path, name
 EOL;
  //       WHERE path LIKE '/Тест/%'
 
@@ -54,7 +54,7 @@ EOL;
             LEFT JOIN tree l ON t.list = l.id) 
           WHERE t.folder = ? 
             AND t.id != t.folder
-          ORDER BY 1
+          ORDER BY t.name
 EOL;
 
         $recs = json_encode($mypdo->sql_many($sql, [$folder]));
@@ -178,7 +178,7 @@ EOL;
 
         // все потомки
         $recs = $mypdo->sql_many('SELECT id, path FROM tree WHERE path LIKE ?', [$old_full_name . '%']);
-//        $recs = $mypdo->sql_many('SELECT id, path FROM tree WHERE path LIKE ?', ['/%']);
+//        $recs = $mypdo->sql_many('SELECT id, path FROM tree WHERE path LIKE ?', ['%']);
         foreach ($recs as $rec) {
             if ($old_node_path === '/') {
                 $old_node_path = '';

@@ -156,6 +156,11 @@ input:invalid {
 }
 
 .red { color: red;}
+.green { color: green;}
+.cyan { color: cyan;}
+.magenta { color: magenta;}
+
+.bold { font-weight: bold; }
 
 .title {
     font-family: "Segoe Script", Helvetica, Arial, sans-serif;

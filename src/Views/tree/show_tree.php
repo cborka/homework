@@ -1,19 +1,10 @@
 <?php
-f_tree_show($params);
+f_tree_show();
 
 // Оборачиваю включаемые файлы в функции чтобы не было конфликтов переменных.
-function f_tree_show($params)
+function f_tree_show()
 {
-    global $logger;
-    global $mypdo;
-
-//    var_dump($params);
-//    echo 'Узел ' . $params[0];
-    $root_id =  $params[0];
-    $root_name = $mypdo->sql_one('SELECT name FROM tree WHERE id = ?', [$root_id]);
-
     ?>
-
     <!--
             СТРУКТУРА ДЕРЕВА
 
@@ -58,7 +49,7 @@ function f_tree_show($params)
         </div>
         <div id="f0" class="tree">
             <ul id="root" oncontextmenu="dblclick_expand_folder(); return false;" ondblclick="return_node_id(true)">
-                <li id="f1"><span id="span1" class="li" tabindex="27" onfocus="remember_me()"><?= $root_name ?></span><ul id="ul<?= $root_id ?>"></ul></li>
+                <li id="f1"><span id="span1" class="li" tabindex="27" onfocus="remember_me()">root</span><ul></ul></li>
             </ul>
         </div>
         <div>
@@ -107,12 +98,7 @@ function f_tree_show($params)
             on_ok(is_ok ? tree_current_li.id : undefined);
         }
 
-
-//        draw_folder("ul<?= $root_id ?>");
-//      show_folder("<?= $root_id ?>");
-
         // ================= Затолкать это всё в отдельный js-файл, который подключать когда рендерим дерево? ======================
-
 
         //
         // Запомнить узел на котором фокусиремся
@@ -132,13 +118,22 @@ function f_tree_show($params)
         //
         function show_folder (id, name='')
         {
-            let f0 = document.getElementById('f1');
-            document.getElementById('span1').innerHTML = name; // По идее здесь надо находить название по id, но что-то пока лень
-//            let ul = f0.childNodes[1];
-//            alert('ul' + id);
-            f0.childNodes[1].id = 'ul' + id;
-            f0.id = 'f' + id;
-//            f0.childNodes[0].focus();
+            // Настройка корневого ul
+            let root = document.getElementById('root'); // Корневой ul
+            let f1 = root.children[0];                // li, которая содержит корневую веточку, в которой есть
+            let span = f1.children[0];                //   span - название и
+            let ul = f1.children[1];                  //   ul - почка следующей веточки
+
+            // По идее здесь надо находить название по id, но что-то пока лень, да и правильно ли это,
+            // ведь теоретически это должно быть сделано уровнем выше, откуда мы и вызываем эту функцию,
+            // кроме того, это как заголовок и не нужно давать это изменять
+            span.innerHTML = name;
+
+            f1.id = 'f' + id;
+            span.id = 'span' + id;
+            ul.id = 'ul' + id;
+
+            // Показываем
             document.getElementById('tree_box').parentElement.style.zIndex = 9999;
             document.getElementById('tree_box').style.zIndex = 9999;
             document.getElementById('tree_box').hidden = false;
@@ -183,12 +178,10 @@ function f_tree_show($params)
                 ul.childNodes[0].remove();
             }
 
-            // document.getElementById('info').innerHTML = '';
-//        SELECT t.id, t.folder, t.list, t.flags, t.ccount, t.name, t.path
             for (let i = 0; i < data.length; i++) {
-//                document.getElementById('info').innerHTML += data[i].name + data[i].id + '<br>';
 
                 let li_new = document.createElement('li');
+
                 let span_new = document.createElement('span');
                 span_new.className = "li";
                 span_new.tabIndex = 20 + next_tabindex++;
@@ -202,11 +195,9 @@ function f_tree_show($params)
                 if ((flag & 1) === 1) { // Это пункт
                     li_new.id = 'i'+data[i].id;
                     li_new.className = "item";
-//                span_new.innerHTML =  li_new.id + '- ' + span_new.innerHTML;
                 } else {                // Это папка
                     li_new.id = 'f'+data[i].id;
                     li_new.className = "folder_closed";
-//                span_new.innerHTML = li_new.id + '&#10010; ' + span_new.innerHTML;
 
                     // К новой папке цепляем новыый элемент ul
                     let ul_new = document.createElement('ul');
@@ -271,7 +262,6 @@ function f_tree_show($params)
             }
 
 //        alert(element.nodeType + ', ' +element.nodeName + ', ' + element.id + ', ' + element.tagName + '=' + e.code);
-//        alert(element.id);
         }
 
         // У пункта один потомок - SPAN,
@@ -360,7 +350,7 @@ function f_tree_show($params)
             }
         }
 
-
+/*
         //
         // Показать всплывающее меню
         //
@@ -414,40 +404,47 @@ function f_tree_show($params)
         {
             event.target.style.display = 'none';
         }
+*/
 
         //
         // Рисуем веточку дерева
         //
 
         // При нажатии стрелки вправо
-        function expand_folder(el) {
+        function expand_folder(el)
+        {
             // Если это папка
             if (el.childElementCount > 1) {
                 draw_folder(el.childNodes[1].id);
+            } else {
+                el.childNodes[0].focus(); // Возвращаю фокус на узел
             }
         }
 
         //
         // Спрятать веточку дерева при нажатии стрелки влево
         //
-        function hide_folder(el) {
-            // Если это папка
-            if (el.childElementCount > 1) {
-                let ul = el.childNodes[1];
-                while (ul.childElementCount > 0) {
-                    ul.childNodes[0].remove();
-                }
+        function hide_folder(el)
+        {
+            // Если это не папка
+            if (el.childElementCount <= 1) {
+                el.childNodes[0].focus(); // Возвращаю фокус на узел
+                return;
             }
-            el.focus();
+
+            let ul = el.childNodes[1];
+            while (ul.childElementCount > 0) {
+                ul.childNodes[0].remove();
+            }
             el.className = "folder_closed";
+            el.childNodes[0].focus();
         }
 
-        // Раскрыть/свернуть веточку по двойному клику
+        // Раскрыть/свернуть веточку по правому клику (раньше было по двойному, название функции осталось)
         // Кликаем либо на SPAN, либо на IL
-        function dblclick_expand_folder() {
+        function dblclick_expand_folder()
+        {
             let li = event.target;    // Пункт всплывающиего меню
-            // let pm = mi.parentElement;  // Всплывающее меню
-            // let li = pm.parent;         // Элемент li - лист дерева из которого вызвали всплывающее меню
 
             if (li.tagName === 'SPAN') {
                 li = li.parentElement;
@@ -462,11 +459,10 @@ function f_tree_show($params)
                     draw_folder(li.childNodes[1].id);
                 }
             }
-//        alert(li.id);
         }
+
         //
         // Добавление пункта или папки
-        // Вызов из mi (menu_item) (из пункта всплывающего меню вызванного из листочка)
         //
         function append_node(li, is_folder)
         {
@@ -512,11 +508,12 @@ function f_tree_show($params)
             }
 
             let li_new = document.createElement('li');
+
             let span_new = document.createElement('span');
             span_new.className = "li";
-//            li_new.tabIndex = 20 + new_id;
             span_new.tabIndex = 20 + next_tabindex++;
             span_new.innerHTML = new_name;
+
             li_new.append(span_new);
 
             // Прицепляем новый элемент к папке. Это папка, так как вызов этой функции возможен только из папки
@@ -545,6 +542,11 @@ function f_tree_show($params)
         //
         function delete_node(li)
         {
+            if (li.parentElement.id === 'root') {
+                alert ('Нельзя удалять корневой элемент.');
+                return;
+            }
+
             if (!confirm('Удалить узел ' + li.childNodes[0].innerHTML + ' ?')) {
                 alert ('Отменили');
                 return;
@@ -581,6 +583,11 @@ function f_tree_show($params)
         // Переименовать узел
         //
         function rename_node(el) {
+
+            if (el.parentElement.id === 'root') {
+                alert ('Нельзя переименовывать корневой элемент.');
+                return;
+            }
 
             span = el.childNodes[0];
 
