@@ -12,16 +12,32 @@ $rec = $mypdo->sql_one_record($sql, [$params['id']]);
 <!--        --><?php //echo $rec['id']; ?><!--<br>-->
 <?php
 
-$week_day = date('l', strtotime($rec['dt']));
+function dt_format($dt)
+{
+    $week_day = date('l', strtotime($dt));
 
-if ($week_day === 'Sunday') {
-    $week_day = '<span class="red bold"> ' . $week_day . '</span>';
-}
-if ($week_day === 'Saturday') {
-    $week_day = '<span class="green bold"> ' . $week_day . '</span>';
+    if ($week_day === 'Sunday') {
+        $week_day = '<span class="red bold"> ' . $week_day . '</span>';
+    }
+    if ($week_day === 'Saturday') {
+        $week_day = '<span class="green bold"> ' . $week_day . '</span>';
+    }
+
+    return $dt . ' ' . $week_day;
 }
 
-echo $rec['dt'] . ' ' . $week_day;
+echo dt_format($rec['dt']);
+
+// $week_day = date('l', strtotime($rec['dt']));
+//
+//if ($week_day === 'Sunday') {
+//    $week_day = '<span class="red bold"> ' . $week_day . '</span>';
+//}
+//if ($week_day === 'Saturday') {
+//    $week_day = '<span class="green bold"> ' . $week_day . '</span>';
+//}
+//
+//echo $rec['dt'] . ' ' . $week_day;
 
 ?>
 

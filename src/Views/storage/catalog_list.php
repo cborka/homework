@@ -25,9 +25,10 @@ function f_catalog_list($params)
     //\System\Lib::var_dump($params);
 
     $sql =  <<< EOL
-        SELECT c.id, c.user_id, u.login, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights 
-          FROM storage_catalog c
-            LEFT JOIN users u ON c.user_id = u.id 
+        SELECT c.id, c.user_id, u.login, CONCAT(t.path, t.name) AS folder, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights 
+          FROM ((storage_catalog c
+            LEFT JOIN users u ON c.user_id = u.id) 
+            LEFT JOIN tree t ON c.folder_id = t.id) 
           WHERE c.user_id = ?
              OR c.access_rights > 0 
           ORDER BY login, file_name
@@ -42,6 +43,7 @@ EOL;
         <thead>
         <tr>
             <td>Пользователь</td>
+            <td>Папка</td>
             <td>Файл</td>
             <td>Загружен</td>
             <td>Размер</td>
@@ -52,6 +54,7 @@ EOL;
         <?php foreach ($recs as $rec) { ?>
             <tr id="tr<?= $rec['id']; ?>" onclick="render_element({id: <?= $rec['id']; ?>, fn: '<?= $rec['file_name']; ?>'})";>
                 <td> <?= $rec['login']; ?></td>
+                <td> <?= $rec['folder']; ?></td>
                 <td> <?= $rec['file_name']; ?></td>
                 <td><?= substr($rec['load_date'], 0, 10); ?></td>
                 <td align="right"> <?= $rec['file_size']; ?></td>

@@ -70,8 +70,6 @@ function f_tree_show($params)
 
     </aside>
 
-    <span id="info3"></span>
-
 <!--    <button onclick=" render_tree('1');">DATA</button>-->
 <!--    <button onclick="show_folder('36', 'Cbcntvf36')"> BATON </button>-->
 

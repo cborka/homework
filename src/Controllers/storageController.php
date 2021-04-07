@@ -2,6 +2,7 @@
 
 namespace Controllers;
 
+use Models\Storage\Storage;
 use System\Render;
 use System\Lib;
 
@@ -17,6 +18,18 @@ class storageController
     {
         global $logger;
         $this->logger = $logger;
+    }
+
+    /*
+     * Показать каталог загруженных файлов
+     */
+    public function actionCatalog()
+    {
+        $this->logger->debug(self::class . '->actionCatalog()');
+
+        $id = $_SESSION['last_uploaded_id']?? '1';
+
+        Render::render('','storage/catalog.php', ['id' => $id]);
     }
 
     /*
@@ -36,8 +49,8 @@ class storageController
     }
 
     /*
-    * Сохранение выбранного загруженного файла
-    */
+     * Сохранение выбранного загруженного файла
+     */
     public function actionSave_uploaded()
     {
         global $logger;
@@ -45,7 +58,15 @@ class storageController
 
         $logger->debug(self::class . '::actionSave_uploaded()');
 
-        $file = $_FILES['filename'];
+//        $file = $_FILES['filename'];
+
+        $name =  Storage::Save_uploaded();
+
+        echo $name;
+
+        return;
+
+
 
 //        $logger->debug(Lib::var_dump1($_FILES));
 
@@ -138,7 +159,7 @@ class storageController
             $logger->debug("Файл $file НЕ удален.");
         }
 
-        // Находим id загруженного файла чтобы показать его
+        // Находим id последнего загруженного файла чтобы показать его
         $id = $mypdo->sql_one('SELECT MAX(id) FROM storage_catalog where user_id = ?', [$_SESSION['id']]);
         Lib::checkPDOError($id);
 
@@ -196,18 +217,6 @@ class storageController
 //        }
 //    }
 
-
-     /*
-     * Показать каталог загруженных файлов
-     */
-    public function actionCatalog()
-    {
-        $this->logger->debug(self::class . '->actionCatalog()');
-
-        $id = $_SESSION['last_uploaded_id']?? '1';
-
-        Render::render('','storage/catalog.php', ['id' => $id]);
-    }
 
 
 }
