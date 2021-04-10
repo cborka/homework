@@ -15,7 +15,7 @@ class Storage
 {
 
     /*
-     * Показать каталог
+     * Сохранить загруженный (фактически) файл
      */
     public static function Save_uploaded()
     {
@@ -46,18 +46,20 @@ class Storage
         $file_type = $file['type'];
 //        $access_rights = 0;
 
-        $dirname = substr($file_token, 0, 2);
+        $dirname = strtoupper(substr($file_token, 0, 1));
 
-        return $dirname . '/' . $file_token;
+        // Полное имя каталога в хранилище
+        $fulldirname = DOCUMENT_ROOT . "/storage/" . $dirname;
 
+        if (!file_exists($fulldirname)) {
+            if (!mkdir($fulldirname)) {
+                $logger->error(self::class . "::Save_uploaded(): Не удалось создать каталог $fulldirname");
+                echo "Не удалось создать каталог";
+                return false;
+            }
+        }
 
-        $sql = 'INSERT INTO storage_catalog (user_id, file_name, file_type, file_token, file_size) VALUES (?, ?, ?, ?, ?)';
-
-        $result = $mypdo->sql_update($sql, [$user_id, $file_name, $file_type, $file_token, $file_size]);
-        Lib::checkPDOError($result);
-
-        // Имя файла в хранилище
-        $fullname = DOCUMENT_ROOT . "/storage/" . $file_token;
+        $fullname = $fulldirname . '/' .  $file_token;
 
         if (!move_uploaded_file($file['tmp_name'], $fullname)) {
             echo "Не удалось переместить";
@@ -65,6 +67,12 @@ class Storage
         } else {
             $logger->debug("Файл  {$file['name']} загружен в хранилище как $file_token");
         }
+
+
+        $sql = 'INSERT INTO storage_catalog (user_id, file_name, file_type, file_token, file_size) VALUES (?, ?, ?, ?, ?)';
+
+        $result = $mypdo->sql_update($sql, [$user_id, $file_name, $file_type, $file_token, $file_size]);
+        Lib::checkPDOError($result);
 
         // Находим id загруженного файла чтобы показать его
         $id = $mypdo->sql_one('SELECT id FROM storage_catalog where file_token = ?', [$file_token]);
@@ -75,6 +83,32 @@ class Storage
         header('location: /storage/catalog');
 //        Render::render_file("storage/show_image.php", ['file' => $file_name]);
 //        Render::render('','storage/catalog.php', ['id' => $id]);
+        return true;
     }
+
+    /*
+     * Ajax-запрос. Обновить запись о файле в БД
+     */
+    public function Update_record()
+    {
+        global $logger;
+        global $mypdo;
+
+        $logger->debug(self::class . '::Update_record()');
+
+        $file_name = $_POST['file_name'];
+        $access_rights = $_POST['access_rights'];
+        $notes = $_POST['notes'];
+        $id = $_POST['id'];
+
+
+        $sql = 'UPDATE storage_catalog SET file_name = ?, access_rights = ?, notes = ?  WHERE id = ?';
+
+        $result = $mypdo->sql_update($sql, [$file_name, $access_rights, $notes, $id]);
+        Lib::checkPDOError($result);
+
+        return "1";
+    }
+
 
 }

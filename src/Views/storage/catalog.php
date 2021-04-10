@@ -4,9 +4,10 @@
         Список
     </aside>
 
-    <aside class="edit-element" id="element-id">
+    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('2', 'Тест');return false;">
         <span>Элемент списка</span><br>
     </aside>
+
 
 </div>
 
@@ -121,32 +122,6 @@
         render_element({id: result, fn: 'x1'});
     }
     
-    // Сохранение записи
-    function save_record()
-    {
-       let id = rec_form.id.value;
-       let filename = rec_form.filename.value+'.'+rec_form.extension.value;
-       let acc = rec_form.access_right.value;
-       let notes = rec_form.notes.value;
-//       alert('x' + id + filename + extension + notes + acc );
-
-        let sql =
-            'UPDATE storage_catalog SET \
-                file_name = ?, \
-                access_rights = ?, \
-                notes = ? \
-             WHERE id = ?';
-
-        response = sql_update(sql, [String(filename), Number(acc), String(notes), Number(id)]);
-
-        if (response !== '1') {
-            alert("однако неудача" + response);
-            return;
-        }
-        render_list();
-        render_element({id: id});
-    }
-
     // Скачивание файла
     function load_file(token, filename)
     {
@@ -169,6 +144,16 @@
 
         document.execCommand("copy");
     }
+
+
+
+    // При выборе узла дерева
+    function tree_on_selection (id) {
+        alert('=== ' + id);
+    }
+
+    // Инициализация дерева
+    render_tree('2000');
 
     // Перейти на страницу загрузки нового файла
     // function upload_file() {

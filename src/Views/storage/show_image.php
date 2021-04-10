@@ -6,10 +6,13 @@ global $logger;
 // и поэтому адрес картинки (src) указывается относительно корня сайта или текущего каталога.
 // Поэтому копирую файл из хранилища в доступный каталог и уже затем показываю.
 
-$filename = DOCUMENT_ROOT . "/storage/" . $params['file'];
+$dirname = strtoupper(substr($params['file'], 0, 1));
+
+$filename = DOCUMENT_ROOT . "/storage/" . $dirname . '/' . $params['file'];
 
 if (!file_exists($filename)) {
-    $logger->debug('show_image: файл ' . $filename . ' не существует.');
+    $logger->debug("+show_image: входной файл: {$params['file']} ");
+    $logger->debug('+show_image: файл ' . $filename . ' не существует.');
     return;
 }
 

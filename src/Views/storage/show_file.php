@@ -1,5 +1,7 @@
 <?php
 
+include_once DOCUMENT_ROOT . '/src/Views/tree/show_tree.php';
+
 use System\Render;
 
 f123($params);
@@ -16,13 +18,16 @@ function f123($params)
 // и поэтому адрес картинки (src) указывается относительно корня сайта или текущего каталога.
 // Поэтому копирую файл из хранилища в доступный каталог и уже затем показываю.
 // А затем, после показа, удаляю.
-
+//    echo DOCUMENT_ROOT . '/src/Views/tree/show_tree.php<br>';
     echo $params['id'] . '<br>';
 
     $sql = <<< EOL
-    SELECT c.id, c.user_id, u.login, u.name, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights, c.notes 
-      FROM storage_catalog c
-        LEFT JOIN users u ON c.user_id = u.id 
+    SELECT c.id, c.user_id, u.login, 
+           c.folder_id, CONCAT(t.path, t.name) AS folder, 
+           u.name, c.file_name, c.file_token, c.load_date, c.file_size, c.access_rights, c.notes 
+      FROM ((storage_catalog c
+        LEFT JOIN users u ON c.user_id = u.id) 
+        LEFT JOIN tree t ON c.folder_id = t.id) 
       WHERE c.id = ?
 EOL;
 //echo $sql;
@@ -51,16 +56,25 @@ EOL;
         $selected0 = '';
         $selected1 = 'selected';
     }
-    $token = $rec['file_token'];
+
     $filename = $rec['file_name'];
-    $fullname = DOCUMENT_ROOT . "/storage/" . $token;
+    $folder = $rec['folder'];
+    $folder_id = $rec['folder_id'];
+
+    $token = $rec['file_token'];
+    $dirname = strtoupper(substr($token, 0, 1));
+    $fullname = DOCUMENT_ROOT . "/storage/" . $dirname . '/' . $token;
+
     $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     $basename = pathinfo($filename, PATHINFO_FILENAME);
 
     if ($is_owner) { ?>
-        <form name="rec_form" action="/storage/save_record" >
+        <div class="edit-element"  >
+        <form name="rec_form" action="/storage/update_record" >
             <input type="number" name="id" value="<?= $id; ?>" readonly hidden><br>
             Файл     <input type="text" name="filename" value="<?= $basename; ?>">.<?= $extension; ?><br>
+            Каталог  <input type="text" name="folder" value="<?= $folder; ?>" readonly> (<?= $folder_id; ?>)
+            <button type="button" oncontextmenu="tree_show_on_click('2', 'Тест');return false;"> Изменить </button><br>
             <input type="text" name="extension" value="<?= $extension; ?>" readonly hidden>
             Доступ
             <select size="1" name="access_right">
@@ -69,19 +83,25 @@ EOL;
             </select>
             <br>
             Описание<br><textarea name="notes" rows="2" cols="60"><?= $rec['notes'] ?></textarea><br>
+            <button onclick="save_record()"> Сохранить изменения </button>
         </form>
-        <button onclick="save_record()">Сохранить</button><br>
+        <button onclick="delete_from_storage('<?= $id; ?>', '<?= $filename; ?>')"> Удалить файл из хранилища </button><br><br>
+        <div class="tree_box" id="tree-id" hidden></div>
+        </div>
 
     <?php } else {
 
         echo 'Файл: ' . $filename . '<br>';
+        echo 'Каталог: ' . $folder . ' (' . $folder_id . ')<br>';
         echo 'Доступ: ' . ($rec['access_rights'] === '0' ? 'приватный' : 'публичный') . '<br>';
     }
     echo 'Владелец: ' . $rec['name'] . '<br>';
     echo 'Загружен: ' . $rec['load_date'] . '<br>';
     echo 'Размер: ' . $rec['file_size'] . '<br>';
-    echo '<pre>' . $rec['file_size'] . '</pre><br>';
+//    echo '<pre>' . $rec['file_size'] . '</pre><br>';
     echo '<br><br>';
+
+
 
     if (!file_exists($fullname)) {
         echo 'Fайл <b>' . $filename . '</b> не существует.';
@@ -135,9 +155,6 @@ EOL;
     <button onclick="copy_to()">Скопировать ссылку на скачивание в буфер обмена</button><br>
     <br>
 
-    <?php if ($is_owner) { ?>
-        <button onclick="delete_from_storage('<?= $id; ?>', '<?= $filename; ?>')">Удалить файл из хранилища</button>
-    <?php } ?>
 
 <?php } ?>
 
