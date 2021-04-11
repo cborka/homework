@@ -77,10 +77,14 @@ EOL;
         $folder = substr($folder, 1); // Находим folder_id (просто убираем первый символ)
 
         // Информация о папке в которую всталяем новый узел
-        $rec = $mypdo->sql_one_record('SELECT name, path FROM tree WHERE id = ?', [$folder]);
+        if ($folder === '1') {
+            $path = '/';
+        } else {
+            $rec = $mypdo->sql_one_record('SELECT name, path FROM tree WHERE id = ?', [$folder]);
 
-        // path = folder_path + folder_name
-        $path = $rec['path'] . $rec['name'] . '/';
+            // path = folder_path + folder_name
+            $path = $rec['path'] . $rec['name'] . '/';
+        }
 
         try {
             $dbh->beginTransaction();
@@ -180,11 +184,11 @@ EOL;
         $recs = $mypdo->sql_many('SELECT id, path FROM tree WHERE path LIKE ?', [$old_full_name . '%']);
 //        $recs = $mypdo->sql_many('SELECT id, path FROM tree WHERE path LIKE ?', ['%']);
         foreach ($recs as $rec) {
-            if ($old_node_path === '/') {
-                $old_node_path = '';
-            }
+//            if ($old_node_path === '/') {
+//                $old_node_path = '';
+//            }
             $new_path =  $old_node_path . $new_name . '/' .  substr($rec['path'], strlen($old_full_name));
-
+//
             $count = $mypdo->sql_update('UPDATE tree SET path = ? WHERE id = ?', [$new_path, $rec['id']]);
 
             // Первый вариант, оставлю на всякий случай

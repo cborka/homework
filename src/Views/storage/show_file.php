@@ -1,7 +1,5 @@
 <?php
 
-include_once DOCUMENT_ROOT . '/src/Views/tree/show_tree.php';
-
 use System\Render;
 
 f123($params);
@@ -69,15 +67,19 @@ EOL;
     $basename = pathinfo($filename, PATHINFO_FILENAME);
 
     if ($is_owner) { ?>
-        <div class="edit-element"  >
-        <form name="rec_form" action="/storage/update_record" >
-            <input type="number" name="id" value="<?= $id; ?>" readonly hidden><br>
-            Файл     <input type="text" name="filename" value="<?= $basename; ?>">.<?= $extension; ?><br>
-            Каталог  <input type="text" name="folder" value="<?= $folder; ?>" readonly> (<?= $folder_id; ?>)
-            <button type="button" oncontextmenu="tree_show_on_click('2', 'Тест');return false;"> Изменить </button><br>
-            <input type="text" name="extension" value="<?= $extension; ?>" readonly hidden>
+        <form name="rec_form" action="/storage/update_record" method="post">
+            <input type="number" name="id" value="<?= $id; ?>" readonly hidden>
+            <br>
+            Файл    <input type="text" name="filename" value="<?= $basename; ?>">.<?= $extension; ?>
+                    <input type="text" name="extension" value="<?= $extension; ?>" readonly hidden>
+            <br>
+            Каталог <input type="text" name="folder" value="<?= $folder; ?>" readonly>
+                    <input type="text" name="folder_id" value="<?= $folder_id; ?>" readonly hidden>
+<!--            (<span id="span_folder_id">--><?//= $folder_id; ?><!--</span>)-->
+            <button type="button" onclick="tree_show_on_click('2', 'Тест');return false;"> Изменить каталог </button>
+            <br>
             Доступ
-            <select size="1" name="access_right">
+            <select size="1" name="access_rights">
                 <option <?= $selected0; ?> value="0">Приватный</option>
                 <option <?= $selected1; ?> value="1">Публичный</option>
             </select>
@@ -86,8 +88,6 @@ EOL;
             <button onclick="save_record()"> Сохранить изменения </button>
         </form>
         <button onclick="delete_from_storage('<?= $id; ?>', '<?= $filename; ?>')"> Удалить файл из хранилища </button><br><br>
-        <div class="tree_box" id="tree-id" hidden></div>
-        </div>
 
     <?php } else {
 
@@ -100,8 +100,6 @@ EOL;
     echo 'Размер: ' . $rec['file_size'] . '<br>';
 //    echo '<pre>' . $rec['file_size'] . '</pre><br>';
     echo '<br><br>';
-
-
 
     if (!file_exists($fullname)) {
         echo 'Fайл <b>' . $filename . '</b> не существует.';

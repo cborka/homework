@@ -52,7 +52,7 @@ function f_tree_show($params)
 
     </aside>
 
-    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('2', 'Тест');return false;">
+    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('1', 'root');return false;">
         <span id="info2" style="color: red;"></span><br>
         <h1>Тестовая веточка дерева</h1>
         Кликнуть правой кнопкой мыши в правой части экрана.<br><br>

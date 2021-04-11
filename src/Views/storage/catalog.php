@@ -1,14 +1,14 @@
-<div class="grid-container-edit">
+<div id="grid-id" class="grid-container-edit">
 
     <aside class="edit-list" id="list-id">
         Список
     </aside>
 
-    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('2', 'Тест');return false;">
+    <aside class="edit-element" id="element-id">
         <span>Элемент списка</span><br>
     </aside>
 
-
+    <div class="tree_box" id="tree-id" hidden></div>
 </div>
 
 <script>
@@ -146,10 +146,11 @@
     }
 
 
-
     // При выборе узла дерева
     function tree_on_selection (id) {
-        alert('=== ' + id);
+//        $("#span_folder_id").html(id.substr(1));
+        rec_form.folder_id.value = id.substr(1);
+        rec_form.folder.value = get_fullname(document.getElementById(id));
     }
 
     // Инициализация дерева

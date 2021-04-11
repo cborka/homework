@@ -128,14 +128,15 @@ function tree_show_on_click(id, name='')
     //     return;
     // }
 
+    if (document.getElementById('cover-div')) {
+        return; // Пытаемся вызвать второй раз
+    }
+
     let menu = document.getElementById('tree-id');
     menu.style.position = "absolute";
     menu.style.display = 'block';
 
     showCover();
-
-//    alert(event.id);
-//    return;
 
     // menu.onmouseleave = function () {
     //     event.target.style.display = 'none';
@@ -190,6 +191,7 @@ function return_node_id(is_ok)
     document.getElementById('tree_box').style.zIndex = -1;
     document.getElementById('tree-id').style.zIndex = -1;
 
+//    alert(get_fullname(tree_current_li));
     if(tree_on_selection) {
         tree_on_selection(is_ok ? tree_current_li.id : undefined);
     }
@@ -204,6 +206,23 @@ function remember_me()
     tree_current_li = element.parentElement;    // LI
 }
 
+//
+// Сформировать fullname для узла дерева
+//
+function get_fullname(li)
+{
+    let elem = li;
+    let ret = '/' + elem.firstElementChild.innerHTML;
+    while(elem = elem.parentNode) { // идти наверх до <html>
+        if (elem.tagName === 'LI')
+           ret = '/' + elem.firstElementChild.innerHTML + ret;
+
+        if (elem.id === 'f0') { // Почему не условие цикла? Перестраховка от зацикливания.
+            return ret;
+        }
+    }
+    return ret;
+}
 
 //
 //  Зацикливаю переход по Tab внутри дерева

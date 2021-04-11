@@ -87,7 +87,7 @@ class Storage
     }
 
     /*
-     * Ajax-запрос. Обновить запись о файле в БД
+     * Обновить запись о файле в БД
      */
     public function Update_record()
     {
@@ -96,18 +96,21 @@ class Storage
 
         $logger->debug(self::class . '::Update_record()');
 
-        $file_name = $_POST['file_name'];
+        $filename = $_POST['filename'] . '.' . $_POST['extension'];
         $access_rights = $_POST['access_rights'];
         $notes = $_POST['notes'];
+        $folder_id = $_POST['folder_id'];
         $id = $_POST['id'];
 
 
-        $sql = 'UPDATE storage_catalog SET file_name = ?, access_rights = ?, notes = ?  WHERE id = ?';
+        $sql = 'UPDATE storage_catalog SET file_name = ?, access_rights = ?, folder_id = ? , notes = ?  WHERE id = ?';
 
-        $result = $mypdo->sql_update($sql, [$file_name, $access_rights, $notes, $id]);
+        $result = $mypdo->sql_update($sql, [$filename, $access_rights, $folder_id, $notes, $id]);
         Lib::checkPDOError($result);
 
-        return "1";
+        $_SESSION['last_uploaded_id'] =  $id;
+
+        header('location: /storage/catalog');
     }
 
 
