@@ -123,16 +123,19 @@
     function t_on_change (id)
     {
         rec_form.folder_id.value = id.substr(1);
-        rec_form.folder.value = get_fullname(document.getElementById(id));
+
+        let str = get_fullname(document.getElementById(id));
+        rec_form.folder.value = str.substr(8);
     }
 
     // При выборе узла дерева
     // при выборе папки во время загрузки
     function t_on_upload (id)
     {
-        alert('kkjkfks'+id);
         upload_form.folder_id.value = id.substr(1);
-        upload_form.folder.value = get_fullname(document.getElementById(id));
+
+        let str = get_fullname(document.getElementById(id));
+        upload_form.folder.value = str.substr(8);
     }
 
 

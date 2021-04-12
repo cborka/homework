@@ -4,9 +4,13 @@
 
 <form name="upload_form" action="/storage/save_uploaded" method="post" enctype="multipart/form-data">
 
-    Каталог <input type="text" name="folder" value="<?= $folder; ?>" readonly>
-    <input type="text" name="folder_id" value="<?= $folder_id; ?>" readonly hidden>
-    <button type="button" onclick="tree_show_on_click('2', 'Тест', t_on_upload);return false;"> Изменить каталог </button>
+    Каталог <input type="text" name="folder" value="<?= substr($folder, 1 + strlen('/Storage/'.$_SESSION['login'])); ?>" readonly>
+    <input type="text" name="folder_id" value="<?= $_SESSION['fs_root']; ?>"  readonly hidden>
+    <button type="button" onclick="tree_show_on_click('<?= $_SESSION['fs_root']; ?>', '__/__ ', t_on_upload);return false;"> Выбрать каталог </button>
+
+<!--    Каталог <input type="text" name="folder" value="--><?//= $folder; ?><!--" readonly>-->
+<!--    <input type="text" name="folder_id" value="--><?//= $folder_id; ?><!--" readonly hidden>-->
+<!--    <button type="button" onclick="tree_show_on_click('2', 'Тест', t_on_upload);return false;"> Изменить каталог </button>-->
     <br>
 
     Загрузить файл <input type="file" name="filename"><br>

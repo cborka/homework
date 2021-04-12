@@ -73,10 +73,10 @@ EOL;
             Файл    <input type="text" name="filename" value="<?= $basename; ?>">.<?= $extension; ?>
                     <input type="text" name="extension" value="<?= $extension; ?>" readonly hidden>
             <br>
-            Каталог <input type="text" name="folder" value="<?= $folder; ?>" readonly>
+            Каталог <input type="text" name="folder" value="<?= substr($folder, 1 + strlen('/Storage/'.$_SESSION['login'])); ?>" readonly>
                     <input type="text" name="folder_id" value="<?= $folder_id; ?>" readonly hidden>
 <!--            (<span id="span_folder_id">--><?//= $folder_id; ?><!--</span>)-->
-            <button type="button" onclick="tree_show_on_click('2', 'Тест', t_on_change);return false;"> Изменить каталог </button>
+            <button type="button" onclick="tree_show_on_click('<?= $_SESSION['fs_root']; ?>', '__/__ ', t_on_change);return false;"> Изменить каталог </button>
             <br>
             Доступ
             <select size="1" name="access_rights">
