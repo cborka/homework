@@ -118,15 +118,18 @@ function getCoords(elem) // кроме IE8-
 // чтобы как по стрелкам ходить, а так получится вразброс, знаю как сделать, но пусть пока так
 let tree_next_tabindex = '33';
 let tree_current_li; // Здесь запомнинаме узел на котором фокусиремся чтобы затем возвратить его
+let tree_on_selection = function (id) {};
 
 //
 // Показ дерева по координатам мыши по правой кнопке мыши
 //
-function tree_show_on_click(id, name='')
+function tree_show_on_click(id, name='', func=function (id) {})
 {
     // if (event.target.id !== "element-id") {
     //     return;
     // }
+
+    tree_on_selection = func;
 
     if (document.getElementById('cover-div')) {
         return; // Пытаемся вызвать второй раз
@@ -160,7 +163,6 @@ function render_tree(id)
     $("#tree-id").html(
         ajax_render('tree/show_tree.php', [id])
     );
-
 }
 
 

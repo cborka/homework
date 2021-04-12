@@ -52,7 +52,7 @@ function f_tree_show($params)
 
     </aside>
 
-    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('1', 'root');return false;">
+    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('1', 'root', t_on_selection);return false;">
         <span id="info2" style="color: red;"></span><br>
         <h1>Тестовая веточка дерева</h1>
         Кликнуть правой кнопкой мыши в правой части экрана.<br><br>
@@ -65,28 +65,23 @@ function f_tree_show($params)
         Таблица слева обновляется при обновлении страницы, это как есть в базе данных.<br>
         <br>
 
-
-
     </aside>
 
-<!--    <button onclick=" render_tree('1');">DATA</button>-->
-<!--    <button onclick="show_folder('36', 'Cbcntvf36')"> BATON </button>-->
     <div class="tree_box" id="tree-id" hidden></div>
 
 </div>
 
 <script>
 
-
     //
     // Обработка результатов выбора узла из дерева
     //
-    function tree_on_selection (id)
+    function t_on_selection (id)
     {
         document.getElementById('info2').innerHTML = id;
     }
 
-
+    // Начальная инициализация дерева
     render_tree('200');
 
 </script>

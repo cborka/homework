@@ -1,16 +1,14 @@
-<?php if ($_SESSION['login'] !== 'Guest13') { ?>
 <div style="float: left;">
     <h3>Каталог загруженных файлов</h3>
 </div>
 
 <div style="float: right;">
-<!--    <button onclick="upload_file()" title="Загрузить новый"><br>+<br>&nbsp </button>-->
-    <button onclick="render_element_upload()" title="Загрузить новый">+<br>+<br>+</button>
+    <?php if (isset($_SESSION['login']) && ($_SESSION['login'] !== 'Guest')) { ?>
+        <button onclick="render_element_upload()" title="Загрузить новый">+<br>+<br>+</button>
+    <?php } ?>
 </div>
+
 <br>
-<?php } else { ?>
-    <h3>Каталог загруженных файлов</h3>
-<?php } ?>
 
 <?php
 
@@ -19,7 +17,6 @@ f_catalog_list($params);
 // Оборачиваю включаемые файлы в функции чтобы не было конфликтов переменных.
 function f_catalog_list($params)
 {
-
     global $mypdo;
 
     //\System\Lib::var_dump($params);

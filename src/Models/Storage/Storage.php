@@ -38,6 +38,9 @@ class Storage
 
         // Инициализация полей для вставки в таблицу-каталог
         // закомментированные поля вставятся по умолчанию
+
+        $folder_id = $_POST['folder_id'];
+
         $user_id = $_SESSION['id'];
         $file_name = $file['name'];
         $file_token = bin2hex(random_bytes(30)) . '.xbz';
@@ -69,9 +72,9 @@ class Storage
         }
 
 
-        $sql = 'INSERT INTO storage_catalog (user_id, file_name, file_type, file_token, file_size) VALUES (?, ?, ?, ?, ?)';
+        $sql = 'INSERT INTO storage_catalog (user_id, folder_id, file_name, file_type, file_token, file_size) VALUES (?, ?, ?, ?, ?, ?)';
 
-        $result = $mypdo->sql_update($sql, [$user_id, $file_name, $file_type, $file_token, $file_size]);
+        $result = $mypdo->sql_update($sql, [$user_id, $folder_id, $file_name, $file_type, $file_token, $file_size]);
         Lib::checkPDOError($result);
 
         // Находим id загруженного файла чтобы показать его

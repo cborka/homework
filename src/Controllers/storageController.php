@@ -39,13 +39,8 @@ class storageController
     {
         global $logger;
         $logger->debug(self::class . '::actionUpload_file()');
-        $logger->debug(self::class . '::actionUpload_file()' . $_SESSION['login'] . ' === Guest');
 
-        if ($_SESSION['login'] === 'Guest') {
-            Render::render('Сначала надо зарегистрироваться!');
-        } else {
-            Render::render_file('storage/upload_file.php');
-        }
+        Render::render_file('storage/upload_file.php');
     }
 
     /*

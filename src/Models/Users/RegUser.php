@@ -7,6 +7,7 @@ use System\Lib;
 use System\MyPdo;
 use System\Mailer;
 use System\Render;
+use Models\Tree\Tree;
 /*
  * Сначала класс был задуман для регистрации нового пользователя,
  * но сейчас здесь ещё восстановление пароля, вход, выход и личный кабинет
@@ -226,7 +227,41 @@ EOS;
             $_SESSION[$key] = $value;
         }
 
+        // id папки в дереве, которая является корневой папкой в хранилище файлов для данного пользователя
+        $_SESSION['fs_root'] = self::getFileStorageRoot();
+
         $logger->debug('$_SESSION = ' . Lib::var_dump1($_SESSION) );
+    }
+
+    /*
+     *  Вернуть id папки в дереве, которая является корневой папкой в хранилище файлов для данного пользователя
+     */
+    private static function getFileStorageRoot()
+    {
+        global $logger;
+        global $mypdo;
+
+        $logger->debug(self::class . '::sessionInit()');
+
+        $login = $_SESSION['login'];
+
+        $folder = $mypdo->sql_one('SELECT id FROM tree WHERE folder = 1 AND name = ?', ['Storage']);
+        Lib::checkPDOError($folder);
+
+        $sql = <<< EOS
+            SELECT id 
+              FROM tree
+              WHERE name = ?
+                AND folder = ?
+EOS;
+        $root_id = $mypdo->sql_one($sql, [$login, $folder]);
+        Lib::checkPDOError($root_id);
+
+        if ($root_id === '') {
+            $root_id = Tree::AppendNode('f'.$folder , '2', $login);
+        }
+
+        return $root_id;
     }
 
     /*

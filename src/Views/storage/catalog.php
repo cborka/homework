@@ -15,34 +15,6 @@
     var current_filename = '';
     var result = '';
 
-//     render_test();
-
-//     function render_test()
-//     {
-//         $("#div_test").html(
-//             ajax_render('tree/show_tree.php', ['36'])
-// //            ajax_render('tree/render_test.php', [])
-//         );
-//
-//         let menu = document.getElementById('div_test');
-//         menu.style.position = "fixed";
-//         menu.style.display = 'block';
-//
-//         // menu.onmouseleave = function () {
-//         //     event.target.style.display = 'none';
-//         // };
-//
-//         // Располагаем меню по координатам мыши
-//         menu.style.left = event.clientX - 1 +'px';
-//         menu.style.top = event.clientY - 1 +'px';
-//
-//         return false; // чтобы не всплывало стандартное контекстное меню надо возвращать false НА МЕСТЕ ВЫЗОВА МЕНЮ!!!
-//     }
-//
-
-    //=======================================
-
-
     render_list();
     render_element({id: <?= $params['id']; ?>});
 
@@ -147,11 +119,22 @@
 
 
     // При выборе узла дерева
-    function tree_on_selection (id) {
-//        $("#span_folder_id").html(id.substr(1));
+    // при изменении папки
+    function t_on_change (id)
+    {
         rec_form.folder_id.value = id.substr(1);
         rec_form.folder.value = get_fullname(document.getElementById(id));
     }
+
+    // При выборе узла дерева
+    // при выборе папки во время загрузки
+    function t_on_upload (id)
+    {
+        alert('kkjkfks'+id);
+        upload_form.folder_id.value = id.substr(1);
+        upload_form.folder.value = get_fullname(document.getElementById(id));
+    }
+
 
     // Инициализация дерева
     render_tree('2000');
