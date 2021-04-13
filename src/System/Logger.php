@@ -123,6 +123,7 @@ class Logger extends AbstractLogger
     private function addMessageToLogs($level, $message)
     {
         global $mypdo;
+        global $requestId;
 
         if (!isset($mypdo)) {
             return;
@@ -130,9 +131,9 @@ class Logger extends AbstractLogger
 
         $login = isset($_SESSION['login']) ? $_SESSION['login'] :  '';
 
-        $sql = "INSERT INTO logs (level, login, ip, host, uri, message) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO logs (request_id, level, login, ip, host, uri, message) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        $values = [$level, $login, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'], $message];
+        $values = [$requestId, $level, $login, $_SERVER['REMOTE_ADDR'], $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'], $message];
 
         $result = $mypdo->sql_insert_into_logs($sql, $values);
         Lib::checkPDOError($result);

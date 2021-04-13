@@ -33,8 +33,10 @@
     // Рендер элемента списка. Показ
     function render_element(params = {})
     {
-        el = ajax_render('mdn/mdnDayElement.php', params);
-        $("#element-id").html(el);
+//        let el = ajax_render('mdn/mdnDayElement.php', params);
+        $("#element-id").html(
+            ajax_render('mdn/mdnDayElement.php', params)
+        );
 
         id = params.id;
         $("tr.selected").removeClass("selected");
@@ -44,8 +46,10 @@
     // Рендер элемента списка. Редактирование
     function render_element_edit(params = {})
     {
-        el = ajax_render('mdn/mdnDayElementEdit.php', params);
-        $("#element-id").html(el);
+//        let el = ajax_render('mdn/mdnDayElementEdit.php', params);
+        $("#element-id").html(
+            ajax_render('mdn/mdnDayElementEdit.php', params)
+        );
     }
 
 

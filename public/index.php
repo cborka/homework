@@ -69,6 +69,8 @@ use System\Render;
 
 global $logger;
 global $dbh;
+global $requestId;
+$requestId = 0;
 
 //$var = 'qqq';
 //echo 'hi' . date("Y-m-d");
