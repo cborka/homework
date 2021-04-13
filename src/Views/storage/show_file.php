@@ -31,6 +31,13 @@ EOL;
 //echo $sql;
 
     $rec = $mypdo->sql_one_record($sql, [$params['id']]);
+    if (!$rec) // Нет такой записи в каталоге
+    {
+        echo '404 Not Found - В каталоге не найдена запись о файле №' . $params['id'];
+        $logger->debug('show_image: 404 В каталоге не найдена запись о файле №' . $params['id']);
+        return;
+    }
+
 //\System\Lib::var_dump($rec);
 
 //array (size=9)
@@ -46,6 +53,11 @@ EOL;
 
     $id = $rec['id'];
     $is_owner = ($rec['user_id'] === $_SESSION['id']);
+
+    if (!$is_owner && ($rec['access_rights'] === '0')) {
+        echo "Это приватный файл, извините.";
+        return;
+    }
 
     if ($rec['access_rights'] === '0') {
         $selected0 = 'selected';

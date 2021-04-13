@@ -23,11 +23,11 @@ class storageController
     /*
      * Показать каталог загруженных файлов
      */
-    public function actionCatalog()
+    public function actionCatalog($params = [])
     {
-        $this->logger->debug(self::class . '->actionCatalog()');
+        $this->logger->debug(self::class . '->actionCatalog()' . Lib::var_dump1($params));
 
-        $id = $_SESSION['last_uploaded_id']?? '1';
+        $id = $_SESSION['last_uploaded_id']?? $params[0]?? '13';
 
         Render::render('','storage/catalog.php', ['id' => $id]);
     }

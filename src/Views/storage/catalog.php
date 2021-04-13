@@ -16,7 +16,7 @@
     var result = '';
 
     render_list();
-    render_element({id: <?= $params['id']; ?>});
+    render_element({id: '<?= $params['id']; ?>'});
 
     // Подгоняю высоту элемента под высоту списка, которую жестко задаю в edit.css
     $("#element-id").height($("#list-id").height()+17);

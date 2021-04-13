@@ -51,7 +51,7 @@ class ajaxController
 
         $filename = $_POST['filename'];
         $params = $_POST['params'];
-
+//var_dump($_POST);
         echo Render::render_file_to_string($filename, $params);
     }
 

@@ -42,7 +42,23 @@ class App
             throw new \ErrorException("Ошибка: $pathParts[2] не существует.");
         }
 
-        $objController->$action();
+        $params = [];
+        $count = count($pathParts);
+
+        // Путь заканчивается на /, последний элемент массива пуст
+        if (trim($pathParts[$count-1]) === '') {
+            $count--;
+        }
+
+        for ($i = 3; $i < $count; $i++) {
+            $params[] = $pathParts[$i];
+        }
+
+        if ($params === []) {
+            $objController->$action();
+        } else {
+            $objController->$action($params);
+        }
 
     }
 }

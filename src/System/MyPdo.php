@@ -132,9 +132,8 @@ class MyPdo
 
         // Если запрос ничего не вернул
         if( count($records) == 0 || count($records[0]) == 0) {
-            $logger->debug('return = ; //запрос ничего не вернул');
-//            return '';
-            return null;
+            $logger->debug('return = ; //запрос ничего не вернул!' . $records);
+            return [];  // функция возвращает массив
         }
 
 //        $logger->debug('return = ' . Lib::var_dump1($records[0]));

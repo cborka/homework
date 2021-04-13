@@ -444,7 +444,7 @@ EOL;
         <a href="/tree/show">&#9884;Дерево ||| </a>
         <a href="/mdn/edit">&#10001;Дневник.2 ||| </a>
         <a href="/mdn/view">Дневник.1 ||| </a>
-        <a href="/storage/catalog">Файлы ||| </a>
+        <a href="/storage/catalog">&#9733;Файлы ||| </a>
         <a href="/users/logout">Выход | </a>
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
@@ -472,8 +472,8 @@ EOL;
             $menu = <<<EOL
         <a href="/tree/show">&#9884;Дерево ||| </a>
         <a href="/help/docs">Описание ||| </a>
-        <a href="/mdn/edit">Дневник ||| </a>
-        <a href="/storage/catalog">Файлы ||| </a>
+        <a href="/mdn/edit">&#9873;Дневник ||| </a>
+        <a href="/storage/catalog">&#9733;Файлы ||| </a>
         <a href="/users/logout">Выход | </a>
 EOL;
         }
