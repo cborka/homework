@@ -95,6 +95,17 @@ class mdnController
         Mdn::saveRecord($_POST['id'], $_POST['dt'], $_POST['header'], $_POST['content']);
     }
 
+    /*
+     * Заполнить таблицу search данными из дневника
+     */
+    public function actionFillSearch()
+    {
+        $this->logger->debug(self::class . '->actionFillSearch()');
+
+        Mdn::fillSearch();
+
+        Render::render('Данные для поиска обновлены.');
+    }
 
 
 
