@@ -4,6 +4,7 @@ namespace Controllers;
 
 use System\Render;
 use Models\MyDailyNews\MdnDb;
+use Models\MyDailyNews\Mdn;
 
 
 /*
@@ -67,13 +68,34 @@ class mdnController
     /*
      * Редактирование дневника, аякс-версия
      */
-    public function actionEdit()
+    public function actionEdit($params = [])
     {
         $this->logger->debug(self::class . '->actionEdit()');
 
-        Render::render('','mdn/mdnEdit.php');
+        $id = $params[0]?? '0';
+
+        Render::render('','mdn/mdnEdit.php', ['id' => $id]);
 //        Render::render_file('mdn/mdnEdit.php');
     }
+
+
+
+    // Сохранить запись из формы в БД
+    public function actionSave2()
+    {
+        $this->logger->debug(self::class . '->actionSave2()');
+
+        if ($_POST['password'] !== '21') {
+            $this->logger->debug(self::class . "->actionSave2(): Неверный пароль" );
+            Render::render('Неверный пароль.');
+            return;
+        }
+
+
+        Mdn::saveRecord($_POST['id'], $_POST['dt'], $_POST['header'], $_POST['content']);
+    }
+
+
 
 
 }

@@ -11,7 +11,7 @@ if ($params['id'] === '0') {
 }
 ?>
 
-<form name="edform" action="/mdn/form" method="post">
+<form name="edform" action="/mdn/save2" method="post">
     <input type="number" name="id" value="<?= $rec['id']; ?>" readonly hidden><br>
     <?= $rec['id']; ?><br><br>
     Дата и время<br>
@@ -23,6 +23,7 @@ if ($params['id'] === '0') {
     <br>
     Пароль<br>
     <input type="number" name="password" value="0"><br>
+    <button>Save</button>
 </form>
 
-<button onclick="save_record(edform)">Save</button>
+<!--<button onclick="save_record(edform)">Save</button>-->

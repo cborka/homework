@@ -33,8 +33,9 @@ EOL;
     $rec = $mypdo->sql_one_record($sql, [$params['id']]);
     if (!$rec) // Нет такой записи в каталоге
     {
-        echo '404 Not Found - В каталоге не найдена запись о файле №' . $params['id'];
-        $logger->debug('show_image: 404 В каталоге не найдена запись о файле №' . $params['id']);
+        $msg = '404 Not Found - В каталоге не найдена запись о файле №' . $params['id'];
+        echo $msg;
+        $logger->debug("show_image: $msg");
         return;
     }
 

@@ -2,15 +2,21 @@
 global $mypdo;
 //\System\Lib::var_dump($params);
 
-$sql = 'SELECT id, dt, header, content FROM my_daily_news WHERE id = ?';
-//echo $sql;
+//
+// Показ одной записи из дневника
+//
 
-$rec = $mypdo->sql_one_record($sql, [$params['id']]);
-?>
+echo $params['id'] . '<br>';
 
-<!-- Вывод на экран-->
-<!--        --><?php //echo $rec['id']; ?><!--<br>-->
-<?php
+$rec = $mypdo->sql_one_record('SELECT id, dt, header, content FROM my_daily_news WHERE id = ?', [$params['id']]);
+
+if (!$rec) // Нет такой записи в дневнике
+{
+    $msg = 'Error 404 Not Found - В дневнике не найдена запись ' . $params['id'];
+    echo $msg;
+    $logger->debug("mdnDayElement: $msg");
+    return;
+}
 
 function dt_format($dt)
 {

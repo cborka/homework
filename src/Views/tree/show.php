@@ -4,6 +4,15 @@ f_tree_show($params);
 // Оборачиваю включаемые файлы в функции чтобы не было конфликтов переменных.
 function f_tree_show($params)
 {
+
+    if ($_SESSION['login'] === 'Admin13') {
+        $tree_root_id = '1';
+        $tree_root_name = '__/__';
+    } else {
+        $tree_root_id = '2';
+        $tree_root_name = 'Test';
+    }
+
     $recs = $params['recs'];
 //    var_dump($recs);
 ?>
@@ -52,7 +61,7 @@ function f_tree_show($params)
 
     </aside>
 
-    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('2', 'test', t_on_selection);return false;">
+    <aside class="edit-element" id="element-id" oncontextmenu="tree_show_on_click('<?= $tree_root_id; ?>', '<?= $tree_root_name; ?>', t_on_selection);return false;">
         <span id="info2" style="color: red;"></span><br>
         <h1>Тестовая веточка дерева</h1>
         Кликнуть правой кнопкой мыши в правой части экрана.<br><br>
