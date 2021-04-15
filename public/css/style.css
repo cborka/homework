@@ -151,9 +151,9 @@ div{
 
 
 /* интересно будет это реализовать в js */
-input:invalid {
-    border: 2px dashed red;
-}
+/*input:invalid {*/
+    /*border: 2px dashed red;*/
+/*}*/
 
 .red { color: red;}
 .green { color: green;}

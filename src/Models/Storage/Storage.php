@@ -83,6 +83,8 @@ class Storage
 
         $_SESSION['last_uploaded_id'] =  $id;
 
+        self::updateSearch($id);
+
         header('location: /storage/catalog');
 //        Render::render_file("storage/show_image.php", ['file' => $file_name]);
 //        Render::render('','storage/catalog.php', ['id' => $id]);
@@ -113,8 +115,56 @@ class Storage
 
         $_SESSION['last_uploaded_id'] =  $id;
 
+        self::updateSearch($id);
+
         header('location: /storage/catalog');
     }
 
+    /*
+     * Обновить запись в таблице search
+     */
+    public static function updateSearch($id)
+    {
+        global $logger;
+        global $mypdo;
+        global $dbh;
+
+        $logger->debug(self::class . "::updateSearch()");
+
+        // Выясняем, есть ли соответствующая запись в табилце search
+        // Здесь doc_type_id сначала надо бы найти, в другой базе данный он может оказаться другим
+        $doc_type_id = 15;
+        $count = '0';
+        if ($id !== '0') {
+            $count = $mypdo->sql_one('SELECT count(*) FROM search WHERE doc_type_id = ? AND doc_id = ?', [$doc_type_id, $id]);
+        }
+
+        if ($count === '0') {
+            $sql2 = 'INSERT INTO search(ref, text, doc_type_id, doc_id) VALUES (?, ?, ?, ?)';
+        } else {
+            $sql2 = <<< EOS
+            UPDATE search SET
+                ref = ?,
+                text = ?
+            WHERE doc_type_id = ? 
+              AND doc_id = ?
+EOS;
+        }
+
+        $sql = <<< EOS
+            SELECT u.login, u.name AS user_name, s.file_name, t.path, t.name, s.load_date, s.notes 
+            FROM ((storage_catalog s 
+              LEFT JOIN users u ON s.user_id = u.id)
+              LEFT JOIN tree t ON s.folder_id = t.id)
+            WHERE s.id = ?
+EOS;
+        $rec = $mypdo->sql_one_record($sql, [$id]);
+
+        $ref = 'Файл в хранилище. <a href="/storage/catalog/' . $id . '" target="_blank"> ' . $rec['file_name'] . '  </a><br>';
+        $text = $rec['login'] . ' ' . $rec['user_name'] . ' ' .$rec['file_name'] . ' ' .$rec['path'] . ' ' .$rec['name'] . ' ' .$rec['load_date'] . ' ' .$rec['notes'] ;
+
+        $result = $mypdo->sql_update($sql2, [$ref, $text, $doc_type_id, $id]);
+        Lib::checkPDOError($result);
+    }
 
 }

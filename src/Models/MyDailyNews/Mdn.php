@@ -58,7 +58,7 @@ EOS;
         $logger->debug(self::class . "::sql2 = ($sql2)");
 
         $ref = 'Запись из дневника. <a href="/mdn/edit/' . $id . '" target="_blank"> ' . $header . '  </a><br>';
-        $text = $header . ' ' . $content;
+        $text = $dt . ' ' . date('l', strtotime($dt)) . ' ' . $header . ' ' . $content;
 
 //        if (id === '0') {
 //            id = sql_one('SELECT id FROM my_daily_news WHERE dt = ?', [dt]);
@@ -134,7 +134,7 @@ EOS;
             }
 
             $ref = 'Запись из дневника. <a href="/mdn/edit/' . $id . '" target="_blank"> ' . $header . '  </a><br>';
-            $text = $header . ' ' . $content;
+            $text = $dt . ' ' . date('l', strtotime($dt)) . ' ' . $header . ' ' . $content;
 
             $result = $mypdo->sql_update($sql2, [$ref, $text, $doc_type_id, $id]);
             Lib::checkPDOError($result);

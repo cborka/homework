@@ -21,7 +21,12 @@
             }
         ?>
         <br>
-        <br>
+        <form action="/search/search" method="post">
+            Поиск
+            <input type="text" name="search_text" value="<?= $_POST['search_text']; ?>" required>
+            <button onclick="">&#10149;</button>
+        </form>
+
         <?= \Models\Users\RegUser::getUserMenu(); ?>
 
     </div>
