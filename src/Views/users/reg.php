@@ -71,7 +71,7 @@
             info("Пароли не совпадают");
             return false;
         }
-        if (userreg.test.value !== "144") {
+        if (userreg.test.value != 144) {
             info("А вы не робот случайно?");
             return false;
         }
@@ -111,7 +111,7 @@
         if (response !== '0') {
             $("#isloginfree").text("Логин занят");
         } else {
-            $("#isloginfree").text('Free');
+            $("#isloginfree").text('');
         }
 
         return check_data();

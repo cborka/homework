@@ -34,7 +34,17 @@ class MyPdo
             die();
         }
 
-        $requestId = $this->sql_one('SELECT NEXTVAL(seq_request_id)', []);
+//        $requestId = $this->sql_one('SELECT NEXTVAL(seq_request_id)', []);
+        // Заменил чтобы не спамить в логи
+        try {
+            $statement = $this->dbh->prepare('SELECT NEXTVAL(seq_request_id)');
+            $statement->execute([]);
+            $records = $statement->fetchAll();
+        } catch (\PDOException $e) {
+            $logger->error("MyPdo->seq_request_id: \n {$e->getMessage()}");
+            return 'PDOError';
+        }
+        $requestId = $records[0][0];
 
         $logger->notice(self::class . " Подключился к БД $params[0] как $params[1], requestId = $requestId");
     }

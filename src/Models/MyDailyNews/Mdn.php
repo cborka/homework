@@ -35,6 +35,7 @@ class Mdn
                     id = $id 
 EOS;
         }
+        $logger->debug(self::class . "::$sql");
 
         // Выясняем, есть ли соответствующая запись в табилце search
         // Здесь doc_type_id сначала надо бы найти, в другой базе данный он может оказаться другим
@@ -73,6 +74,11 @@ EOS;
             $statement = $dbh->prepare($sql);
             $statement->execute([$dt, $header, $content]);
 
+            // найти новое id
+            if ($id === '0') {
+                $id = $mypdo->sql_one('SELECT id FROM my_daily_news WHERE dt = ? AND header = ?', [$dt, $header]);
+            }
+
             // Вставляем/обновляем запись в таблицу поиска
             $statement2 = $dbh->prepare($sql2);
             $statement2->execute([$ref, $text, $doc_type_id, $id]);
@@ -84,13 +90,9 @@ EOS;
             return 'PDOError';
         }
 
-        // найти новое id
-        if ($id === '0') {
-            $id = $mypdo->sql_one('SELECT id FROM my_daily_news WHERE dt = ? AND header = ?', [$dt, $header]);
-        }
 //        return $new_id;
         header("location: /mdn/edit/$id");
-        return $id;
+//        return $id;
     }
 
 

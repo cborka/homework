@@ -91,14 +91,14 @@ $dbh = $mypdo->getDbh();
 
 if($bot) {
 //    echo "Bot";
-    $logger->notice("Bot {$_SERVER['REMOTE_ADDR']} --- {$_SERVER['HTTP_HOST']} - {$_SERVER['REQUEST_URI']} - {$_SESSION['login']} -");
+    $logger->notice("Bot {$_SERVER['REQUEST_URI']} - {$_SESSION['login']} - {$_SERVER['REMOTE_ADDR']} - {$_SERVER['HTTP_HOST']}");
     die();
 }
 
 // Render::render('Рендер строки, проверка переменных.', null, ['left_col' => '', 'menu' => '']);
 // die();
 
-$logger->notice("-----BEGIN ----- {$_SERVER['REMOTE_ADDR']} ----- {$_SERVER['HTTP_HOST']} --- {$_SERVER['REQUEST_URI']} ----- {$_SESSION['login']} -----");
+$logger->notice("--- BEGIN --- {$_SERVER['REQUEST_URI']} - {$_SESSION['login']} - {$_SERVER['REMOTE_ADDR']} - {$_SERVER['HTTP_HOST']} -");
 
 // Запускаем приложение
 try {

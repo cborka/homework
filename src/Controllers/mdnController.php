@@ -91,7 +91,6 @@ class mdnController
             return;
         }
 
-
         Mdn::saveRecord($_POST['id'], $_POST['dt'], $_POST['header'], $_POST['content']);
     }
 

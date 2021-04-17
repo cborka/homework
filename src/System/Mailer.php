@@ -20,7 +20,7 @@ class Mailer
             global $logger;
             // Чтобы не выводил отладочные сообщения уровня 1 и 2
             if ($level > 2) {
-                // echo "$str <br>";
+                 echo "$str <br>";
                 // $logger->debug(self::class .'::send()->$mail->Debugoutput: lvl=' . $level . ':' . $str);
                 $logger->debug($level . ': ' . $str);
             }
@@ -32,16 +32,31 @@ class Mailer
         try {
             //Server settings
             $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.mail.ru';                         //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'service2323';                          //SMTP username
-            $mail->Password   = 'ljvfirf2323';                          //SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
-            $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+
+            $mail->isSMTP();
+            $mail->Host = 'localhost';
+            $mail->SMTPAuth = false;
+            $mail->SMTPAutoTLS = false;
+            $mail->Port = 25;
+
+//            $mail->isSMTP();                                            //Send using SMTP
+//            $mail->Host       = 'bc.eopa.ru';                     //Set the SMTP server to send through
+//            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+//            $mail->Username   = 'bor';                          //SMTP username
+//            $mail->Password   = '';                          //SMTP password
+
+// Забанен
+//            $mail->Host       = 'smtp.mail.ru';                         //Set the SMTP server to send through
+//            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+//            $mail->Username   = 'service2323';                          //SMTP username
+//            $mail->Password   = 'ljvfirf2323';                          //SMTP password
+//
+//            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
+//            $mail->Port       = 25;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+//            $mail->Port       = 587;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
 
             //Recipients
-            $mail->setFrom('service2323@mail.ru', 'HomeworkMailer');
+            $mail->setFrom('bor@bc.eopa.ru', 'HomeworkMailer');
             $mail->addAddress($email, $name);                           //Add a recipient
 //          $mail->addAddress('cborka777@yandex.ru', 'Joe User');       //Add a recipient
 //          $mail->addAddress('cborka@mail.ru');                        //Name is optional

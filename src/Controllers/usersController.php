@@ -244,16 +244,20 @@ class usersController
 
 
     // Тестил почту, оставлю для истории
-//    public function actionSendMail()
-//    {
-//        $this->logger->debug(self::class . '->sendMail()');
-//
+    public function actionSendMail()
+    {
+        $this->logger->debug(self::class . '->sendMail()');
+
 //        Lib::var_dump($_POST);
-//
-//        Mailer::send('cborka@mail.ru',
-//            'Tema',
-//            'Привет от старых штиблет. Hi from old shoose.',
-//            'Old fart');
-//    }
+
+        Mailer::send(
+//            'cborka777@yandex.ru',
+//            'cborka@mail.ru',
+//            'cborka50@gmail.com',
+            'cborka50@gmail.com',
+            'Tema',
+            'Привет от старых штиблет. Hi from old shoose.',
+            'Old fart');
+    }
 
 }
