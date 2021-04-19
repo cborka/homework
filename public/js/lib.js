@@ -163,6 +163,8 @@ function render_tree(id)
     $("#tree-id").html(
         ajax_render('tree/show_tree.php', [id])
     );
+
+    document.getElementById("tree_box").onkeyup = li_onkeyup;
 }
 
 
@@ -344,7 +346,7 @@ function draw_folder (ul_id, target_ul = '')
 //  При отжатии клавиши
 //
 //        top.onkeyup = li_onkeyup;
-document.getElementById("tree_box").onkeyup = li_onkeyup;
+// document.getElementById("tree_box").onkeyup = li_onkeyup; // делаю это в начальной функции render_tree
 function li_onkeyup(e) {
 
     let el = event.target;         // Элемент из которого вызываем меню SPAN
@@ -588,6 +590,7 @@ function append_node(li, is_folder)
     span_new.className = "li";
     span_new.tabIndex = 20 + tree_next_tabindex++;
     span_new.innerHTML = new_name;
+    span_new.onfocus = remember_me;
 
     li_new.append(span_new);
 

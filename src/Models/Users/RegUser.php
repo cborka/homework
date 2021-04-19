@@ -432,9 +432,9 @@ EOS;
         if (!isset($_SESSION['login'])) {
             $menu = <<<EOL
         &#9776;<a href="/users/login">Вход | </a>
-        <a href="/users/showRegForm">Регистрация | </a>
-        <a href="/users/restorePassword">Восстановление пароля ||| </a>
-        <a href="/users/loginGuest">Зайти как гость ||| </a>
+        <a href="/users/showRegForm">&#10004;Регистрация | </a>
+        <a href="/users/restorePassword">&#8634;Восстановление пароля ||| </a>
+        <a href="/users/loginGuest">&#9749;Зайти как гость ||| </a>
         <a href="/mdn/edit">Дневник ||| </a>
 EOL;
         } else if ($_SESSION['login'] === 'Guest') {
@@ -443,7 +443,7 @@ EOL;
         <a href="/mdn/edit">&#10001;Дневник.2 ||| </a>
         <a href="/mdn/view">Дневник.1 ||| </a>
         <a href="/storage/catalog">&#9733;Файлы ||| </a>
-        <a href="/users/logout">Выход | </a>
+        <a href="/users/logout">Выход &raquo;| </a>
 EOL;
         } else if ($_SESSION['login'] === 'nubasik13') {
             $menu = <<<EOL
@@ -463,7 +463,7 @@ EOL;
         <a href="/help/jqueryLearn">jQuery Learn ||| </a>
         <a href="/help/docs">Описание ||| </a>
         <a href="/mdn/view">Дневник ||| </a>
-        <a href="/users/logout">Выход | </a>&#9809;
+        <a href="/users/logout">Выход &raquo;| </a>&#9809;
 EOL;
         } else {
 //            // И здесь хорошо бы проверить права
@@ -472,7 +472,7 @@ EOL;
         <a href="/help/docs">Описание ||| </a>
         <a href="/mdn/edit">&#9873;Дневник ||| </a>
         <a href="/storage/catalog">&#9733;Файлы ||| </a>
-        <a href="/users/logout">Выход | </a>
+        <a href="/users/logout">Выход &raquo;| </a>
 EOL;
         }
 

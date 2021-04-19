@@ -2,7 +2,7 @@
 
 Неверный логин или пароль, можете воспользоваться одним из трёх вариантов:<br>
 <br>
-<a href="/users/showLoginForm">Повторить вход</a><br>
+<a href="/users/login">Повторить вход</a><br>
 <br>
 <a href="/users/showRegForm">Зарегистрироваться</a><br>
 <br>

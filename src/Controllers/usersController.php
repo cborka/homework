@@ -254,7 +254,7 @@ class usersController
 //            'cborka777@yandex.ru',
 //            'cborka@mail.ru',
 //            'cborka50@gmail.com',
-            'test-8xe7k1yqx@srv1.mail-tester.com',
+            'test-x06mj7woj@srv1.mail-tester.com',
             'Tema',
             'Привет от старых штиблет. Hi from old shoose.',
             'Old fart');

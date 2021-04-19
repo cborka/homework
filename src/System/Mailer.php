@@ -42,14 +42,14 @@ class Mailer
 //            $mail->isSMTP();                                            //Send using SMTP
 //            $mail->Host       = 'bc.eopa.ru';                     //Set the SMTP server to send through
 //            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-//            $mail->Username   = 'bor';                          //SMTP username
+//            $mail->Username   = '';                          //SMTP username
 //            $mail->Password   = '';                          //SMTP password
 
 // Забанен
 //            $mail->Host       = 'smtp.mail.ru';                         //Set the SMTP server to send through
 //            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-//            $mail->Username   = 'service2323';                          //SMTP username
-//            $mail->Password   = 'ljvfirf2323';                          //SMTP password
+//            $mail->Username   = '';                          //SMTP username
+//            $mail->Password   = '';                          //SMTP password
 //
 //            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
 //            $mail->Port       = 465;                                    //TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
@@ -59,9 +59,9 @@ class Mailer
             //Recipients
             $mail->setFrom('bor@bc.eopa.ru', 'HomeworkMailer');
             $mail->addAddress($email, $name);                           //Add a recipient
-//          $mail->addAddress('cborka777@yandex.ru', 'Joe User');       //Add a recipient
-//          $mail->addAddress('cborka@mail.ru');                        //Name is optional
-//          $mail->addReplyTo('cborka@mail.ru', 'Information');
+//          $mail->addAddress('cc@example.com', 'Joe User');       //Add a recipient
+//          $mail->addAddress('cc@example.com');                        //Name is optional
+//          $mail->addReplyTo('cc@example.com', 'Information');
 //          $mail->addCC('cc@example.com');
 //          $mail->addBCC('bcc@example.com');
 //
