@@ -451,8 +451,8 @@ EOL;
         <a href="/storage/catalog">&#9733;storage ||| </a>
         <a href="/mdn/edit">&#9873;ajaxMdn ||| </a>
         <!--<a href="/help/ajaxRenderTest">ajaxRender ||| </a>-->
-        <a href="/tailwind.html">tailwind | </a>
         <a href="/bulma.html">&#9773;bulma | </a>
+        <a href="/bulma2.html">&#9773;bulma2 | </a>
         <a href="/bootstrap.html">bootstarp | </a>
         <a href="/flex.html">flex ||| </a>
         <a href="/help/test">Тесты ||| </a>
